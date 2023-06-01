@@ -1,0 +1,30 @@
+<mat-toolbar >
+  <button mat-button (click)="home()"  aria-label="Example icon-button with heart icon">
+    My App
+  </button>
+  <span class="example-spacer"></span>
+  <button mat-button [disabled]="isLoggedIn" [matMenuTriggerFor]="menu">  <mat-icon>account_circle</mat-icon></button>
+
+  <mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon> <span class="material-symbols-outlined">
+      face
+      </span> </mat-icon >
+    <span>Profilo </span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon> <span class="material-symbols-outlined">
+      list_alt
+      </span> </mat-icon >
+    <span>Noleggi </span>
+  </button>
+  <button mat-menu-item  (click)="logout()" >
+    <mat-icon> <span class="material-symbols-outlined">
+      logout
+      </span> </mat-icon >
+    <span>Log out </span>
+  </button>
+  </mat-menu>
+
+</mat-toolbar>
+

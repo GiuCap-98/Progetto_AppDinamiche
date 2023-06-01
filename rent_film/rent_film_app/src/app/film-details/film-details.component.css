@@ -1,0 +1,28 @@
+.dialog-window {
+  display: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  height: 100%;
+  opacity:0.7;
+  margin:0;
+
+}
+
+.dialog-content{
+  padding: 40px;
+}
+
+.film-poster {
+  width: 200px;
+  height: auto;
+  margin-right: 16px;
+  float: left;
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+  padding-top: 16px;
+}
