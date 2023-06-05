@@ -1,28 +1,36 @@
 .dialog-window {
-  display: relative;
+  display: block;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: black;
   color: white;
-  height: 100%;
-  opacity:0.7;
-  margin:0;
+  font-family: Calibri;
+  font-size: 20px;
+  border-radius: 2%;
+}
 
+
+.title {
+  display: block;
+  background-color: #293133;
+  padding: 40px;
+  padding-top: 50px;
+}
+
+.title h2{
+  margin-bottom: -10px;
+  font-family:serif;
+  font-size: 50px;
 }
 
 .dialog-content{
   padding: 40px;
+  padding-left:70px ;
 }
 
-.film-poster {
-  width: 200px;
-  height: auto;
-  margin-right: 16px;
-  float: left;
-}
 
-.dialog-actions {
+mat-card-actions{
   justify-content: flex-end;
-  padding-top: 16px;
+  padding-bottom: 0;
 }

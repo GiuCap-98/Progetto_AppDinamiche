@@ -8,12 +8,10 @@ import { ServiceRentService } from '../service/service-rent.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent  implements OnInit  {
-  form = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-  });
 
   public submitted = false;
+  public error: string | null | undefined;
+  public isLoggedIn = false;
 
   constructor( private servizioRent: ServiceRentService,
     private _router: Router,
@@ -21,8 +19,8 @@ export class LoginComponent  implements OnInit  {
     ) { }
 
   ngOnInit(): void {}
-  
-  @Input() error: string | null | undefined;
+
+  //@Input() error: string | null | undefined;
 
   //@Output() sendDataEvent = new EventEmitter();
   @Output() loginSuccess = new EventEmitter();
@@ -30,6 +28,7 @@ export class LoginComponent  implements OnInit  {
   submit() {
     //if (this.form.valid) {
       this.loginSuccess.emit(null)
+      this.isLoggedIn = true; // Imposta isLoggedIn a true dopo un accesso riuscito
       this._router.navigate(['start-button'])
       console.log(false);
     //}
@@ -37,16 +36,6 @@ export class LoginComponent  implements OnInit  {
 
 
 
-  email = new FormControl('', [Validators.required, Validators.email]);
-  hide = true;
-  getErrorMessage() {
-    if (this.email.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.email.hasError('email') ? 'Not a valid email' : '';
-  }
-
   onLogin(): void {
     // console.log(this.loginForm.value);
     this.submitted = true;
@@ -54,84 +43,40 @@ export class LoginComponent  implements OnInit  {
   }
 
 
+  loginValido(): boolean {
+    // Ottenere i valori inseriti dall'utente per username e password
+  const username = (<HTMLInputElement>document.getElementById('username')).value;
+  const password = (<HTMLInputElement>document.getElementById('password')).value;
 
-/*
-  public loginForm: FormGroup = this.formBuilder.group({
-      email: ["", [Validators.email, Validators.required]],
-      password: [
-        "",
-        [
-          Validators.required,
-          Validators.pattern(
-            "(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!#^~%*?&,.<>\"'\\;:{\\}\\[\\]\\|\\+\\-\\=\\_\\)\\(\\)\\`\\/\\\\\\]])[A-Za-z0-9d$@].{7,}"
-          )
-        ]
-      ]
-    });
-  public submitted = false;
+  // Esempio di verifica delle credenziali
+  // Implementa la tua logica di verifica qui, ad esempio, controlla le credenziali nel tuo sistema di autenticazione
+  // Restituisci true se le credenziali sono valide, altrimenti false
 
-  ngOnInit(): void {
-    this.heroForm = new FormGroup({
-      name: new FormControl(this.hero.name, [
-        Validators.required,
-        Validators.minLength(4),
-        forbiddenNameValidator(/bob/i) // <-- Here's how you pass in the custom validator.
-      ]),
-      alterEgo: new FormControl(this.hero.alterEgo),
-      power: new FormControl(this.hero.power, Validators.required)
-    });
+  // Esempio di verifica delle credenziali hard-coded
+  const usernameCorretto = 'utente';
+  const passwordCorretta = 'password';
 
+  if (username === usernameCorretto && password === passwordCorretta) {
+    return true;
+  } else {
+    return false;
   }
-
-  get name() { return this.heroForm.get('name'); }
-
-  get power() { return this.heroForm.get('power'); }
-
-  get email() {
-    return this.loginForm.get('email') as FormControl;
-  }
-
-  onLogin(): void {
-    // console.log(this.loginForm.value);
-    this.submitted = true;
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      localStorage.setItem("user-Data", JSON.stringify(this.loginForm.value));
-      this.router.navigate(["/"]);
-    }
-  }
+}
 
 
-  /*
-  form = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-  });
-
-
-  @Input() error: string | null | undefined;
-
-  @Output() sendDataEvent = new EventEmitter();
-
-  submit() {
-    if (this.form.valid) {
-      this.sendDataEvent.emit(this.form.value);
-    }
-    else{
-      this.sendDataEvent.emit(this.error);
-    }
-  }
-
-
-
-  email = new FormControl('', [Validators.required, Validators.email]);
-  hide = true;
-  getErrorMessage() {
-    if (this.email.hasError('required')) {
-      return 'You must enter a value';
+  login(): void {
+    // Effettua il login utilizzando il servizio AuthService
+    if (this.loginValido()) {
+      //this.servizioRent.setValue(true);
+      this._router.navigate(['start-button']);
+      this.servizioRent.isLoggedIn$.next(true)
+      this.isLoggedIn = true; // Imposta isLoggedIn a true dopo un accesso riuscito
+    } else {
+      this.error = 'Credenziali non valide'; // Imposta l'errore per un accesso non valido
     }
 
-    return this.email.hasError('email') ? 'Not a valid email' : '';
+
+
   }
-  */
+
 }

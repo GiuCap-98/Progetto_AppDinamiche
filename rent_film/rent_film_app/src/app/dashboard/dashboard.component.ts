@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { Router , ActivatedRoute} from '@angular/router';
@@ -13,18 +13,24 @@ import { PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class DashboardComponent implements OnInit{
   searchControl = new FormControl('')
   films: any[] = []; // array to store the films
-  startIndex = 0;  endIndex = 10;
-  pageSize = 10;  pageSizeOptions = [5, 10, 20];
+  startIndex = 0;
+  endIndex = 10;
+  pageSize = 10;
+  pageSizeOptions = [5, 10, 20];
   pageIndex = 0;
-  
   //se isFilm è null non mi ritorna i dettagli del film, altrimenti si
   isFilm!: boolean;
+  isScrolled: boolean = false;
+  scrolled = 0;
+
+
 
   constructor(private serviceRent: ServiceRentService,  //iniettiamo il servizio
     public dialog: Dialog) {}
@@ -32,31 +38,49 @@ export class DashboardComponent implements OnInit{
   ngOnInit(): void {
     this.getFilms();
     this.searchFilms();
+
   }
 
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    const numb = window.scrollY;
+    if (numb >= 50){
+      this.scrolled = 1;
+    }
+    else {
+      this.scrolled = 0;
+    }
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
   // get all films from service
-  getFilms() { 
-    this.serviceRent.getFilms().subscribe(response => { 
-      this.films = response.data.films; 
-      this.updatePageIndex(); 
-    }); 
-  } 
- 
-  updatePageIndex() { 
-    this.startIndex = this.pageIndex * this.pageSize; 
-    this.endIndex = this.startIndex + this.pageSize; 
-  } 
- 
+  getFilms() {
+    this.serviceRent.getFilms().subscribe(response => {
+      this.films = response.data.films;
+      this.updatePageIndex();
+    });
+  }
+
+  updatePageIndex() {
+    this.startIndex = this.pageIndex * this.pageSize;
+    this.endIndex = this.startIndex + this.pageSize;
+  }
+
   // search films by title
   private searchFilms() {
-    // emits a value whenever the value in the FormControl changes 
+    // emits a value whenever the value in the FormControl changes
     this.searchControl.valueChanges
-      .pipe( 
+      .pipe(
         // emits the most recent value after a delay of 300 milliseconds from the end of the last output value
         debounceTime(300),
         // emits the most recent value only if different from the previous one
-        distinctUntilChanged(), // 
-        /* Pass the search term emitted by the observable to the searchFilms method, 
+        distinctUntilChanged(), //
+        /* Pass the search term emitted by the observable to the searchFilms method,
         / then map the result of the call to a new observable */
         switchMap((searchTerm: string | null) => this.serviceRent.searchFilms(searchTerm || ''))
       )
@@ -66,14 +90,14 @@ export class DashboardComponent implements OnInit{
         if (responseData) {
           this.films = responseData.searchFilms; // Aggiorna l'array films con i risultati della ricerca
         }
-      });  
+      });
   }
-  onPageChange(event: PageEvent) { 
-    this.pageIndex = event.pageIndex; 
-    this.pageSize = event.pageSize; 
-    this.updatePageIndex(); 
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePageIndex();
   }
-  
+
   // dialog for film details
   openDialog(film:any) {
     this.dialog.open(FilmDetailsComponent, {
@@ -84,4 +108,7 @@ export class DashboardComponent implements OnInit{
       data: film
     });
     }
+
+
+
 }

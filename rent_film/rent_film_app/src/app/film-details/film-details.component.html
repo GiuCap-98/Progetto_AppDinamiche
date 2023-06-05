@@ -1,15 +1,31 @@
+<div class="first">
+  <div class="dialog-window">
 
-<div class="dialog-window">
-  <div class="dialog-content">
-  <h2 mat-dialog-title>{{ film.title }}</h2>
-  <p><strong>Title:</strong> {{ film.title }}</p>
-  <p><strong>Genere:</strong> {{ film.title }}</p>
+    <div class="title">
+      <h2 mat-dialog-title>{{ film.title }}</h2>
+    </div>
+    <div class="dialog-content">
+
+    <p><strong>Genere:</strong> {{ film.title }}</p>
+    <p><strong>Genere:</strong> {{ film.title }}</p>
+    <p><strong>Genere:</strong> {{ film.title }}</p>
+
+    <p><strong>Genere:</strong> {{ film.title }}</p>
+    <p><strong>Descrizione:</strong> {{ film.description }}</p>
 
 
-  <div class="dialog-action" align="end">
-    <button mat-button (click)="closeDialog()">Close</button>
+
+
+    </div>
+
+
+    <mat-card-actions >
+      <button mat-button (click)="closeDialog()"><mat-icon><span class="material-symbols-outlined">
+        <span class="material-symbols-outlined">
+          close
+          </span></span> </mat-icon> Close</button>
+    </mat-card-actions>
   </div>
 
   </div>
-</div>
 

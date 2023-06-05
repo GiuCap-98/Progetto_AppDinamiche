@@ -10,10 +10,10 @@ import { ServiceRentService } from '../service/service-rent.service';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit{
-  isLoggedIn = this.servizioRent.getValue();
+  //isLoggedIn = this.servizioRent.getValue();
 
   ngOnInit(): void{
-    console.log('disabled',this.isLoggedIn)
+    //console.log('disabled',this.isLoggedIn)
 
   }
   constructor( private servizioRent: ServiceRentService, private _router: Router, private _activatedRoute:ActivatedRoute) { }
@@ -29,7 +29,7 @@ export class ToolbarComponent implements OnInit{
 
   logout(): void {
     // Effettua il logout utilizzando il servizio AuthService
-    this.servizioRent.setValue(false);
+    //this.servizioRent.setValue(false);
   }
 
 

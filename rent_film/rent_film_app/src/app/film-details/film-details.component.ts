@@ -38,6 +38,4 @@ export class FilmDetailsComponent implements OnInit {
   closeDialog(): void {
     this.dialogRef.close();
   }
-
-
 }

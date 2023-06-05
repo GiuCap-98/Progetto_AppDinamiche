@@ -10,7 +10,7 @@ import { ProvaComponent } from './prova/prova.component';
 const routes: Routes = [
   {
     path: '', component: LoginComponent
-    },
+  },
 
   {
     path:'dashboard', component: DashboardComponent,

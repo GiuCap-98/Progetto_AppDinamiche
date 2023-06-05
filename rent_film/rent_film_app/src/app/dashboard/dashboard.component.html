@@ -1,18 +1,25 @@
-<section class="start" style="background: #404040 url(assets/cinema2.jpg); background-repeat: no-repeat; background-size:cover; background-position: center;">
-  
-  <input type="text" [formControl]="searchControl" placeholder="Cerca film per titolo" style="margin-bottom: 10px;">
-  <div class="result-count">
-    Risultati: {{ films.length }}
-  </div>
-  <cdk-virtual-scroll-viewport itemSize="1" class="viewport">
-    <!--<app-film *cdkVirtualFor="let film of films" [film]="film" class="item"></app-film> -->
-    <mat-card class="item" *cdkVirtualFor="let film of films | slice: startIndex: endIndex">
-      <mat-card-header>
-        <mat-card-title>
-          <button (click)="openDialog(film)">
-            <a  routerLink="/dashboard/{{film.title}}"> {{film.title }}</a>
+<body  >
+<section class="start">
 
-          </button>
+  <div class="search">
+    <div class="serach-content">
+      <mat-form-field  class="search-field">
+        <input matInput placeholder="Scegli un film" type="text" [formControl]="searchControl"/>
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+
+      <button  mat-icon-button color="warn"  aria-label="Icon button filter">  <mat-icon >
+        filter_list
+      </mat-icon> </button>
+
+
+    </div>
+  </div>
+    <!--<app-film *cdkVirtualFor="let film of films" [film]="film" class="item"></app-film> -->
+    <mat-card (click)="openDialog(film)" class="item" *ngFor="let film of films | slice: startIndex: endIndex">
+      <mat-card-header>
+        <mat-card-title class="title">
+             {{film.title }}
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
@@ -27,22 +34,33 @@
           euro</span> </mat-icon> NOLEGGIA</button>
       </mat-card-actions>
     </mat-card>
-  </cdk-virtual-scroll-viewport>
 
-  <ng-template *ngIf="isFilm">
-    <p> prof</p>
+  <!-- Paginazione -->
+  <div class="paginator-div">
+  <mat-paginator
+    [length]="films.length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+    class="paginator"
+  ></mat-paginator>
+
+</div>
 
 
-  </ng-template>
-
-  <!-- Paginazione --> 
-<mat-paginator 
-  [length]="films.length" 
-  [pageSize]="pageSize" 
-  [pageIndex]="pageIndex" 
-  [pageSizeOptions]="pageSizeOptions" 
-  (page)="onPageChange($event)" 
-  ></mat-paginator> 
 
 
 </section>
+
+<div id="scroll-up">
+<!-- Bottone per tornare all'inizio della pagina -->
+<button mat-fab class="back-to-top-button" *ngIf="scrolled == 1" (click)="scrollToTop()"  [class.show]="isScrolled">
+  <mat-icon>arrow_upward</mat-icon>
+</button>
+</div>
+
+
+
+</body>
