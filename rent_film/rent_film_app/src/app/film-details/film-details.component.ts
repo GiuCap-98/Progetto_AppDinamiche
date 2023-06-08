@@ -19,6 +19,7 @@ export class FilmDetailsComponent implements OnInit {
   currentTheme!: string;
   coloreCard!: string;
   coloreTextCard!: string;
+  storeSelected : boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,4 +54,9 @@ export class FilmDetailsComponent implements OnInit {
       this.stores= response.data.stores;
     });
   }
+
+  click(selected: boolean) {
+    this.storeSelected = selected
+  }
+
 }

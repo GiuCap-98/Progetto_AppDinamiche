@@ -23,9 +23,8 @@
 
       <mat-form-field>
         <mat-label>Store</mat-label>
-        <mat-select>
-          <mat-option>None</mat-option>
-          <mat-option *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film">{{store.address}}</mat-option>
+        <mat-select >
+          <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address}}</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -33,7 +32,8 @@
         <button mat-button
         tabindex="0"
         [style.color]="coloreTextCard"
-        class="button-rent">
+        class="button-rent"
+        [disabled]="!storeSelected">
           {{ film.rental_rate}}
           <mat-icon>
             <span class="material-symbols-outlined">euro</span>
