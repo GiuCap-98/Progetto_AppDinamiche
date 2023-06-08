@@ -1,35 +1,53 @@
 <div class="dialog-window" [ngClass]="currentTheme">
+  <div class="title"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+    <mat-card-actions >
 
-  <div class="title">
+      <button mat-button (click)="closeDialog()">
+        <mat-icon>
+          <span class="material-symbols-outlined">close</span>
+        </mat-icon>
+        Close
+      </button>
+    </mat-card-actions>
+
+
     <h2 mat-dialog-title>{{ film.title }}</h2>
   </div>
   <div class="dialog-content" >
+      <p><strong>Genere:</strong> {{ film.film_id }}</p>
+      <p><strong>Genere:</strong> {{ film.title }}</p>
+      <p><strong>Genere:</strong> {{ film.title }}</p>
 
-  <p><strong>Genere:</strong> {{ film.film_id }}</p>
-  <p><strong>Genere:</strong> {{ film.title }}</p>
-  <p><strong>Genere:</strong> {{ film.title }}</p>
+      <p><strong>Genere:</strong> {{ film.title }}</p>
+      <p><strong>Descrizione:</strong> {{ film.description }}</p>
 
-  <p><strong>Genere:</strong> {{ film.title }}</p>
-  <p><strong>Descrizione:</strong> {{ film.description }}</p>
+      <mat-form-field>
+        <mat-label>Store</mat-label>
+        <mat-select>
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film">{{store.address}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Store</mat-label>
-    <mat-select>
-      <mat-option>None</mat-option>
-      <mat-option *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film">{{store.address}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <div class="content-rent">
+        <button mat-button
+        tabindex="0"
+        [style.color]="coloreTextCard"
+        class="button-rent">
+          {{ film.rental_rate}}
+          <mat-icon>
+            <span class="material-symbols-outlined">euro</span>
+          </mat-icon>
+          NOLEGGIA
+        </button>
+      </div>
 
 
   </div>
 
 
-  <mat-card-actions >
-    <button mat-button (click)="closeDialog()"><mat-icon><span class="material-symbols-outlined">
-      <span class="material-symbols-outlined">
-        close
-        </span></span> </mat-icon> Close</button>
-  </mat-card-actions>
+
+
 </div>
 
 

@@ -18,7 +18,7 @@
     </div>
   </form>
     <!--<app-film *cdkVirtualFor="let film of films" [film]="film" class="item"></app-film> -->
-  <section role="list-film" [ngClass]="currentTheme" >
+  <section role="list-film" >
     <mat-card class="item" *ngFor="let film of films | slice: startIndex: endIndex"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
       <mat-card-header>
         <mat-card-title class="title">
@@ -60,7 +60,7 @@
       </mat-card-actions>
     </mat-card>
   </section>
-  <section role="select-page" class="paginator-div" [ngClass]="currentTheme" >
+  <section role="select-page" class="paginator-div" >
   <!-- Paginazione -->
       <mat-paginator
         [length]="films.length"

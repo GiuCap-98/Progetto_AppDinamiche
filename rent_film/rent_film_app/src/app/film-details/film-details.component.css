@@ -10,12 +10,13 @@
 
 .title {
   display: block;
-  padding: 40px;
-  padding-top: 50px;
 }
 
 .title h2{
   margin-bottom: -10px;
+
+  padding: 40px;
+  padding-top: 50px;
   font-family:serif;
   font-size: 50px;
 }
@@ -31,3 +32,14 @@ mat-card-actions{
   padding-bottom: 0;
 }
 
+.content-rent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.button-rent{
+  font-size: large;
+  padding: 5%;
+}
