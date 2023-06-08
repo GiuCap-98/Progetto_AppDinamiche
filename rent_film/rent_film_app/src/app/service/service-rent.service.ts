@@ -18,6 +18,12 @@ import { BehaviorSubject, Observable} from "rxjs";
 })
 export class ServiceRentService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private themeSubject = new BehaviorSubject<string>('theme1-toolbar');
+  public theme$ = this.themeSubject.asObservable();
+
+  changeTheme(theme: string) {
+    this.themeSubject.next(theme);
+  }
 
   constructor(private apollo: Apollo) {}
 
@@ -63,6 +69,25 @@ export class ServiceRentService {
       query: SEARCH_FILMS_QUERY,
       variables: {
         searchTerm: searchTerm
+      }
+    });
+  }
+
+  getStores(film_id: any): Observable<any>{
+    const StoreQuery = gql`
+    query FindStoresByFilmId($filmId: ID!) {
+      stores(film_id: $filmId) {
+        store_id
+        address
+        num_film
+      }
+    }
+    `;
+
+    return this.apollo.query({
+      query: StoreQuery ,
+      variables: {
+        filmId : film_id
       }
     });
   }

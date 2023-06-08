@@ -1,22 +1,25 @@
-<body  >
-<section class="start">
+<body title="Dashboard" [ngClass]="currentTheme" class="start">
 
-  <div class="search">
-    <div class="serach-content">
+  <form role="search-bar" class="search">
+    <div class="serach-content"
+    [style.background-color]="coloreCard" >
       <mat-form-field  class="search-field">
         <input matInput placeholder="Scegli un film" type="text" [formControl]="searchControl"/>
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
 
-      <button  mat-icon-button color="warn"  aria-label="Icon button filter">  <mat-icon >
+      <button  mat-icon-button color="warn"
+      aria-label="Icon button filter"
+      tabindex="0">  <mat-icon >
         filter_list
       </mat-icon> </button>
 
 
     </div>
-  </div>
+  </form>
     <!--<app-film *cdkVirtualFor="let film of films" [film]="film" class="item"></app-film> -->
-    <mat-card (click)="openDialog(film)" class="item" *ngFor="let film of films | slice: startIndex: endIndex">
+  <section role="list-film" [ngClass]="currentTheme" >
+    <mat-card class="item" *ngFor="let film of films | slice: startIndex: endIndex"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
       <mat-card-header>
         <mat-card-title class="title">
              {{film.title }}
@@ -27,40 +30,59 @@
         <p> <a>Anno:</a> {{ film.release_year }}</p>
         <p>{{ film.rating }}</p>
 
+
         <!-- Altri dettagli del film -->
       </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-button >{{ film.rental_rate}} <mat-icon><span class="material-symbols-outlined">
-          euro</span> </mat-icon> NOLEGGIA</button>
+      <mat-card-actions align="start"  >
+        <button cdkMonitorSubtreeFocus
+        (cdkFocusChange)="elementOrigin = formatOrigin($event); markForCheck()"
+        class="details" mat-button
+        (click)="openDialog(film)"
+        tabindex="0"
+        [style.color]="coloreTextCard">
+          Dettagli ({{elementOrigin}})
+          <mat-icon>
+            <span class="material-symbols-outlined">add</span>
+          </mat-icon>
+
+        </button>
+      </mat-card-actions>
+      <mat-card-actions align="end" >
+        <button mat-button
+        tabindex="0"
+        [style.color]="coloreTextCard">
+          {{ film.rental_rate}}
+          <mat-icon>
+            <span class="material-symbols-outlined">euro</span>
+          </mat-icon>
+          NOLEGGIA
+        </button>
       </mat-card-actions>
     </mat-card>
-
+  </section>
+  <section role="select-page" class="paginator-div" [ngClass]="currentTheme" >
   <!-- Paginazione -->
-  <div class="paginator-div">
-  <mat-paginator
-    [length]="films.length"
-    [pageSize]="pageSize"
-    [pageIndex]="pageIndex"
-    [pageSizeOptions]="pageSizeOptions"
-    (page)="onPageChange($event)"
-    showFirstLastButtons
-    class="paginator"
-  ></mat-paginator>
-
-</div>
+      <mat-paginator
+        [length]="films.length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        class="paginator"
+      ></mat-paginator>
+  </section>
 
 
 
-
-</section>
-
-<div id="scroll-up">
-<!-- Bottone per tornare all'inizio della pagina -->
-<button mat-fab class="back-to-top-button" *ngIf="scrolled == 1" (click)="scrollToTop()"  [class.show]="isScrolled">
-  <mat-icon>arrow_upward</mat-icon>
-</button>
-</div>
-
-
-
+  <div id="scroll-up">
+    <!-- Bottone per tornare all'inizio della pagina -->
+    <button mat-fab class="back-to-top-button" *ngIf="scrolled == 1" (click)="scrollToTop()"  [class.show]="isScrolled">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+    </div>
 </body>
+
+
+
+

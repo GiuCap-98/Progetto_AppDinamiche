@@ -1,5 +1,6 @@
-<div fxLayout="column" fxLayoutAlign="center center" class="login-form-flex">
-  <mat-card>
+
+<div class="login" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card  [style.background-color]="coloreCard" [style.color]="coloreTextCard" >
     <mat-card-title fxLayout="column" fxLayoutAlign="center stretch">
       Login
     </mat-card-title>
@@ -20,3 +21,4 @@
     </mat-card-actions>
   </mat-card>
 </div>
+

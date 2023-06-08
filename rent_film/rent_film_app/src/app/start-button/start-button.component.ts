@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Router , ActivatedRoute} from '@angular/router';
+import { ServiceRentService } from '../service/service-rent.service';
 
 @Component({
   selector: 'app-start-button',
@@ -8,12 +9,20 @@ import { Router , ActivatedRoute} from '@angular/router';
   styleUrls: ['./start-button.component.css']
 })
 export class StartButtonComponent {
-  img_cinema:string= "assets/cinema_background.jpg";
+  currentTheme!: string;
 
   constructor(
     private _router: Router,
-    private _activatedRoute:ActivatedRoute
+    private _activatedRoute:ActivatedRoute,
+    private serviceRent: ServiceRentService
     ) { }
+
+  ngOnInit(): void {
+    this.serviceRent.theme$.subscribe((theme) => {
+      this.currentTheme = theme === 'theme1' ? 'theme2' : 'theme1';
+    });
+  }
+
 
   film_dashboard(){
 

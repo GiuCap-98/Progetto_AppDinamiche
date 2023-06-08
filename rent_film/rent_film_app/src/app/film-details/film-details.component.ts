@@ -14,7 +14,11 @@ import {Dialog, DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog'
 export class FilmDetailsComponent implements OnInit {
 
   film:  any;
-  id : any;
+  stores: any[] = []; // array to store the shops
+  film_id : any;
+  currentTheme!: string;
+  coloreCard!: string;
+  coloreTextCard!: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,15 +31,24 @@ export class FilmDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.film)
+    this.serviceRent.theme$.subscribe((theme) => {
+      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
+    });
+    this.getStores();
   }
-
   getFilm(): void {
-    this.id = this.route.snapshot.paramMap.get('id')
+    this.film_id = this.route.snapshot.paramMap.get('id')
     console.log(this.route.snapshot.paramMap.get('id'))
   }
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+
+  getStores() {
+    this.serviceRent.getStores(this.film.film_id).subscribe((response) => {
+      this.stores= response.data.stores;
+    });
   }
 }

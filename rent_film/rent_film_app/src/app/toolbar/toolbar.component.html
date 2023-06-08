@@ -1,32 +1,65 @@
- <mat-toolbar color="warn">
-    <button mat-button (click)="home()"  aria-label="Example icon-button with heart icon">
+  <mat-toolbar [ngClass]="currentTheme"
+  role="toolbar"
+  aria-label="App Toolbar"
+  aria-orientation="horizontal"
+  class="toolbar">
+
+    <button mat-button (click)="home()"  aria-label="Go to Home" tabindex="1">
       My App
     </button>
     <span class="example-spacer"></span>
-    <button mat-button  [matMenuTriggerFor]="menu">  <mat-icon>account_circle</mat-icon></button>
 
+    <button mat-button  [matMenuTriggerFor]="menu"
+    aria-label="Open Menu"
+    tabindex="2"
+    aria-haspopup="true">
+      <mat-icon>account_circle</mat-icon></button>
     <mat-menu #menu="matMenu">
-    <button mat-menu-item>
-      <mat-icon> <span class="material-symbols-outlined">
-        face
-        </span> </mat-icon >
-      <span>Profilo </span>
+
+      <button mat-menu-item tabindex="3" >
+        <mat-icon>
+          <span class="material-symbols-outlined">face</span>
+        </mat-icon >
+        <span>Profilo </span>
+      </button>
+
+      <button mat-menu-item tabindex="4" >
+        <mat-icon>
+          <span class="material-symbols-outlined">list_alt</span>
+        </mat-icon >
+        <span>Noleggi </span>
+      </button>
+
+      <button mat-menu-item  (click)="logout()" tabindex="5" >
+        <mat-icon>
+          <span class="material-symbols-outlined">logout</span>
+        </mat-icon >
+        <span>Log out </span>
+      </button>
+
+    </mat-menu>
+
+    <button mat-button [matMenuTriggerFor]="theme"
+    aria-label="Open Menu"
+    aria-label="Open Theme Menu"
+    aria-haspopup="true"
+    tabindex="6" >
+    Tema
     </button>
-    <button mat-menu-item>
-      <mat-icon> <span class="material-symbols-outlined">
-        list_alt
-        </span> </mat-icon >
-      <span>Noleggi </span>
-    </button>
-    <button mat-menu-item  (click)="logout()" >
-      <mat-icon> <span class="material-symbols-outlined">
-        logout
-        </span> </mat-icon >
-      <span>Log out </span>
-    </button>
+
+
+    <mat-menu #theme="matMenu">
+      <button mat-menu-item (click)="changeTheme('theme1-toolbar')" tabindex="7" >Light</button>
+      <button mat-menu-item (click)="changeTheme('theme2-toolbar')" tabindex="8" >Dark</button>
     </mat-menu>
 
   </mat-toolbar>
+
+  <router-outlet></router-outlet>
+
+
+
+
 
 
 

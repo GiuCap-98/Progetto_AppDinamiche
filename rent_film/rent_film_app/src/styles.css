@@ -1,4 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.theme1-toolbar{
+  background-color:  #e8e8e8;
+  color: black;
+}
+
+.theme1-other {
+  background-color:white;
+  color:black;
+}
+
+.theme2-toolbar{
+  background-color: #2E343B ;
+  color: white;
+
+}
+
+.theme2-other {
+  background-color: #4b6a88;
+  color:black;
+}
+
+
+

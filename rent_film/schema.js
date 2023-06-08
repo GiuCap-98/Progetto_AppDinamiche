@@ -43,6 +43,12 @@ const typeDefs = gql`
     password: String
   }
 
+  type Store{
+    store_id: ID!
+    address: String
+    num_film: Int
+  }
+
   type Query {
     customers: [Customer]
     films: [Film]
@@ -52,6 +58,7 @@ const typeDefs = gql`
     categories: [Category]
     userById(customer_id: ID!): User 
     users: [User]
+    stores(film_id: ID!): [Store]
 
   }
 `;
@@ -131,6 +138,7 @@ const resolvers = {
     },
     userById: async (_, { customer_id }, { db_user }) => {
       try {
+        
         const result = await db_user.query('SELECT * FROM user_app WHERE customer_id = $1', [customer_id]);
         return result.rows[0];
       } catch (error) {
@@ -149,6 +157,24 @@ const resolvers = {
         throw new Error('Errore del server');
       }
     },
+    stores: async (_, { film_id }, { db_rent }) => {
+      try {
+        const query = `
+        SELECT addr.address, s.store_id, COALESCE(COUNT(i.film_id), 0) AS num_film
+        FROM store s
+        JOIN address addr ON s.address_id = addr.address_id
+        LEFT JOIN inventory i ON s.store_id = i.store_id AND i.film_id = $1
+        LEFT JOIN rental r ON i.inventory_id = r.inventory_id AND r.return_date IS NULL
+        WHERE r.inventory_id IS NULL
+        GROUP BY addr.address, s.store_id;
+        `;
+        const result = await db_rent.query(query, [film_id]);
+        return result.rows;
+      } catch (error) {
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+    }
     
   },
 };

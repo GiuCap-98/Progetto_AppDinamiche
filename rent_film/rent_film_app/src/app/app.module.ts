@@ -28,6 +28,8 @@ import { DialogModule } from '@angular/cdk/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ProvaComponent } from './prova/prova.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
+import { A11yModule } from '@angular/cdk/a11y';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -52,7 +54,9 @@ const modules = [
   ScrollingModule,
   DialogModule,
   MatFormFieldModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  A11yModule,
+  MatSelectModule
 ];
 
 @NgModule({

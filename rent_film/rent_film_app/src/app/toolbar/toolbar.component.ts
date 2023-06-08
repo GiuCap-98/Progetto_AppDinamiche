@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 import { Router , ActivatedRoute} from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'toolbar',
@@ -10,17 +11,21 @@ import { ServiceRentService } from '../service/service-rent.service';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit{
-  //isLoggedIn = this.servizioRent.getValue();
+  currentTheme!: string ;
+
+  constructor( private serviceRent: ServiceRentService, private _router: Router, private _activatedRoute:ActivatedRoute) { }
 
   ngOnInit(): void{
-    //console.log('disabled',this.isLoggedIn)
-
+    this.serviceRent.theme$.subscribe(theme => {
+      this.currentTheme = theme;
+    });
   }
-  constructor( private servizioRent: ServiceRentService, private _router: Router, private _activatedRoute:ActivatedRoute) { }
 
   navigateToLogin() {
     this._router.navigate(['login'])
   }
+
+
 
   home(){
     this._router.navigate(['start-button'])
@@ -30,6 +35,11 @@ export class ToolbarComponent implements OnInit{
   logout(): void {
     // Effettua il logout utilizzando il servizio AuthService
     //this.servizioRent.setValue(false);
+  }
+
+  changeTheme(theme: string) {
+    this.currentTheme = theme;
+    this.serviceRent.changeTheme(theme);
   }
 
 
