@@ -30,6 +30,7 @@ import { ProvaComponent } from './prova/prova.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSelectModule } from '@angular/material/select';
+import { RentalListComponent } from './rental-list/rental-list.component';
 
 
 
@@ -68,7 +69,8 @@ const modules = [
     DashboardComponent,
     LoginComponent,
     FilmDetailsComponent,
-    ProvaComponent
+    ProvaComponent,
+    RentalListComponent
   ],
 
   imports: modules,

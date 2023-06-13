@@ -51,6 +51,7 @@ export class LoginComponent  implements OnInit  {
     this.submitted = true;
 
   }
+  
 
 
   loginValido(): boolean {
@@ -74,8 +75,7 @@ export class LoginComponent  implements OnInit  {
     }
 }
 
-
-  login(): void {
+login(): void {
     // Effettua il login utilizzando il servizio AuthService
     if (this.loginValido()) {
       //this.servizioRent.setValue(true);
@@ -85,9 +85,6 @@ export class LoginComponent  implements OnInit  {
     } else {
       this.error = 'Credenziali non valide'; // Imposta l'errore per un accesso non valido
     }
-
-
-
   }
 
 }

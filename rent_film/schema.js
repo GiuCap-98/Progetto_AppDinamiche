@@ -39,14 +39,34 @@ const typeDefs = gql`
     customer_id: ID!
     first_name: String
     last_name: String
-    email: String
-    password: String
+    email: String!
+    password: String!
   }
 
   type Store{
     store_id: ID!
     address: String
     num_film: Int
+  }
+
+  type Rental {
+    rental_id: ID!
+    rental_date: Float
+    inventory_id: ID!
+    customer_id: ID!
+    return_date: Float
+    staff_id: ID
+    last_update: String
+    film: Film
+    payment: Payment
+  }
+
+  type Payment {
+    payment_id: ID!
+    customer_id: ID!
+    rental_id: ID!
+    amount: Float!
+    payment_date: String
   }
 
   type Query {
@@ -59,7 +79,8 @@ const typeDefs = gql`
     userById(customer_id: ID!): User 
     users: [User]
     stores(film_id: ID!): [Store]
-
+    findUserByEmailAndPassword(email: String!, password: String!): User
+    rentalsByCustomer(customerId: ID!): [Rental]
   }
 `;
 
@@ -174,8 +195,40 @@ const resolvers = {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
-    }
-    
+    },
+    findUserByEmailAndPassword: async (_, { email, password }, { db_user }) => {
+      const query = `
+        SELECT customer_id, first_name, last_name, email
+        FROM user_app
+        WHERE email = $1 AND password = $2;
+      `;
+      
+      const result = await db_user.query(query, [email, password]);
+      const user = result.rows[0];
+      
+      return user;
+    },
+    rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
+      const query = `
+        SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id
+        FROM film f
+        JOIN inventory i ON f.film_id = i.film_id
+        JOIN rental r ON i.inventory_id = r.inventory_id
+        JOIN payment p ON r.rental_id = p.rental_id
+        WHERE r.customer_id = $1;
+      `;
+      const result = await db_rent.query(query, [customerId]);
+      
+      const rentals = result.rows.map(row => ({
+        film: { title: row.title },
+        payment: { amount: row.amount },
+        rental_date: row.rental_date,
+        return_date: row.return_date,
+        rental_id: row.rental_id
+      }));
+      
+      return rentals;    
+    }     
   },
 };
 

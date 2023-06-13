@@ -92,5 +92,26 @@ export class ServiceRentService {
     });
   }
 
+  getLoggedUser(email: any, password: any): Observable<any>{
+    
+    const Logged_User = gql`
+    query {
+      findUserByEmailAndPassword($email: String!, password: String!) {
+        customer_id
+        first_name
+        last_name
+        email
+      }
+    }
+   `;
+    return this.apollo.query({
+      query: Logged_User,
+      variables: {
+        email: email, 
+        password: password
+      }
+    });
+  }
+
 
 }
