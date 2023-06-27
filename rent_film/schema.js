@@ -1,4 +1,21 @@
 const { gql } = require('apollo-server-express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const SECRET_KEY = 'mysecretkey'; // Sostituisci con la tua chiave segreta
+
+const generateToken = (userId) => {
+  const payload = {
+    userId: userId
+  };
+
+  const options = {
+    expiresIn: '1h' // Imposta la durata di validità del token (es. 1 ora)
+  };
+
+  return jwt.sign(payload, SECRET_KEY, options);
+};
+
 
 // Define GraphQL schema
 const typeDefs = gql`
@@ -43,6 +60,7 @@ const typeDefs = gql`
     password: String!
   }
 
+
   type Store{
     store_id: ID!
     address: String
@@ -69,6 +87,7 @@ const typeDefs = gql`
     payment_date: String
   }
 
+
   type Query {
     customers: [Customer]
     films: [Film]
@@ -79,9 +98,32 @@ const typeDefs = gql`
     userById(customer_id: ID!): User 
     users: [User]
     stores(film_id: ID!): [Store]
+    
+    findUser(email: String!, password: String!): User
     findUserByEmailAndPassword(email: String!, password: String!): User
+    findUserHash(email: String!, password: String!): User
+
     rentalsByCustomer(customerId: ID!): [Rental]
+
+
+    returnNameCustomer(email:String!): Customer
   }
+
+
+
+  type Mutation {
+    registerUser(input: UserInput!): User
+  }
+
+  input UserInput {
+    customer_id: ID!
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+  }
+
+
 `;
 
 // Resolvers GraphQL query
@@ -196,11 +238,13 @@ const resolvers = {
         throw new Error('Errore del server');
       }
     },
-    findUserByEmailAndPassword: async (_, { email, password }, { db_user }) => {
+    
+
+    findUser: async (_, { email, password }, { db_user }) => {
       const query = `
-        SELECT customer_id, first_name, last_name, email
-        FROM user_app
-        WHERE email = $1 AND password = $2;
+        SELECT u.customer_id, u.first_name, u.last_name, u.email
+        FROM user_app as u
+        WHERE u.email = $1 AND u.password = $2;
       `;
       
       const result = await db_user.query(query, [email, password]);
@@ -208,28 +252,128 @@ const resolvers = {
       
       return user;
     },
-    rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
-      const query = `
-        SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id
-        FROM film f
-        JOIN inventory i ON f.film_id = i.film_id
-        JOIN rental r ON i.inventory_id = r.inventory_id
-        JOIN payment p ON r.rental_id = p.rental_id
-        WHERE r.customer_id = $1;
-      `;
-      const result = await db_rent.query(query, [customerId]);
+
+    // Funzione per il login sicuro
+    findUserHash: async (_, { email, password }, { db_user }) => {
+       try{ 
+        // Recupera l'hash della password memorizzato per l'utente dal tuo database
+        const HashedPassword = `
+            SELECT password FROM user_app 
+            WHERE email=$1;
+          `;
+
+        //se l'utente esiste e mi trova l'hash della password
+        if(HashedPassword){
+          // Confronta l'hash memorizzato con la password inserita dall'utente
+          const isPasswordMatched = await bcrypt.compare(password, HashedPassword);
+          if (isPasswordMatched) {
+            const query = `
+            SELECT u.customer_id, u.first_name, u.last_name, u.email
+            FROM user_app as u
+            WHERE u.email = $1 AND u.password = $2;
+            `;
+            
+            const result = await db_user.query(query, [email, HashedPassword]);
+            const user = result.rows[0];
+            
+            return user;
+          }
+        }else{
+
+        }
+      }catch{
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+
       
-      const rentals = result.rows.map(row => ({
-        film: { title: row.title },
-        payment: { amount: row.amount },
-        rental_date: row.rental_date,
-        return_date: row.return_date,
-        rental_id: row.rental_id
-      }));
+
+
       
-      return rentals;    
-    }     
+    
   },
+
+    rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
+      try{
+        const query = `
+          SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id
+          FROM film f
+          JOIN inventory i ON f.film_id = i.film_id
+          JOIN rental r ON i.inventory_id = r.inventory_id
+          JOIN payment p ON r.rental_id = p.rental_id
+          WHERE r.customer_id = $1;
+        `;
+        const result = await db_rent.query(query, [customerId]);
+        
+        const rentals = result.rows.map(row => ({
+          film: { title: row.title },
+          payment: { amount: row.amount },
+          rental_date: row.rental_date,
+          return_date: row.return_date,
+          rental_id: row.rental_id
+        }));
+        
+        return rentals; 
+      }catch{
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }     
+    },
+
+    returnNameCustomer : async (_, { email }, { db_rent }) => {
+      try{
+
+            // Genera il nuovo valore per customer_id
+            const queryGetCustomerId = `
+            SELECT c.customer_id, c.first_name, c.last_name FROM customer as c WHERE c.email=$1;
+          `;
+          const result = await db_rent.query(queryGetCustomerId,[email]);
+          
+          const user = result.rows[0];
+            
+          return user;
+
+
+      }catch{
+
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+    }
+     
+  },
+
+  Mutation: {
+    registerUser: async (_, { input }, { db_user  }) => {
+      try {
+        const {
+          customer_id, 
+          first_name, 
+          last_name,
+          email,
+          password
+        } = input;
+  
+        // Effettua l'hashing della password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Inserisci i dati dell'utente nel database
+        const query = `
+        INSERT INTO user_app (customer_id, first_name, last_name, email, password)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *;
+        `;
+        const resultInsertUser= await db_user.query(query, [customer_id, first_name, last_name, email, hashedPassword]);
+        const registeredUser = resultInsertUser.rows[0];
+        return registeredUser;
+      } catch (error) {
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+    },
+  }
+  
 };
 
 module.exports = { typeDefs, resolvers };
+

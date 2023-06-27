@@ -20,6 +20,9 @@ export class ServiceRentService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private themeSubject = new BehaviorSubject<string>('theme1-toolbar');
   public theme$ = this.themeSubject.asObservable();
+  private film: any;
+  private stores: any[] =[];
+
 
   changeTheme(theme: string) {
     this.themeSubject.next(theme);
@@ -92,23 +95,27 @@ export class ServiceRentService {
     });
   }
 
-  getLoggedUser(email: any, password: any): Observable<any>{
-    
-    const Logged_User = gql`
+  // Return User rentals list
+  getRentalsByCustomer(customer_id: any): Observable<any>{
+
+    const User_Rentals = gql`
     query {
-      findUserByEmailAndPassword($email: String!, password: String!) {
-        customer_id
-        first_name
-        last_name
-        email
+      rentalsByCustomer(customerId: 534) {
+        film {
+          title
+        }
+        payment {
+          amount
+        }
+        rental_date
+        return_date
       }
     }
    `;
     return this.apollo.query({
-      query: Logged_User,
+      query: User_Rentals,
       variables: {
-        email: email, 
-        password: password
+        customerId: customer_id
       }
     });
   }

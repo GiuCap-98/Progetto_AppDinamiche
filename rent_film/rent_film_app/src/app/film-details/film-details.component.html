@@ -28,12 +28,14 @@
         </mat-select>
       </mat-form-field>
 
+
       <div class="content-rent">
         <button mat-button
         tabindex="0"
         [style.color]="coloreTextCard"
         class="button-rent"
-        [disabled]="!storeSelected">
+        [disabled]="!storeSelected"
+        (click)="rent_page()">
           {{ film.rental_rate}}
           <mat-icon>
             <span class="material-symbols-outlined">euro</span>

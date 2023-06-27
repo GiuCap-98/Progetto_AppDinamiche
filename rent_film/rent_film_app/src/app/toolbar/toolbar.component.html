@@ -16,21 +16,21 @@
       <mat-icon>account_circle</mat-icon></button>
     <mat-menu #menu="matMenu">
 
-      <button mat-menu-item tabindex="3" >
+      <button mat-menu-item tabindex="0" >
         <mat-icon>
           <span class="material-symbols-outlined">face</span>
         </mat-icon >
-        <span>Profilo </span>
+        <span>Profilo</span>
       </button>
 
-      <button mat-menu-item tabindex="4" >
+      <button mat-menu-item tabindex="0"  (click)="rentalList()">
         <mat-icon>
           <span class="material-symbols-outlined">list_alt</span>
         </mat-icon >
         <span>Noleggi </span>
       </button>
 
-      <button mat-menu-item  (click)="logout()" tabindex="5" >
+      <button mat-menu-item  (click)="logout()" tabindex="0" >
         <mat-icon>
           <span class="material-symbols-outlined">logout</span>
         </mat-icon >
@@ -43,14 +43,14 @@
     aria-label="Open Menu"
     aria-label="Open Theme Menu"
     aria-haspopup="true"
-    tabindex="6" >
+    tabindex="0" >
     Tema
     </button>
 
 
     <mat-menu #theme="matMenu">
-      <button mat-menu-item (click)="changeTheme('theme1-toolbar')" tabindex="7" >Light</button>
-      <button mat-menu-item (click)="changeTheme('theme2-toolbar')" tabindex="8" >Dark</button>
+      <button mat-menu-item (click)="changeTheme('theme1-toolbar')" tabindex="0" >Light</button>
+      <button mat-menu-item (click)="changeTheme('theme2-toolbar')" tabindex="0" >Dark</button>
     </mat-menu>
 
   </mat-toolbar>

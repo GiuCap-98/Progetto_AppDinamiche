@@ -1,0 +1,25 @@
+<div class="login" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card   >
+    <mat-card-title >
+      Login
+    </mat-card-title>
+    <mat-card-content >
+      <form [formGroup]="form" (ngSubmit)="register()">
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email" [(ngModel)]="email" name="email">
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <input matInput type="password" placeholder="Password" formControlName="password" [(ngModel)]="password" name="password">
+        </mat-form-field>
+        <br />
+        <button mat-raised-button color="primary" (click)="register()" type="submit">Register</button>
+
+        <br>
+
+        <p *ngIf="error" style="color:black" class="error-message">{{ error }}</p>
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>

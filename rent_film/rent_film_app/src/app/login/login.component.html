@@ -1,24 +1,27 @@
-
 <div class="login" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
   <mat-card  [style.background-color]="coloreCard" [style.color]="coloreTextCard" >
-    <mat-card-title fxLayout="column" fxLayoutAlign="center stretch">
+    <mat-card-title >
       Login
     </mat-card-title>
-    <mat-card-content fxLayout="column" fxLayoutAlign="center stretch">
-      <mat-form-field fxLayout="column" fxLayoutAlign="center stretch">
-        <input id="username" matInput placeholder="User Name" />
-      </mat-form-field>
-      <br />
-      <mat-form-field fxLayout="column" fxLayoutAlign="center stretch">
-        <input id="password" type="password" matInput placeholder="Password" />
-      </mat-form-field>
-      <p *ngIf="error" class="error-message">{{ error }}</p> <!-- Mostra l'errore se presente -->
+    <mat-card-content >
+      <form [formGroup]="form" (ngSubmit)="getLogged()">
+        <mat-form-field >
+          <input matInput placeholder="Username"  formControlName="email" [(ngModel)]="username" name="username">
+        </mat-form-field>
+        <br />
+        <mat-form-field >
+          <input matInput placeholder="Password"  formControlName="password" [(ngModel)]="password" name="password" type="password">
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="primary" type="submit">Login</button>
+        <br>
+        <a [routerLink]="['/registration']" >Registration</a>
+        <br>
+
+        <p *ngIf="error" class="error-message">{{ error }}</p>
+
+    </form>
     </mat-card-content>
-    <mat-card-actions>
-      <div class="button-flex-container">
-        <button mat-raised-button color="primary" (click)="login()">Login</button>
-      </div>
-    </mat-card-actions>
+
   </mat-card>
 </div>
-

@@ -4,9 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { StartButtonComponent } from './start-button/start-button.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,12 +25,14 @@ import { MenuComponent } from './menu/menu.component';
 import { LoginComponent } from './login/login.component';
 import { DialogModule } from '@angular/cdk/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { ProvaComponent } from './prova/prova.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSelectModule } from '@angular/material/select';
 import { RentalListComponent } from './rental-list/rental-list.component';
-
+import { JwtInterceptor } from './jwt.interceptor';
+import { RegistrationComponent } from './registration/registration.component';
+import { RentComponent } from './rent/rent.component';
+import { DialogComponentComponent } from './dialog-component/dialog-component.component';
 
 
 const modules = [
@@ -57,7 +58,8 @@ const modules = [
   MatFormFieldModule,
   MatPaginatorModule,
   A11yModule,
-  MatSelectModule
+  MatSelectModule,
+  HttpClientModule
 ];
 
 @NgModule({
@@ -65,16 +67,17 @@ const modules = [
     AppComponent,
     ToolbarComponent,
     MenuComponent,
-    StartButtonComponent,
     DashboardComponent,
     LoginComponent,
     FilmDetailsComponent,
-    ProvaComponent,
-    RentalListComponent
+    RentalListComponent,
+    RegistrationComponent,
+    RentComponent,
+    DialogComponentComponent
   ],
 
   imports: modules,
-  providers: [],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

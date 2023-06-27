@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StartButtonComponent } from './start-button/start-button.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
-import { ProvaComponent } from './prova/prova.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { RentComponent } from './rent/rent.component';
+import { RentalListComponent } from './rental-list/rental-list.component';
 
 const routes: Routes = [
   {
@@ -15,16 +16,27 @@ const routes: Routes = [
   {
     path:'dashboard', component: DashboardComponent,
     children: [
-      { path: ':id', component: FilmDetailsComponent }
+      {
+        path: ':id', component: FilmDetailsComponent,
+      }
+
     ]
 
   },
+  { path: 'rent/:film_title/:film_id/:data1/:store1_num_film/:data2/:store2_num_film', component: RentComponent ,
+
+  },
+
+
   {
-    path:'start-button', component: StartButtonComponent
+    path:'registration', component: RegistrationComponent
 
   },
   {
     path:'film-details', component: FilmDetailsComponent
+  },
+  {
+    path:'rental-list', component: RentalListComponent
   }
 
 ];

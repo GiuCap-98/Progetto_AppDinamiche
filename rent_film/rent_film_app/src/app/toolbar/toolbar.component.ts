@@ -31,6 +31,10 @@ export class ToolbarComponent implements OnInit{
     this._router.navigate(['start-button'])
   }
 
+  rentalList() {
+    this._router.navigate(['rental-list'])
+  }
+
 
   logout(): void {
     // Effettua il logout utilizzando il servizio AuthService

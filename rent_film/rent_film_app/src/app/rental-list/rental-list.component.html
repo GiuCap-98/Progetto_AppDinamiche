@@ -1,1 +1,63 @@
-<p>rental-list works!</p>
+<main title="User Rental List" [ngClass]="currentTheme" class="start">
+
+  <!-- Sezione lista noleggi -->
+  <section role="list-rental">
+
+      <!-- Creazione di una matcard per visualizzare i dati di ogni noleggio in 'rentals' -->
+      <mat-card class="item" *ngFor="let rent of rentals | slice: startIndex: endIndex"  [style.background-color]="coloreCard" [style.color]="coloreTextCard" aria-describedby="list-rental-description">
+
+          <!-- Intestazione matcard -->
+          <mat-card-header>
+            <mat-card-title class="title" aria-describedby="rental-data">
+                 {{rent.film.title }}
+            </mat-card-title>
+          </mat-card-header>
+
+          <!-- Contenuto matcard-->
+          <mat-card-content>
+            <p>{{ rent.rental_date }}</p>
+          </mat-card-content>
+
+          <!-- Azioni matcard: bottone per visualizzare i dettagli di un noleggio-->
+          <mat-card-actions align="start">
+              <button class="details" mat-button tabindex="0" [style.color]="coloreTextCard" aria-describedby="descrizione-dettagli">
+                Dettagli
+                <mat-icon>
+                  <span class="material-symbols-outlined">add</span>
+                </mat-icon>
+              </button>
+
+              <!-- Descrizione dei dettagli -->
+              <p id="descrizione-dettagli" style="display: none;">
+                  Questo bottone consente di visualizzare ulteriori dettagli del noleggio selezionato.
+              </p>
+          </mat-card-actions>
+
+
+
+      </mat-card>
+
+      <!-- Descrizione del contenuto della sezione lista noleggi -->
+      <div id="list-rental-description" style="display: none;">
+          Questa sezione mostra l'elenco dei noleggi effettuati e la spesa totale effettuata
+      </div>
+
+  </section>
+
+
+  <!-- Sezione paginazione -->
+  <section role="select-page" class="paginator-div" aria-controls="rental-pagination">
+
+      <mat-paginator
+          [length]="rentals.length"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+          class="paginator"
+          id="rental-pagination"
+      ></mat-paginator>
+
+  </section>
+</main>

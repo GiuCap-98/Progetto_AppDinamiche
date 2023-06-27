@@ -9,6 +9,8 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import axe from 'axe-core';
+import { Router } from '@angular/router';
+import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,8 @@ import axe from 'axe-core';
 export class DashboardComponent implements OnInit {
   searchControl = new FormControl('');
   films: any[] = []; // array to store the films
+  storesByFilm: any[] = [];
+  stores: any[] = []; // array to store the shops
   startIndex = 0;
   endIndex = 10;
   pageSize = 10;
@@ -27,21 +31,24 @@ export class DashboardComponent implements OnInit {
   currentTheme: string = 'theme1-other';
   coloreCard!: string;
   coloreTextCard!: string;
+  disableRent: boolean = false;
+  disponibile!: boolean;
+
+  public error: any | null | undefined;
+
 
 
   // se isFilm è null non mi ritorna i dettagli del film, altrimenti si
   isFilm!: boolean;
   isScrolled: boolean = false;
   scrolled = 0;
-  elementOrigin = this.formatOrigin(null);
-  subtreeOrigin = this.formatOrigin(null);
-  @ViewChildren('filmElement') filmElements!: QueryList<any>; // QueryList for film elements
+  //@ViewChildren('filmElement') filmElements!: QueryList<any>; // QueryList for film elements
+
 
   constructor(
     private serviceRent: ServiceRentService, // iniettiamo il servizio
     public dialog: Dialog,
-    private _ngZone: NgZone,
-    private _cdr: ChangeDetectorRef
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -52,14 +59,9 @@ export class DashboardComponent implements OnInit {
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
-  }
 
-  formatOrigin(origin: FocusOrigin): string {
-    return origin ? origin + ' focused' : 'blurred';
-  }
-  // Workaround for the fact that (cdkFocusChange) emits outside NgZone.
-  markForCheck() {
-    this._ngZone.run(() => this._cdr.markForCheck());
+
+
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -108,8 +110,6 @@ export class DashboardComponent implements OnInit {
         if (responseData) {
           this.films = responseData.searchFilms; // Aggi
           this.films = responseData.searchFilms; // Aggiorna l'array films con i risultati della ricerca
-          // Focus the first film element when search results are updated
-          this.setFocusOnFilmElement();
         }
       });
   }
@@ -120,25 +120,48 @@ export class DashboardComponent implements OnInit {
     this.updatePageIndex();
   }
 
+
+  rent_page(film : any){
+
+    if(!this.getStoresByFilm(film)){
+      this._router.navigate(['rent', film.title, film.film_id, this.storesByFilm[0].address,this.storesByFilm[0].num_film,this.storesByFilm[1].address, this.storesByFilm[1].num_film  ])
+    }else{
+      this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
+
+    }
+
+  }
+
+  getStoresByFilm(film: any): boolean {
+    this.serviceRent.getStores(film.film_id).subscribe((response) => {
+      this.storesByFilm= response.data.stores;
+
+    });
+    console.log( this.storesByFilm.every(store => store.num_film === 0));
+    return  this.storesByFilm.every(store => store.num_film === 0);
+
+  }
+
+  getStores() {
+    this.serviceRent.getStores(this.films).subscribe((response) => {
+      this.stores= response.data.stores;
+    });
+  }
+
+
+
+
   // dialog for film details
   openDialog(film: any) {
+    this.getStoresByFilm(film)
     this.dialog.open(FilmDetailsComponent, {
       width: '90%',
       maxWidth: '800px',
       height: '90%',
       maxHeight: '600px',
-      data: film
+      data: {film: film, stores: this.storesByFilm }
     });
   }
 
-  private setFocusOnFilmElement() {
-    // Wait for the film elements to be available in the DOM
-    this.filmElements.changes.subscribe(() => {
-      // Check if there are any film elements
-      if (this.filmElements.length > 0) {
-        // Focus the first film element
-        this.filmElements.first.nativeElement.focus();
-      }
-    });
-  }
+
 }

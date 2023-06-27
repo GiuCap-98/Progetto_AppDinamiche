@@ -17,9 +17,8 @@
 
     </div>
   </form>
-    <!--<app-film *cdkVirtualFor="let film of films" [film]="film" class="item"></app-film> -->
   <section role="list-film" >
-    <mat-card class="item" *ngFor="let film of films | slice: startIndex: endIndex"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+    <mat-card  class="item" *ngFor="let film of films | slice: startIndex: endIndex"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
       <mat-card-header>
         <mat-card-title class="title">
              {{film.title }}
@@ -35,22 +34,25 @@
       </mat-card-content>
       <mat-card-actions align="start"  >
         <button cdkMonitorSubtreeFocus
-        (cdkFocusChange)="elementOrigin = formatOrigin($event); markForCheck()"
         class="details" mat-button
         (click)="openDialog(film)"
         tabindex="0"
         [style.color]="coloreTextCard">
-          Dettagli ({{elementOrigin}})
+          Dettagli
           <mat-icon>
             <span class="material-symbols-outlined">add</span>
           </mat-icon>
 
         </button>
       </mat-card-actions>
+
+      <p *ngIf="error" class="error-message">{{ error }}</p>
+
       <mat-card-actions align="end" >
         <button mat-button
         tabindex="0"
-        [style.color]="coloreTextCard">
+        [style.color]="coloreTextCard"
+        (click)="rent_page(film)">
           {{ film.rental_rate}}
           <mat-icon>
             <span class="material-symbols-outlined">euro</span>
@@ -72,8 +74,6 @@
         class="paginator"
       ></mat-paginator>
   </section>
-
-
 
   <div id="scroll-up">
     <!-- Bottone per tornare all'inizio della pagina -->

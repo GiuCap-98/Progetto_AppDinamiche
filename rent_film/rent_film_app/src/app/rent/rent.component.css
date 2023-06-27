@@ -1,0 +1,60 @@
+.login {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  padding-left: 30%;
+  padding-right: 30%;
+  height: 100%;
+  margin:40px;
+  color: black;
+
+}
+
+
+@media only screen and (min-width: 500px) {
+	.login {
+
+  padding-left: 10%;
+  padding-right: 10%;
+
+  }
+}
+
+@media only screen and (max-width: 600px) {
+	.login {
+
+    margin: 500px;
+
+  }
+}
+
+mat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  height: auto;
+  width: auto;
+  padding: 80px;
+}
+mat-card-content{
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+
+}
+
+
+mat-card mat-card-title{
+  font-size: 200%;
+  padding-bottom: 20px;
+}
+
+.button-flex-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}

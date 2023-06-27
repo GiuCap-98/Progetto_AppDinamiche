@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ServiceRentService } from '../service/service-rent.service';
 import {NgIf} from '@angular/common';
 import {Dialog, DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
+
 
 
 @Component({
@@ -21,14 +22,18 @@ export class FilmDetailsComponent implements OnInit {
   coloreTextCard!: string;
   storeSelected : boolean = false;
 
+  public error: string | null | undefined;
+
   constructor(
     private route: ActivatedRoute,
+    private _router: Router,
     private serviceRent: ServiceRentService,
     private location: Location,
-    @Inject(DIALOG_DATA) public data: any,
+    @Inject(DIALOG_DATA) public data: {film: any, stores: any},
     public dialogRef: DialogRef<FilmDetailsComponent>
   ) {
-    this.film= data
+    this.film= data.film
+    this.stores= data.stores
   }
 
   ngOnInit(): void {
@@ -37,26 +42,22 @@ export class FilmDetailsComponent implements OnInit {
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
-    this.getStores();
-  }
-  getFilm(): void {
-    this.film_id = this.route.snapshot.paramMap.get('id')
-    console.log(this.route.snapshot.paramMap.get('id'))
+
+    this.error= this.data.stores[0]
   }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
 
-
-  getStores() {
-    this.serviceRent.getStores(this.film.film_id).subscribe((response) => {
-      this.stores= response.data.stores;
-    });
-  }
-
   click(selected: boolean) {
     this.storeSelected = selected
+  }
+
+  rent_page(){
+    this._router.navigate(['rent', this.film.title, this.film.film_id, this.stores[0].address,this.stores[0].num_film,this.stores[1].address, this.stores[1].num_film  ])
+    this.closeDialog()
+
   }
 
 }

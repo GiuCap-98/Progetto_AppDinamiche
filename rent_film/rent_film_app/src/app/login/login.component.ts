@@ -1,7 +1,10 @@
 import { Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
-import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthServiceService } from '../service/authservice.service';
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,18 +12,28 @@ import { ServiceRentService } from '../service/service-rent.service';
 })
 export class LoginComponent  implements OnInit  {
 
-  public submitted = false;
   public error: string | null | undefined;
-  public isLoggedIn = false;
+  form!: FormGroup;
   theme: string = 'theme1-toolbar';
   currentTheme!: string;
   coloreCard!: string;
   coloreTextCard!: string;
+  user: any;
+
+  username!: string;
+  password!: string;
+
 
   constructor( private serviceRent: ServiceRentService,
     private _router: Router,
-    private _activatedRoute:ActivatedRoute
-    ) { }
+    private authService: AuthServiceService,
+    private fb: FormBuilder
+    ) {
+      this.form = this.fb.group({
+        email: ['', Validators.required],
+        password: ['', Validators.required]
+    });
+     }
 
   ngOnInit(): void {
     this.serviceRent.theme$.subscribe((theme) => {
@@ -29,62 +42,41 @@ export class LoginComponent  implements OnInit  {
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
   }
-
-  //@Input() error: string | null | undefined;
-
-  //@Output() sendDataEvent = new EventEmitter();
-  @Output() loginSuccess = new EventEmitter();
-
-  submit() {
-    //if (this.form.valid) {
-      this.loginSuccess.emit(null)
-      this.isLoggedIn = true; // Imposta isLoggedIn a true dopo un accesso riuscito
-      this._router.navigate(['start-button'])
-      console.log(false);
-    //}
+  logout() {
+      this.authService.clearAuthToken(); // Cancella il token
+      this._router.navigateByUrl('/');
   }
 
 
+  getLogged() {
+    this.authService.getLogged(this.username,this.password).subscribe((response) => {
+      this.user = response.data.findUser;
+      if (this.user) {
+        // Aggiungi qui la navigazione verso la pagina successiva dopo il login
+        this._router.navigate(['dashboard'])
+      } else {
+        this.error= 'Utente o password errati'
 
-  onLogin(): void {
-    // console.log(this.loginForm.value);
-    this.submitted = true;
-
+      }
+    });
   }
-  
 
 
-  loginValido(): boolean {
-    // Ottenere i valori inseriti dall'utente per username e password
-    const username = (<HTMLInputElement>document.getElementById('username')).value;
-    const password = (<HTMLInputElement>document.getElementById('password')).value;
+  getLoggedToken() {
+    this.authService.getLogged(this.username,this.password).subscribe((response) => {
+      this.user = response.data.findUser;
+      if (this.user) {
+        // Salva il token JWT nel localStorage
+        localStorage.setItem('jwtToken', response.token);
 
-
-    // Esempio di verifica delle credenziali
-    // Implementa la tua logica di verifica qui, ad esempio, controlla le credenziali nel tuo sistema di autenticazione
-    // Restituisci true se le credenziali sono valide, altrimenti false
-
-    // Esempio di verifica delle credenziali hard-coded
-    const usernameCorretto = 'utente';
-    const passwordCorretta = 'password';
-
-    if (username === usernameCorretto && password === passwordCorretta) {
-      return true;
-    } else {
-      return false;
-    }
-}
-
-login(): void {
-    // Effettua il login utilizzando il servizio AuthService
-    if (this.loginValido()) {
-      //this.servizioRent.setValue(true);
-      this._router.navigate(['dashboard']);
-      this.serviceRent.isLoggedIn$.next(true)
-      this.isLoggedIn = true; // Imposta isLoggedIn a true dopo un accesso riuscito
-    } else {
-      this.error = 'Credenziali non valide'; // Imposta l'errore per un accesso non valido
-    }
+        // Aggiungi qui la navigazione verso la pagina successiva dopo il login
+        this._router.navigate(['dashboard']);
+      } else {
+        this.error = 'Utente o password errati';
+      }
+    });
   }
+
+
 
 }
