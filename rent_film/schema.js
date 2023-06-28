@@ -95,9 +95,9 @@ const typeDefs = gql`
 
   
   type Rental_FilmPaymant {
-    film: [Film]
-    payment: [Payment]
-    rental:[Rental]
+    film: Film
+    payment: Payment
+    rental:Rental
   }
 
 
@@ -110,18 +110,15 @@ const typeDefs = gql`
   }
 
   type Film_Category {
-    film: [Film]
-    category: [Category]
+    film: Film
+    category: Category
   }
 
   type StoreOccorrency{
-    store: [Store]
-    address: [Address]
+    store: Store
+    address: Address
     num_film: Float
   }
-
-
-
 
   type Query {
     customers: [Customer]
@@ -137,11 +134,9 @@ const typeDefs = gql`
     findUserByEmailAndPassword(email: String!, password: String!): User
     findUserHash(email: String!, password: String!): User
 
-    rentalsByCustomer(customerId: ID!): [Rental]
+    rentalsByCustomer(customerId: ID!): [Rental_FilmPaymant]
     returnNameCustomer(email:String!): Customer
   }
-
-
 
   type Mutation {
     registerUser(input: UserInput!): User
@@ -154,7 +149,6 @@ const typeDefs = gql`
     email: String!
     password: String!
   }
-
 
 `;
 
@@ -170,26 +164,38 @@ const resolvers = {
         throw new Error('Errore del server');
       }
     },
+
     films: async (_, __, { db_rent }) => {
       try {
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
+        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name
         FROM film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
         `;
+        
         const result = await db_rent.query(query);
-        
-        const films = result.rows.map(row => ({
-          film: { film_id: row.film_id, title: row.title,description: row.description, release_year: row.release_year, language_id: row.language_id, 
-            rental_duration: row.rental_duration, rental_rate: row.rental_rate, length: row.length, rating: row.rating, last_update: row.last_update  },
-          category:{
-            name: row.name
-          }
+
+        const film_obj = result.rows.map(row => ({
+          film: { 
+            film_id: row.film_id,
+            title: row.title,
+            description: row.description,
+            release_year: row.release_year,
+            language_id: row.language_id,
+            rental_duration: row.rental_duration,
+            rental_rate: row.rental_rate,
+            length: row.length,
+            rating: row.rating,
+            last_update: row.last_update
+          },
+          category: { name: row.name }
         }));
-        
-        return films; 
-      } catch (error) {
+
+        return film_obj; 
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -199,7 +205,9 @@ const resolvers = {
       try {
         const result = await db_user.query('SELECT * FROM user_app');
         return result.rows;
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -214,16 +222,12 @@ const resolvers = {
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
         WHERE f.title ILIKE '%' || $1 || '%'
         `;
-        const result = await db_rent.query(query, [term]);
-        const films = result.rows.map(row => ({
-          film: { film_id: row.film_id, title: row.title, description: row.description, release_year: row.release_year, language_id: row.language_id, rental_duration: row.rental_duration, rental_rate: row.rental_rate, length: row.length, rating: row.rating, last_update: row.last_update  },
-          category:{
-            name: row.name
-          }
-        }));
-        
-        return films; 
-      } catch (error) {
+        const result = await db_rent.query(query, [term]);    
+        return result.rows; 
+
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -239,17 +243,12 @@ const resolvers = {
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
         WHERE cat.name= $1
         `;
-        const result = await client.query(query, [category]);
-        client.release();
-        const films = result.rows.map(row => ({
-          film: { film_id: row.film_id, title: row.title, description: row.description, release_year: row.release_year, language_id: row.language_id, rental_duration: row.rental_duration, rental_rate: row.rental_rate, length: row.length, rating: row.rating, last_update: row.last_update  },
-          category:{
-            name: row.name
-          }
-        }));
-        
-        return films; 
-      } catch (error) {
+        const result = await client.query(query, [category]);    
+        return result.rows; 
+
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -259,8 +258,10 @@ const resolvers = {
       try {
         
         const result = await db_user.query('SELECT * FROM user_app WHERE customer_id = $1', [customer_id]);
-        return result.rows[0];
-      } catch (error) {
+        return result.rows;
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -270,13 +271,15 @@ const resolvers = {
       try {
         const client = await db_rent.connect();
         const result = await client.query('SELECT name FROM category');
-        client.release();
         return result.rows;
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
     },
+
     stores: async (_, { film_id }, { db_rent }) => {
       try {
         const query = `
@@ -288,17 +291,12 @@ const resolvers = {
         WHERE r.inventory_id IS NULL
         GROUP BY addr.address, s.store_id;
         `;
-        const result = await db_rent.query(query, [film_id]);
-        const stores = result.rows.map(row => ({
-          store: { store_id: row.store_id },
-          address:{
-            address: row.address
-          },
-          num_film: row.num_film
-        }));
+        const result = await db_rent.query(query, [film_id]); 
+        return result.rows; 
         
-        return stores; 
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
@@ -349,13 +347,7 @@ const resolvers = {
       }catch{
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
-      }
-
-      
-
-
-      
-    
+      }    
   },
 
     rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
@@ -373,9 +365,12 @@ const resolvers = {
         const rentals = result.rows.map(row => ({
           film: { title: row.title },
           payment: { amount: row.amount },
-          rental: {rental_date: row.rental_date,
+          rental: {
+            rental_date: row.rental_date,
             return_date: row.return_date,
-            rental_id: row.rental_id}
+            rental_id: row.rental_id
+          }
+          
         }));
         
         return rentals; 

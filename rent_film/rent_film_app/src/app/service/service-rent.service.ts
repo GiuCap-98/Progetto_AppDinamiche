@@ -165,8 +165,8 @@ export class ServiceRentService {
         rental {
           rental_date
           return_date
+          rental_id
         }
-
       }
     }
    `;

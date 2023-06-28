@@ -62,9 +62,6 @@ export class DashboardComponent implements OnInit {
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
-
-
-
   }
 
   @HostListener('window:scroll', ['$event'])
