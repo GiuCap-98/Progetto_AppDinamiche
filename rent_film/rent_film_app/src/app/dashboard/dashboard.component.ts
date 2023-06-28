@@ -33,6 +33,8 @@ export class DashboardComponent implements OnInit {
   coloreTextCard!: string;
   disableRent: boolean = false;
   disponibile!: boolean;
+  selectedOption!: string;
+  categories: string[] =[];
 
   public error: any | null | undefined;
 
@@ -54,6 +56,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getFilms();
     this.searchFilms();
+    this.getCategories();
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
@@ -86,6 +89,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getCategories(){
+    this.serviceRent.getCategories().subscribe((response) => {
+      this.categories = response.data.categories;
+    });
+  }
+
+
   updatePageIndex() {
     this.startIndex = this.pageIndex * this.pageSize;
     this.endIndex = this.startIndex + this.pageSize;
@@ -108,7 +118,6 @@ export class DashboardComponent implements OnInit {
       .subscribe((response: any) => {
         const responseData: any = response.data;
         if (responseData) {
-          this.films = responseData.searchFilms; // Aggi
           this.films = responseData.searchFilms; // Aggiorna l'array films con i risultati della ricerca
         }
       });
@@ -145,6 +154,15 @@ export class DashboardComponent implements OnInit {
   getStores() {
     this.serviceRent.getStores(this.films).subscribe((response) => {
       this.stores= response.data.stores;
+    });
+  }
+
+
+  filterByCategory(category: string){
+    console.log(category)
+    this.serviceRent.searchFilmsByCategory(category).subscribe((response) => {
+      this.films = response.data.searchFilmsByCategory;  // Aggiorna l'array films con i risultati della ricerca
+
     });
   }
 

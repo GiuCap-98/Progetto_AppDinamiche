@@ -35,19 +35,34 @@ export class ServiceRentService {
       query: gql`
         query {
           films {
-            film_id
-            title
-            description
-            release_year
-            language_id
-            rental_duration
-            rental_rate
-            length
-            replacement_cost
-            rating
-            special_features
-            fulltext
-            last_update
+            film{
+              film_id
+              title
+              description
+              release_year
+              language_id
+              rental_duration
+              rental_rate
+              length
+              rating
+              last_update
+            }
+            category {
+              name
+            }
+          }
+        }
+      `
+    });
+  }
+
+
+  getCategories(): Observable<any>{
+    return this.apollo.query<any>({
+      query: gql`
+        query {
+          categories {
+            name
           }
         }
       `
@@ -62,8 +77,15 @@ export class ServiceRentService {
           title
           description
           release_year
-          rating
+          language_id
+          rental_duration
           rental_rate
+          length
+          rating
+          last_update
+        }
+        category{
+          name
         }
       }
     `;
@@ -76,12 +98,45 @@ export class ServiceRentService {
     });
   }
 
+  searchFilmsByCategory(category: string): Observable<any> {
+    const SEARCH_FILMS_BY_CATEGORY = gql`
+      query SearchFilms($searchCategory: String!) {
+        searchFilmsByCategory(category: $searchCategory) {
+          film_id
+          title
+          description
+          release_year
+          language_id
+          rental_duration
+          rental_rate
+          length
+          rating
+          last_update
+        }
+        category {
+          name
+        }
+      }
+    `;
+
+    return this.apollo.query({
+      query: SEARCH_FILMS_BY_CATEGORY,
+      variables: {
+        searchCategory: category
+      }
+    });
+  }
+
   getStores(film_id: any): Observable<any>{
     const StoreQuery = gql`
     query FindStoresByFilmId($filmId: ID!) {
       stores(film_id: $filmId) {
-        store_id
-        address
+        store{
+          store_id
+        }
+        address {
+          address
+        }
         num_film
       }
     }
@@ -107,8 +162,11 @@ export class ServiceRentService {
         payment {
           amount
         }
-        rental_date
-        return_date
+        rental {
+          rental_date
+          return_date
+        }
+
       }
     }
    `;

@@ -7,7 +7,7 @@ import { GraphQLModule } from './graphql.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule} from '@angular/material/card';
@@ -33,7 +33,8 @@ import { JwtInterceptor } from './jwt.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
 import { RentComponent } from './rent/rent.component';
 import { DialogComponentComponent } from './dialog-component/dialog-component.component';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatRadioModule} from '@angular/material/radio';
 
 const modules = [
   BrowserModule,
@@ -59,7 +60,10 @@ const modules = [
   MatPaginatorModule,
   A11yModule,
   MatSelectModule,
-  HttpClientModule
+  HttpClientModule,
+  MatSidenavModule,
+  MatCheckboxModule,
+  MatRadioModule
 ];
 
 @NgModule({

@@ -117,5 +117,17 @@ mat-card-content a{
   border-radius:50px;
 }
 
+mat-drawer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+}
 
-
+.radio-label {
+  display: inline-block;
+  padding: 8px 12px;
+  cursor: pointer;
+}
