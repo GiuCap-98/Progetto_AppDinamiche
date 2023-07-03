@@ -2,8 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthServiceService } from '../service/authservice.service';
-
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +10,9 @@ import { AuthServiceService } from '../service/authservice.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent  implements OnInit  {
+
+  email!: string;
+  password!: string;
 
   public error: string | null | undefined;
   form!: FormGroup;
@@ -20,13 +22,10 @@ export class LoginComponent  implements OnInit  {
   coloreTextCard!: string;
   user: any;
 
-  username!: string;
-  password!: string;
-
 
   constructor( private serviceRent: ServiceRentService,
     private _router: Router,
-    private authService: AuthServiceService,
+    private authService: AuthService,
     private fb: FormBuilder
     ) {
       this.form = this.fb.group({
@@ -42,41 +41,20 @@ export class LoginComponent  implements OnInit  {
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
   }
-  logout() {
-      this.authService.clearAuthToken(); // Cancella il token
-      this._router.navigateByUrl('/');
-  }
 
-
-  getLogged() {
-    this.authService.getLogged(this.username,this.password).subscribe((response) => {
-      this.user = response.data.findUser;
-      if (this.user) {
-        // Aggiungi qui la navigazione verso la pagina successiva dopo il login
-        this._router.navigate(['dashboard'])
-      } else {
-        this.error= 'Utente o password errati'
-
-      }
-    });
-  }
-
-
-  getLoggedToken() {
-    this.authService.getLogged(this.username,this.password).subscribe((response) => {
-      this.user = response.data.findUser;
-      if (this.user) {
+  login() {
+    this.authService.login(this.email, this.password).subscribe(
+      response => {
+        const token = response.data.login;
         // Salva il token JWT nel localStorage
-        localStorage.setItem('jwtToken', response.token);
-
-        // Aggiungi qui la navigazione verso la pagina successiva dopo il login
-        this._router.navigate(['dashboard']);
-      } else {
-        this.error = 'Utente o password errati';
+        localStorage.setItem('token', token); 
+        // Reindirizza alla pagina del dashboard dopo il login
+        this._router.navigate(['/dashboard']); 
+      },
+      error => {
+        console.error(error);
       }
-    });
+    );
   }
-
-
 
 }

@@ -3,9 +3,6 @@ import { Apollo } from 'apollo-angular';
 import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { BehaviorSubject, Observable} from "rxjs";
 
-
-
-
 // injectable vuol dire che è iniettabile, ovvero che possiamo
 // iniettare il nostro service 'in giro' all'applicazione
 
@@ -16,6 +13,7 @@ import { BehaviorSubject, Observable} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
+
 export class ServiceRentService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private themeSubject = new BehaviorSubject<string>('theme1-toolbar');

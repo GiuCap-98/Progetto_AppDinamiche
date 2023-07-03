@@ -1,5 +1,8 @@
 const { Pool } = require('pg');
 
+const SECRET = 'asklkdjwqportityakmajdejnekn';
+ 
+
 async function configureDB() {
   // Initialize database connections
   const pool_rent = new Pool({
@@ -15,8 +18,8 @@ async function configureDB() {
     user: 'postgres',
     host: 'localhost',
     database: 'user_web',
-    //password: '1324',
-    password: 'giulisa',
+    password: '1324',
+    //password: 'giulisa',
     port: 5432,
   });
   
@@ -35,4 +38,4 @@ async function configureDB() {
 }
 
 // Export database connection
-module.exports = { configureDB };
+module.exports = { configureDB, SECRET };

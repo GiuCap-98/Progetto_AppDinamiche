@@ -10,14 +10,23 @@ import { RentalListComponent } from './rental-list/rental-list.component';
 
 const routes: Routes = [
   {
-    path: '', component: LoginComponent
+    path: '', 
+    component: LoginComponent,
+    children: [
+      {
+        path: 'registration',
+        component: RegistrationComponent
+      }
+      
+    ]
   },
 
   {
     path:'dashboard', component: DashboardComponent,
     children: [
       {
-        path: ':id', component: FilmDetailsComponent,
+        path: ':id', 
+        component: FilmDetailsComponent
       }
 
     ]

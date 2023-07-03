@@ -2,23 +2,9 @@ const { gql } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const SECRET_KEY = 'mysecretkey'; // Sostituisci con la tua chiave segreta
-
-const generateToken = (userId) => {
-  const payload = {
-    userId: userId
-  };
-
-  const options = {
-    expiresIn: '1h' // Imposta la durata di validità del token (es. 1 ora)
-  };
-
-  return jwt.sign(payload, SECRET_KEY, options);
-};
-
-
 // Define GraphQL schema
 const typeDefs = gql`
+
   type Customer {
     customer_id: ID!
     store_id: ID
@@ -65,15 +51,6 @@ const typeDefs = gql`
     last_update: String
   }
     
-  type User {
-    customer_id: ID!
-    first_name: String
-    last_name: String
-    email: String!
-    password: String!
-  }
-
-
   type Store{
     store_id: ID!
     manager_staff_id: ID
@@ -120,36 +97,29 @@ const typeDefs = gql`
     num_film: Float
   }
 
+  type User {
+    customer_id: ID!
+    first_name: String
+    last_name: String
+    email: String!
+    password: String!
+  }
+
   type Query {
     customers: [Customer]
     films: [Film_Category]
     searchFilms(term: String!): [Film_Category]
     searchFilmsByCategory(category: String!): [Film_Category]
     categories: [Category]
-    userById(customer_id: ID!): User 
-    users: [User]
     stores(film_id: ID!): [StoreOccorrency]
-    
-    findUser(email: String!, password: String!): User
-    findUserByEmailAndPassword(email: String!, password: String!): User
-    findUserHash(email: String!, password: String!): User
-
     rentalsByCustomer(customerId: ID!): [Rental_FilmPaymant]
     returnNameCustomer(email:String!): Customer
   }
 
   type Mutation {
-    registerUser(input: UserInput!): User
+    register(customer_id: ID!, first_name: String!, last_name: String!, email: String!, password: String!): User
+    login(email: String!, password: String!): String!
   }
-
-  input UserInput {
-    customer_id: ID!
-    first_name: String!
-    last_name: String!
-    email: String!
-    password: String!
-  }
-
 `;
 
 // Resolvers GraphQL query
@@ -201,18 +171,6 @@ const resolvers = {
       }
     },
 
-    users: async (_, __, { db_user }) => {
-      try {
-        const result = await db_user.query('SELECT * FROM user_app');
-        return result.rows;
-      } 
-      
-      catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },
-
     searchFilms: async (_, { term }, { db_rent }) => {
       try {
         const query = `
@@ -254,19 +212,6 @@ const resolvers = {
       }
     },
 
-    userById: async (_, { customer_id }, { db_user }) => {
-      try {
-        
-        const result = await db_user.query('SELECT * FROM user_app WHERE customer_id = $1', [customer_id]);
-        return result.rows;
-      } 
-      
-      catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },
-    
     categories: async (_, __, { db_rent }) => {
       try {
         const client = await db_rent.connect();
@@ -302,54 +247,6 @@ const resolvers = {
       }
     },
     
-
-    findUser: async (_, { email, password }, { db_user }) => {
-      const query = `
-        SELECT u.customer_id, u.first_name, u.last_name, u.email
-        FROM user_app as u
-        WHERE u.email = $1 AND u.password = $2;
-      `;
-      
-      const result = await db_user.query(query, [email, password]);
-      const user = result.rows[0];
-      
-      return user;
-    },
-
-    // Funzione per il login sicuro
-    findUserHash: async (_, { email, password }, { db_user }) => {
-       try{ 
-        // Recupera l'hash della password memorizzato per l'utente dal tuo database
-        const HashedPassword = `
-            SELECT password FROM user_app 
-            WHERE email=$1;
-          `;
-
-        //se l'utente esiste e mi trova l'hash della password
-        if(HashedPassword){
-          // Confronta l'hash memorizzato con la password inserita dall'utente
-          const isPasswordMatched = await bcrypt.compare(password, HashedPassword);
-          if (isPasswordMatched) {
-            const query = `
-            SELECT u.customer_id, u.first_name, u.last_name, u.email
-            FROM user_app as u
-            WHERE u.email = $1 AND u.password = $2;
-            `;
-            
-            const result = await db_user.query(query, [email, HashedPassword]);
-            const user = result.rows[0];
-            
-            return user;
-          }
-        }else{
-
-        }
-      }catch{
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }    
-  },
-
     rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
       try{
         const query = `
@@ -404,35 +301,67 @@ const resolvers = {
   },
 
   Mutation: {
-    registerUser: async (_, { input }, { db_user  }) => {
+    register: async (_, { customer_id, first_name, last_name, email, password }, { db_user }) => {
       try {
-        const {
-          customer_id, 
-          first_name, 
-          last_name,
-          email,
-          password
-        } = input;
-  
-        // Effettua l'hashing della password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Inserisci i dati dell'utente nel database
-        const query = `
-        INSERT INTO user_app (customer_id, first_name, last_name, email, password)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
+        // Verifica se l'utente esiste già nel database
+        const queryCheckUser = `
+          SELECT email FROM user_app WHERE email = $1;
         `;
-        const resultInsertUser= await db_user.query(query, [customer_id, first_name, last_name, email, hashedPassword]);
-        const registeredUser = resultInsertUser.rows[0];
-        return registeredUser;
+        const existingUser = await db_user.query(queryCheckUser, [email]);
+  
+        if (existingUser.rows.length > 0) {
+          throw new Error('Utente già registrato con questa email');
+        }
+  
+        // Genera l'hash della password
+        const hashedPassword = await bcrypt.hash(password, 12);
+  
+        // Inserisci l'utente nel database
+        const queryInsertUser = `
+          INSERT INTO user_app (customer_id, first_name, last_name, email, password)
+          VALUES ($1, $2, $3, $4, $5)
+          RETURNING *;
+        `;
+        const result = await db_user.query(queryInsertUser, [customer_id, first_name, last_name, email, hashedPassword]);
+        const newUser = result.rows[0];
+  
+        return newUser;
       } catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
     },
-  }
+
+    login: async (_, { email, password }, { db_user, SECRET }) => {
+      try {
+        // Check if the user exists in the database
+        const queryCheckUser = `
+          SELECT customer_id, email, password FROM user_app WHERE email = $1;
+        `;
+        const result = await db_user.query(queryCheckUser, [email]);
+        const user = result.rows[0];
   
+        if (!user) {
+          throw new Error('Email non valida');
+        }
+  
+        // Verify the password
+        const isPasswordMatched = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatched) {
+          throw new Error('Password non valida');
+        }
+  
+        // Generate a JWT token
+        const token = jwt.sign({ email: user.email, customer_id: user.customer_id }, SECRET, { expiresIn: '1d' });
+  
+        return token;
+      } catch (error) {
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+    }
+  }
+
 };
 
 module.exports = { typeDefs, resolvers };

@@ -7,7 +7,7 @@ import { GraphQLModule } from './graphql.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule} from '@angular/material/card';
@@ -35,6 +35,11 @@ import { RentComponent } from './rent/rent.component';
 import { DialogComponentComponent } from './dialog-component/dialog-component.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter(): string | null {
+  return localStorage.getItem('token');
+}
 
 const modules = [
   BrowserModule,

@@ -12,8 +12,6 @@ export class AuthServiceService {
 
     constructor(private apollo: Apollo) {}
 
-
-
     getLogged(email: string, password:string): Observable<any>{
       const Logged_User = gql`
         query findUser($email: String!, $password: String!) {
