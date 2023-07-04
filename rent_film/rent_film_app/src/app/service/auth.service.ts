@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Apollo, gql } from 'apollo-angular';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +27,7 @@ export class AuthService {
 
   register(user: any): Observable<any> {
     const register = gql`
-    mutation RegisterUser($customer_id: Int!, $first_name: String!, $last_name: String!, $email: String!, $password: String!) {
+    mutation RegisterUser($customer_id: ID!, $first_name: String!, $last_name: String!, $email: String!, $password: String!) {
       register(
         customer_id: $customer_id
         first_name: $first_name

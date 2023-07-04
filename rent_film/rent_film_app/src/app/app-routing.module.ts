@@ -10,14 +10,14 @@ import { RentalListComponent } from './rental-list/rental-list.component';
 
 const routes: Routes = [
   {
-    path: '', 
+    path: '',
     component: LoginComponent,
     children: [
       {
         path: 'registration',
         component: RegistrationComponent
       }
-      
+
     ]
   },
 
@@ -25,17 +25,16 @@ const routes: Routes = [
     path:'dashboard', component: DashboardComponent,
     children: [
       {
-        path: ':id', 
+        path: ':id',
         component: FilmDetailsComponent
       }
 
     ]
 
   },
-  { path: 'rent/:film_title/:film_id/:data1/:store1_num_film/:data2/:store2_num_film', component: RentComponent ,
+  //{ path: 'rent/:film_title/:film_id/:data1/:store1_num_film/:data2/:store2_num_film', component: RentComponent ,},
 
-  },
-
+  { path: 'rent/:film_store', component: RentComponent},
 
   {
     path:'registration', component: RegistrationComponent

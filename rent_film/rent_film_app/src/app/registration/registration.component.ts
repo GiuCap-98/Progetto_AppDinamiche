@@ -21,7 +21,7 @@ export class RegistrationComponent {
     });
   }
 
-  register() {
+  register() : void {
     if (this.form.valid) {
       const user = this.form.value;
       this.authService.register(user).subscribe(

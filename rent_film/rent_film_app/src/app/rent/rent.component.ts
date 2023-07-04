@@ -1,12 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ServiceRentService } from '../service/service-rent.service';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { AuthServiceService } from '../service/authservice.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Stores } from '../Type/Store';
 import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
+import { FilmCategoryStore } from '../Type/interface';
 
 @Component({
   selector: 'app-rent',
@@ -17,13 +14,11 @@ export class RentComponent implements OnInit{
 
   public error: string | null | undefined;
   form!: FormGroup;
-  stores : Stores[]=[]
-  stores_address:string[]=[]; // array to store the shops
-  stores_num_film: number[]=[];
-  film!: any;
-  film_id!:any;
+
+  film!: FilmCategoryStore;
   dataSelected: boolean = false;
   storeSelected : boolean = false;
+
   theme: string = 'theme1-toolbar';
   currentTheme!: string;
   coloreCard!: string;
@@ -31,7 +26,7 @@ export class RentComponent implements OnInit{
 
 
 
-  constructor( private fb: FormBuilder, private serviceRent: ServiceRentService, private route: ActivatedRoute, private dialog: Dialog) {
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog) {
       this.form = this.fb.group({
         data: ['', Validators.required],
         store: ['', Validators.required]
@@ -39,43 +34,31 @@ export class RentComponent implements OnInit{
 
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.route.params.subscribe(params => {
-      this.film = params['film_title'];
-      this.film_id = params['film_id']
-      this.stores_address[0]= params['data1'];
-      this.stores_address[1] = params['data2'];
-
-      this.stores_num_film[0]= +params['store1_num_film'];
-      this.stores_num_film[1] = +params['store2_num_film'];
+      this.film = JSON.parse(params['film_store']);
     });
-
-    this.stores = [
-      { address: this.stores_address[0], num_film: this.stores_num_film[0]},
-      { address: this.stores_address[1], num_film: this.stores_num_film[1]}]
-    //this.stores= this.route.snapshot.paramMap.get('data_stores')
-
   }
 
-  rent(){
+  rent() : void {
     this.openDialog()
   }
 
-  click_data(selected: boolean) {
+  click_data(selected: boolean) : void {
     this.dataSelected = selected
   }
-  click_store(selected: boolean) {
+  click_store(selected: boolean) : void {
     this.storeSelected = selected
   }
 
 
 
   // dialog for film details
-  openDialog() {
-    //if(this.storeSelected && this.dataSelected){
-    this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }});
+  openDialog() : void {
+    if(this.storeSelected && this.dataSelected){
+      this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }});
 
-    //}
+    }
 
 
 

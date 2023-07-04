@@ -91,8 +91,13 @@ const typeDefs = gql`
     category: Category
   }
 
+  type Film_Category_Stores {
+    film: Film
+    category: Category
+    stores: [StoreOccorrency]
+  }
+
   type StoreOccorrency{
-    store: Store
     address: Address
     num_film: Float
   }
@@ -108,12 +113,12 @@ const typeDefs = gql`
   type Query {
     customers: [Customer]
     films: [Film_Category]
-    searchFilms(term: String!): [Film_Category]
-    searchFilmsByCategory(category: String!): [Film_Category]
+    searchFilms(searchTerm: String!): [Film_Category_Stores]
+    searchFilmsByCategory(category: String!): [Film_Category_Stores]
+    films_cat_stores: [Film_Category_Stores]
     categories: [Category]
     stores(film_id: ID!): [StoreOccorrency]
     rentalsByCustomer(customerId: ID!): [Rental_FilmPaymant]
-    returnNameCustomer(email:String!): Customer
   }
 
   type Mutation {
@@ -171,38 +176,146 @@ const resolvers = {
       }
     },
 
-    searchFilms: async (_, { term }, { db_rent }) => {
+
+    films_cat_stores: async (_, __, { db_rent }) => {
       try {
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS category 
-        FROM film f
+        SELECT
+        f.film_id,
+        f.title,
+        f.description,
+        f.release_year,
+        f.language_id,
+        f.rental_duration,
+        f.rental_rate,
+        f.length,
+        f.rating,
+        f.last_update,
+        cat.name,
+        (
+          SELECT
+            json_agg(json_build_object('address', sf.address, 'num_film', COALESCE(sf.num_film, 0))) 
+          FROM (
+            SELECT
+              addr.address,
+              COALESCE(COUNT(i.film_id), 0) AS num_film
+            FROM
+              store s
+              JOIN address addr ON s.address_id = addr.address_id
+              LEFT JOIN inventory i ON s.store_id = i.store_id AND i.film_id = f.film_id 
+              LEFT JOIN rental r ON i.inventory_id = r.inventory_id AND r.return_date IS NULL
+            WHERE
+              r.inventory_id IS NULL
+            GROUP BY
+              addr.address
+          ) AS sf
+        ) AS stores
+      FROM
+        film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
-        WHERE f.title ILIKE '%' || $1 || '%'
-        `;
-        const result = await db_rent.query(query, [term]);    
-        return result.rows; 
-
-      } 
       
-      catch (error) {
+        `;
+    
+        const result = await db_rent.query(query);
+        
+        
+        const filmObj = result.rows.map(row => ({
+          film: {
+            film_id: row.film_id,
+            title: row.title,
+            description: row.description,
+            release_year: row.release_year,
+            language_id: row.language_id,
+            rental_duration: row.rental_duration,
+            rental_rate: row.rental_rate,
+            length: row.length,
+            rating: row.rating,
+            last_update: row.last_update
+          },
+          category: { name: row.name },
+          //stores:  row.stores || []
+          stores: row.stores.map(store => ({
+            address:  { address: store.address || 'No address available'}, // Assegna una stringa vuota se l'indirizzo è null
+            num_film: store.num_film
+          }))
+            
+            
+      }));
+    
+        return filmObj;
+      } catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
     },
 
+    searchFilms: async (_, { searchTerm }, { db_rent }) => {
+      try {
+        const query = `
+        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
+        FROM film f
+        JOIN film_category f_cat ON f_cat.film_id = f.film_id
+        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
+        WHERE f.title ILIKE '%' || $1 || '%'
+        `;
+        const result = await db_rent.query(query, [searchTerm]);    
+        const filmObj = result.rows.map(row => ({
+          film: {
+            film_id: row.film_id,
+            title: row.title,
+            description: row.description,
+            release_year: row.release_year,
+            language_id: row.language_id,
+            rental_duration: row.rental_duration,
+            rental_rate: row.rental_rate,
+            length: row.length,
+            rating: row.rating,
+            last_update: row.last_update
+          },
+          category: { name: row.name }
+        }));
+      
+        return filmObj;
+      } 
+      catch (error) {
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
+    },
+    
+
     searchFilmsByCategory: async (_, { category }, { db_rent }) => {
       try {
         const client = await db_rent.connect();
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS category 
+        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
         FROM film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
         WHERE cat.name= $1
         `;
-        const result = await client.query(query, [category]);    
-        return result.rows; 
+        const result = await client.query(query, [category]);  
+        
+        
+        const categoryObj = result.rows.map(row => ({
+          film: {
+            film_id: row.film_id,
+            title: row.title,
+            description: row.description,
+            release_year: row.release_year,
+            language_id: row.language_id,
+            rental_duration: row.rental_duration,
+            rental_rate: row.rental_rate,
+            length: row.length,
+            rating: row.rating,
+            last_update: row.last_update
+          },
+          category: { name: row.name }
+           
+      }));
+    
+        return categoryObj;
 
       } 
       
@@ -277,26 +390,7 @@ const resolvers = {
       }     
     },
 
-    returnNameCustomer : async (_, { email }, { db_rent }) => {
-      try{
-
-            // Genera il nuovo valore per customer_id
-            const queryGetCustomerId = `
-            SELECT c.customer_id, c.first_name, c.last_name FROM customer as c WHERE c.email=$1;
-          `;
-          const result = await db_rent.query(queryGetCustomerId,[email]);
-          
-          const user = result.rows[0];
-            
-          return user;
-
-
-      }catch{
-
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    }
+    
      
   },
 

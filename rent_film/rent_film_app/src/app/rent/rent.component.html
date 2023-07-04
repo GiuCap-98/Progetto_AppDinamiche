@@ -1,7 +1,7 @@
 <div class="login" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
   <mat-card  [style.background-color]="coloreCard" [style.color]="coloreTextCard" >
     <mat-card-title >
-      {{film}}
+      {{film.film.title}}
       <br>
     </mat-card-title>
     <mat-card-content >
@@ -20,7 +20,7 @@
         <mat-form-field >
           <mat-label>Store</mat-label>
           <mat-select formControlName="store" >
-            <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click_store(matOption.selected)" >{{store.address}}</mat-option>
+            <mat-option #matOption *ngFor="let store of film.stores" [value]="store" [disabled]="!store.num_film" (click)="click_store(matOption.selected)" >{{store.address.address}}</mat-option>
           </mat-select>
         </mat-form-field>
         <br>

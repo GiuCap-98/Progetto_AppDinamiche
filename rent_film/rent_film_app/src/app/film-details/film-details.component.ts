@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { ServiceRentService } from '../service/service-rent.service';
 import {NgIf} from '@angular/common';
 import {Dialog, DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
+import { FilmCategoryStore } from '../Type/interface';
 
 
 
@@ -14,9 +15,7 @@ import {Dialog, DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog'
 })
 export class FilmDetailsComponent implements OnInit {
 
-  film:  any;
-  stores: any[] = []; // array to store the shops
-  film_id : any;
+  film:  FilmCategoryStore;
   currentTheme!: string;
   coloreCard!: string;
   coloreTextCard!: string;
@@ -25,15 +24,12 @@ export class FilmDetailsComponent implements OnInit {
   public error: string | null | undefined;
 
   constructor(
-    private route: ActivatedRoute,
     private _router: Router,
     private serviceRent: ServiceRentService,
-    private location: Location,
-    @Inject(DIALOG_DATA) public data: {film: any, stores: any},
+    @Inject(DIALOG_DATA) public data: {film_and_stores: FilmCategoryStore},
     public dialogRef: DialogRef<FilmDetailsComponent>
   ) {
-    this.film= data.film
-    this.stores= data.stores
+    this.film= data.film_and_stores
   }
 
   ngOnInit(): void {
@@ -43,21 +39,21 @@ export class FilmDetailsComponent implements OnInit {
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
 
-    this.error= this.data.stores[0]
   }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
 
-  click(selected: boolean) {
+  click(selected: boolean) : void {
     this.storeSelected = selected
   }
 
-  rent_page(){
-    this._router.navigate(['rent', this.film.title, this.film.film_id, this.stores[0].address,this.stores[0].num_film,this.stores[1].address, this.stores[1].num_film  ])
+  rent_page(film : FilmCategoryStore) : void{
+    this._router.navigate(['rent', JSON.stringify(film)])
     this.closeDialog()
 
   }
+
 
 }

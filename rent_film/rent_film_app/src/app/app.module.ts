@@ -35,7 +35,7 @@ import { RentComponent } from './rent/rent.component';
 import { DialogComponentComponent } from './dialog-component/dialog-component.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
-import { JwtModule } from '@auth0/angular-jwt';
+//import { JwtModule } from '@auth0/angular-jwt';
 
 export function tokenGetter(): string | null {
   return localStorage.getItem('token');

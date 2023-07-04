@@ -15,23 +15,23 @@ export class ToolbarComponent implements OnInit{
 
   constructor( private serviceRent: ServiceRentService, private _router: Router, private _activatedRoute:ActivatedRoute) { }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.serviceRent.theme$.subscribe(theme => {
       this.currentTheme = theme;
     });
   }
 
-  navigateToLogin() {
+  navigateToLogin() : void {
     this._router.navigate(['login'])
   }
 
 
 
-  home(){
+  home() : void{
     this._router.navigate(['start-button'])
   }
 
-  rentalList() {
+  rentalList() : void {
     this._router.navigate(['rental-list'])
   }
 
@@ -41,7 +41,7 @@ export class ToolbarComponent implements OnInit{
     //this.servizioRent.setValue(false);
   }
 
-  changeTheme(theme: string) {
+  changeTheme(theme: string) : void {
     this.currentTheme = theme;
     this.serviceRent.changeTheme(theme);
   }

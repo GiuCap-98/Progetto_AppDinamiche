@@ -1,6 +1,5 @@
 import { DIALOG_DATA, DialogRef,  } from '@angular/cdk/dialog';
 import { Component, Inject } from '@angular/core';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-dialog-component',
