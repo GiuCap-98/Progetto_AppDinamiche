@@ -35,7 +35,6 @@ export class DashboardComponent implements OnInit {
   //variabili per il bottone di ritorno ad inizio pagina
   isScrolled: boolean = false;
   scrolled = 0;
-
   //variabile per la selezione di una categoria (usata nell'html)
   selectedOption!: Category;
 
