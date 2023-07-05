@@ -4,7 +4,8 @@ import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { BehaviorSubject, Observable} from "rxjs";
 
 import { ApolloQueryResult } from '@apollo/client/core';
-import { CategoryResponse, FilmsCatStoresResponse, RentalResponse } from '../Type/interface';
+import { CategoryResponse, FilmsCatStoresResponse, FilmsCategoryResponse, RentalResponse } from '../Type/interface';
+import { FilmCategory } from '../Type/Model';
 
 
 // injectable vuol dire che è iniettabile, ovvero che possiamo
@@ -32,8 +33,8 @@ export class ServiceRentService {
 
   constructor(private apollo: Apollo) {}
 
-  getFilms(): Observable<any>{
-    return this.apollo.query<any>({
+  getFilms(): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
+    return this.apollo.query<FilmsCategoryResponse>({
       query: gql`
         query {
           films {
@@ -57,7 +58,6 @@ export class ServiceRentService {
       `
     });
   }
-
 
   getStores(film_id: any): Observable<any>{
     const StoreQuery = gql`

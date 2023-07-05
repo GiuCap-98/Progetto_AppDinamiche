@@ -11,14 +11,12 @@ import { RentalListComponent } from './rental-list/rental-list.component';
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent,
-    children: [
-      {
-        path: 'registration',
-        component: RegistrationComponent
-      }
-
-    ]
+    component: LoginComponent
+  },
+  
+  {
+    path: 'registration',
+    component: RegistrationComponent
   },
 
   {

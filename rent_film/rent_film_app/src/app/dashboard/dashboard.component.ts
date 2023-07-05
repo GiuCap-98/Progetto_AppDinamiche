@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
-import { FilmCategoryStore } from '../Type/interface';
+import { FilmCategory, FilmCategoryStore } from '../Type/interface';
 import { Category } from '../Type/interface';
 
 @Component({
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Funzioni per il bottone di ritorno ad inizo pagina
+  // Bottone di ritorno ad inizo pagina
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() : void {
     const numb = window.scrollY;
@@ -81,7 +81,14 @@ export class DashboardComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Ritorna una lista di film 
+  /**getFilms() : void {
+    this.serviceRent.getFilms().subscribe((response) => {
+      this.films = response.data.films as FilmCategory[];
 
+      this.updatePageIndex();
+    });
+  }*/
 
   // get all films from service
   getFilms() : void {
@@ -97,7 +104,6 @@ export class DashboardComponent implements OnInit {
       this.categories = response.data.categories as Category[];
     });
   }
-
 
   updatePageIndex() : void {
     this.startIndex = this.pageIndex * this.pageSize;

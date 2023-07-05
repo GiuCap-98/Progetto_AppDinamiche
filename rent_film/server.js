@@ -6,15 +6,16 @@ const { typeDefs, resolvers } = require('./schema'); // Import GraphQL schema
 const { configureDB, SECRET } = require('./db'); // Import database
 
 async function startServer() {
-  // Initialize Apollo server
+  // Inizializza Apollo server
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    // req rappresenta l'oggetto di richiesta HTTP
     context: ({ req }) => ({
       db_rent,
       db_user,
       SECRET,
-      user: req.user // Imposta l'utente nel contesto (opzionale)
+      user: req.user // Imposta l'utente nel contesto
     })
   });
 
