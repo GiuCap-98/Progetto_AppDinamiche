@@ -1,0 +1,32 @@
+<div class="dialog-window" [ngClass]="currentTheme">
+  <div class="title"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+    <mat-card-actions >
+
+      <button mat-button (click)="closeDialog()">
+        <mat-icon>
+          <span class="material-symbols-outlined">close</span>
+        </mat-icon>
+        Close
+      </button>
+    </mat-card-actions>
+
+
+    <h2 mat-dialog-title>{{ film.film.title }}</h2>
+  </div>
+  <div class="dialog-content" >
+      <p><strong>Genere:</strong> {{ film.film.film_id }}</p>
+      <p><strong>Genere:</strong> {{ film.film.title }}</p>
+      <p><strong>Genere:</strong> {{ film.film.title }}</p>
+      <p><strong>Descrizione:</strong> {{ film.film.description }}</p>
+      <mat-card-actions >
+      {{ film.film.rental_rate}}
+      <mat-icon>
+        <span class="material-symbols-outlined">euro</span>
+      </mat-icon>
+    </mat-card-actions>
+
+  </div>
+
+</div>
+
+

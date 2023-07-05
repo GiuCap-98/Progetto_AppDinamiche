@@ -34,7 +34,7 @@ const routes: Routes = [
   },
   //{ path: 'rent/:film_title/:film_id/:data1/:store1_num_film/:data2/:store2_num_film', component: RentComponent ,},
 
-  { path: 'rent/:film_store', component: RentComponent},
+  { path: 'rent/:film/:stores', component: RentComponent},
 
   {
     path:'registration', component: RegistrationComponent

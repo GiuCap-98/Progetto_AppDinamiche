@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
-import { FilmCategoryStore } from '../Type/interface';
+import { FilmCategoryStore, StoreOccorrency } from '../Type/interface';
+import { FilmCategory } from '../Type/Model';
 
 @Component({
   selector: 'app-rent',
@@ -15,7 +16,8 @@ export class RentComponent implements OnInit{
   public error: string | null | undefined;
   form!: FormGroup;
 
-  film!: FilmCategoryStore;
+  film!: FilmCategory;
+  stores!: StoreOccorrency[];
   dataSelected: boolean = false;
   storeSelected : boolean = false;
 
@@ -36,9 +38,13 @@ export class RentComponent implements OnInit{
 
   ngOnInit() : void {
     this.route.params.subscribe(params => {
-      this.film = JSON.parse(params['film_store']);
+      this.film = JSON.parse(params['film']);
+      this.stores = JSON.parse(params['stores']);
+
     });
   }
+
+
 
   rent() : void {
     this.openDialog()

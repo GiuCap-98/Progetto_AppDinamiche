@@ -73,6 +73,7 @@ const typeDefs = gql`
   
   type Rental_FilmPaymant {
     film: Film
+    address: Address
     payment: Payment
     rental:Rental
   }
@@ -98,6 +99,7 @@ const typeDefs = gql`
   }
 
   type StoreOccorrency{
+    store: Store
     address: Address
     num_film: Float
   }
@@ -113,8 +115,8 @@ const typeDefs = gql`
   type Query {
     customers: [Customer]
     films: [Film_Category]
-    searchFilms(searchTerm: String!): [Film_Category_Stores]
-    searchFilmsByCategory(category: String!): [Film_Category_Stores]
+    searchFilms(searchTerm: String!): [Film_Category]
+    searchFilmsByCategory(category: String!): [Film_Category]
     films_cat_stores: [Film_Category_Stores]
     categories: [Category]
     stores(film_id: ID!): [StoreOccorrency]
@@ -341,7 +343,7 @@ const resolvers = {
     stores: async (_, { film_id }, { db_rent }) => {
       try {
         const query = `
-        SELECT addr.address, s.store_id, COALESCE(COUNT(i.film_id), 0) AS num_film
+        SELECT s.store_id, addr.address, COALESCE(COUNT(i.film_id), 0) AS num_film
         FROM store s
         JOIN address addr ON s.address_id = addr.address_id
         LEFT JOIN inventory i ON s.store_id = i.store_id AND i.film_id = $1
@@ -350,7 +352,13 @@ const resolvers = {
         GROUP BY addr.address, s.store_id;
         `;
         const result = await db_rent.query(query, [film_id]); 
-        return result.rows; 
+        const stores = result.rows.map(row => ({
+          store: { store_id: row.store_id },
+          address: { address: row.address },
+          num_film: row.num_film
+        }));
+        
+        return stores;
         
       } 
       
@@ -363,17 +371,21 @@ const resolvers = {
     rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
       try{
         const query = `
-          SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id
+          SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id, addr.address
           FROM film f
           JOIN inventory i ON f.film_id = i.film_id
           JOIN rental r ON i.inventory_id = r.inventory_id
-          JOIN payment p ON r.rental_id = p.rental_id
-          WHERE r.customer_id = $1;
+          LEFT JOIN payment p ON r.rental_id = p.rental_id
+          LEFT JOIN customer cust ON cust.customer_id = p.customer_id
+          LEFT JOIN address addr ON addr.address_id = cust.address_ID
+          WHERE r.customer_id = $1 AND p.amount is not NULL
+          order by r.rental_date desc;
         `;
         const result = await db_rent.query(query, [customerId]);
         
         const rentals = result.rows.map(row => ({
           film: { title: row.title },
+          address: { address: row.address },
           payment: { amount: row.amount },
           rental: {
             rental_date: row.rental_date,

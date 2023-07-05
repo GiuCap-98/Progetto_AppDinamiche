@@ -1,8 +1,9 @@
 //QUERY
 // Crea un tipo per rappresentare la risposta della query GraphQL
-export interface FilmsCatStoresResponse {
-  films_cat_stores: FilmCategoryStore[];
-  searchFilmsByCategory : FilmCategoryStore[]
+export interface FilmsCategoryResponse {
+  films: FilmCategory[];
+  searchFilmsByCategory : FilmCategory[]
+  searchFilm : FilmCategory[]
 }
 
 export interface CategoryResponse {
@@ -42,6 +43,15 @@ export interface Address {
 }
 
 export interface Store {
+  store_id: number
+  manager_staff_id: number
+  address_id: number
+  last_update: String
+}
+
+
+export interface StoreOccorrency {
+  store: Store
   address: Address;
   num_film: number;
 }
@@ -49,10 +59,13 @@ export interface Store {
 export interface FilmCategoryStore {
   film: Film;
   category: Category;
-  stores: Store[];
+  stores: StoreOccorrency[];
 }
 
-
+export interface FilmCategory {
+  film: Film;
+  category: Category;
+}
 
 export interface Payment {
   payment_id: number;

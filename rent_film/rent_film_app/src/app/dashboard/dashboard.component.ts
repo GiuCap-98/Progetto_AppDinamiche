@@ -1,14 +1,17 @@
 import { Component, HostListener, OnDestroy, OnInit, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ServiceRentService } from '../service/service-rent.service';
 import { Dialog} from '@angular/cdk/dialog';
+import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
 import { FilmDetailsComponent } from '../film-details/film-details.component';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
-import { FilmCategoryStore } from '../Type/interface';
+import { FilmCategory, FilmCategoryStore, StoreOccorrency } from '../Type/interface';
 import { Category } from '../Type/interface';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +21,7 @@ import { Category } from '../Type/interface';
 })
 export class DashboardComponent implements OnInit {
   searchControl : FormControl = new FormControl('');
-  films: FilmCategoryStore[] = []; // array to store the films
+  films: FilmCategory[] = []; // array to store the films
 
   // variabili per la paginazione
   startIndex : number = 0;
@@ -44,7 +47,8 @@ export class DashboardComponent implements OnInit {
   //per stampare un errore
   public error: any | null | undefined;
 
-  //storesByFilm: any[] = [];
+  storesByFilm: StoreOccorrency[] = [];
+  isFilmPresent!: boolean ;
   //stores: any[] = []; // array to store the shops
 
 
@@ -85,11 +89,26 @@ export class DashboardComponent implements OnInit {
 
   // get all films from service
   getFilms() : void {
-    this.serviceRent.getFilms_Cat_Store().subscribe((response) => {
-      this.films = response.data.films_cat_stores as FilmCategoryStore[];
+    this.serviceRent.getFilms().subscribe((response) => {
+      this.films = response.data.films as FilmCategory[];
 
       this.updatePageIndex();
     });
+  }
+
+  getStoresByFilm(film: any)  {
+    this.serviceRent.getStores(film.film_id).subscribe((response) => {
+      this.storesByFilm= response.data.stores;
+
+    });
+
+
+  }
+
+  getStoresByFilm2(film: any): Observable<StoreOccorrency[]> {
+    return this.serviceRent.getStores(film.film_id).pipe(
+      map((response) => response.data.stores)
+    );
   }
 
   getCategories() : void{
@@ -121,7 +140,7 @@ export class DashboardComponent implements OnInit {
       .subscribe((response: any) => {
         const responseData: any = response.data;
         if (responseData) {
-          this.films = responseData.searchFilms.film as FilmCategoryStore[]; // Aggiorna l'array films con i risultati della ricerca
+          this.films = responseData.searchFilms as FilmCategory[]; // Aggiorna l'array films con i risultati della ricerca
         }
       });
   }
@@ -133,13 +152,34 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  rent_page(film : FilmCategoryStore) : void{
+  rent_page(film : FilmCategory) : void{
+    this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
+      if (storesByFilm[0].num_film || storesByFilm[1].num_film) {
+        this.isFilmPresent = true;
+        this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(storesByFilm)])
+      } else {
+        this.isFilmPresent = false;
+        this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
+      }
+      console.log(this.isFilmPresent);
+    });
+    /*
+    this.getStoresByFilm(film.film)
+    if(this.storesByFilm[0].num_film || this.storesByFilm[1].num_film){
+      this.isFilmPresent= true
+    }else{
+      this.isFilmPresent= false
+    }
+    console.log(this.isFilmPresent)
+    */
+    /*
     if(film.stores[0].num_film || film.stores[1].num_film){
       this._router.navigate(['rent', JSON.stringify(film)])
     }else{
       this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
 
     }
+    */
 
   }
 
@@ -154,15 +194,17 @@ export class DashboardComponent implements OnInit {
 
 
   // dialog for film details
-  openDetails(film: FilmCategoryStore) : void {
-    //this.getStoresByFilm(film)
-    this.dialog.open(FilmDetailsComponent, {
-      width: '90%',
-      maxWidth: '800px',
-      height: '90%',
-      maxHeight: '600px',
-      data: {film_and_stores: film}
+  openDetails(film: FilmCategory) : void {
+    this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
+      this.dialog.open(FilmDetailsComponent, {
+        width: '90%',
+        maxWidth: '800px',
+        height: '90%',
+        maxHeight: '600px',
+        data: {film_and_category: film, stores: storesByFilm}
+      });
     });
+
   }
 
 

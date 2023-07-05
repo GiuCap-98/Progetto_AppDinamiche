@@ -24,7 +24,7 @@
       <mat-form-field>
         <mat-label>Store</mat-label>
         <mat-select >
-          <mat-option #matOption *ngFor="let store of film.stores" [value]="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address.address}}</mat-option>
+          <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address.address}}</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -35,7 +35,7 @@
         [style.color]="coloreTextCard"
         class="button-rent"
         [disabled]="!storeSelected"
-        (click)="rent_page(film)">
+        (click)="rent_page(film, stores)">
           {{ film.film.rental_rate}}
           <mat-icon>
             <span class="material-symbols-outlined">euro</span>

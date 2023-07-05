@@ -4,7 +4,7 @@ import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { BehaviorSubject, Observable} from "rxjs";
 
 import { ApolloQueryResult } from '@apollo/client/core';
-import { CategoryResponse, FilmsCatStoresResponse, RentalResponse } from '../Type/interface';
+import { CategoryResponse, FilmsCategoryResponse, RentalResponse } from '../Type/interface';
 
 
 // injectable vuol dire che è iniettabile, ovvero che possiamo
@@ -32,8 +32,8 @@ export class ServiceRentService {
 
   constructor(private apollo: Apollo) {}
 
-  getFilms(): Observable<any>{
-    return this.apollo.query<any>({
+  getFilms(): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
+    return this.apollo.query<FilmsCategoryResponse>({
       query: gql`
         query {
           films {
@@ -81,7 +81,7 @@ export class ServiceRentService {
       }
     });
   }
-
+ /*
   getFilms_Cat_Store(): Observable<ApolloQueryResult<FilmsCatStoresResponse>>{
       return this.apollo.query<FilmsCatStoresResponse>({
         query: gql`
@@ -114,7 +114,7 @@ export class ServiceRentService {
       });
     }
 
-
+    */
 
   getCategories(): Observable<ApolloQueryResult<CategoryResponse>>{
     return this.apollo.query<CategoryResponse>({
@@ -128,7 +128,7 @@ export class ServiceRentService {
     });
   }
 
-  searchFilms(searchTerm: string): Observable<any> {
+  searchFilms(searchTerm: string): Observable<ApolloQueryResult<FilmsCategoryResponse>> {
     const SEARCH_FILMS_QUERY = gql`
       query SearchFilms($searchTerm: String!) {
         searchFilms(searchTerm: $searchTerm) {
@@ -148,9 +148,10 @@ export class ServiceRentService {
             name
           }
       }
+    }
     `;
 
-    return this.apollo.query({
+    return this.apollo.query<FilmsCategoryResponse>({
       query: SEARCH_FILMS_QUERY,
       variables: {
         searchTerm: searchTerm
@@ -158,7 +159,7 @@ export class ServiceRentService {
     });
   }
 
-  searchFilmsByCategory(name_category: string): Observable<ApolloQueryResult<FilmsCatStoresResponse>> {
+  searchFilmsByCategory(name_category: string): Observable<ApolloQueryResult<FilmsCategoryResponse>> {
     const SEARCH_FILMS_BY_CATEGORY = gql`
       query SearchFilms($searchCategory: String!) {
         searchFilmsByCategory(category: $searchCategory) {
@@ -181,7 +182,7 @@ export class ServiceRentService {
     }
     `;
 
-    return this.apollo.query<FilmsCatStoresResponse>({
+    return this.apollo.query<FilmsCategoryResponse>({
       query: SEARCH_FILMS_BY_CATEGORY,
       variables: {
         searchCategory: name_category
@@ -198,6 +199,9 @@ export class ServiceRentService {
       rentalsByCustomer(customerId: 534) {
         film {
           title
+        }
+        address {
+          address
         }
         payment {
           amount

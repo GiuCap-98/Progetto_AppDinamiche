@@ -21,7 +21,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule} from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { ScrollingModule} from "@angular/cdk/scrolling";
-import { MenuComponent } from './menu/menu.component';
 import { LoginComponent } from './login/login.component';
 import { DialogModule } from '@angular/cdk/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -35,8 +34,9 @@ import { RentComponent } from './rent/rent.component';
 import { DialogComponentComponent } from './dialog-component/dialog-component.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatRadioModule} from '@angular/material/radio';
-//import { JwtModule } from '@auth0/angular-jwt';
-
+import { RentDetailsComponent } from './rent-details/rent-details.component';
+import {MatTableModule} from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 export function tokenGetter(): string | null {
   return localStorage.getItem('token');
 }
@@ -68,21 +68,23 @@ const modules = [
   HttpClientModule,
   MatSidenavModule,
   MatCheckboxModule,
-  MatRadioModule
+  MatRadioModule,
+  MatTableModule,
+  MatSortModule
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    MenuComponent,
     DashboardComponent,
     LoginComponent,
     FilmDetailsComponent,
     RentalListComponent,
     RegistrationComponent,
     RentComponent,
-    DialogComponentComponent
+    DialogComponentComponent,
+    RentDetailsComponent
   ],
 
   imports: modules,
