@@ -43,19 +43,19 @@ export class LoginComponent  implements OnInit  {
     });
   }
 
-  login() : void {
-    this.authService.login(this.email, this.password).subscribe(
-      response => {
-        const token = response.data.login;
-        // Salva il token JWT nel localStorage
-        localStorage.setItem('token', token);
-        // Reindirizza alla pagina del dashboard dopo il login
-        this._router.navigate(['/dashboard']);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }
+  login(): void {
+  this.authService.login(this.email, this.password).subscribe(
+    response => {
+      const token = response.data.login;
+      // Salva il token JWT nel sessionstorage
+      localStorage.setItem('token', token);
+      // Reindirizza alla pagina del dashboard dopo il login
+      this._router.navigateByUrl('/dashboard')
+    },
+    error => {
+      console.error(error);
+    }
+  );
+}
 
 }

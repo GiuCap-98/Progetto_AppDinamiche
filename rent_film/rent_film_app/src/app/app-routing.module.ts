@@ -7,44 +7,23 @@ import { FilmDetailsComponent } from './film-details/film-details.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { RentComponent } from './rent/rent.component';
 import { RentalListComponent } from './rental-list/rental-list.component';
+import { AuthGuard } from './service/auth.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent
+
+  { path: '', component: LoginComponent },
+
+  { path: 'registration', component: RegistrationComponent },
+
+  { path:'dashboard', component: DashboardComponent, canActivate : [AuthGuard],
+    children: [ { path: ':id', component: FilmDetailsComponent }]
   },
 
-  {
-
-    path: 'registration',
-    component: RegistrationComponent
-  },
-
-  {
-    path:'dashboard', component: DashboardComponent,
-    children: [
-      {
-        path: ':id',
-        component: FilmDetailsComponent
-      }
-
-    ]
-
-  },
-  //{ path: 'rent/:film_title/:film_id/:data1/:store1_num_film/:data2/:store2_num_film', component: RentComponent ,},
-
-  { path: 'rent/:film/:stores', component: RentComponent},
-
-  {
-    path:'registration', component: RegistrationComponent
-
-  },
-  {
-    path:'film-details', component: FilmDetailsComponent
-  },
-  {
-    path:'rental-list', component: RentalListComponent
-  }
+  { path: 'rent/:film/:stores', component: RentComponent, canActivate : [AuthGuard]},
+  
+  { path:'film-details', component: FilmDetailsComponent, canActivate : [AuthGuard]},
+  
+  { path:'rental-list', component: RentalListComponent, canActivate : [AuthGuard]}
 
 ];
 
@@ -52,4 +31,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }

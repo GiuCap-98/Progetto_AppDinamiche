@@ -6,6 +6,25 @@ const { typeDefs, resolvers } = require('./schema'); // Import GraphQL schema
 const { configureDB, SECRET } = require('./db'); // Import database
 
 async function startServer() {
+  
+  // Initialize Express app
+  const app = express();
+
+  const checkUser = async (req, res) => {
+    const token = req.headers["authorization"] || ""
+    console.log(token)
+  
+    try{
+      const {user} = await jwt.verify(token, SECRET);
+      req.user = user
+    }catch(err){
+      // console.log(err)
+    }
+    req.next();
+  };
+  
+  app.use(checkUser);
+
   // Initialize Apollo server
   const server = new ApolloServer({
     typeDefs,
@@ -17,38 +36,6 @@ async function startServer() {
       user: req.user // Imposta l'utente nel contesto (opzionale)
     })
   });
-
-  // Initialize Express app
-  const app = express();
-
-  // Aggiungi questa funzione per verificare il token JWT
-  const verifyToken = (token, secret) => {
-    return new Promise((resolve, reject) => {
-      jwt.verify(token, secret, (err, decoded) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(decoded);
-        }
-      });
-    });
-  };
-
-  // Modifica la funzione addUser per verificare il token e impostare l'utente nel campo req.user
-  const addUser = async (req, res, next) => {
-    const token = req.headers.authorization;
-    try {
-      if (token) {
-        const decodedToken = await verifyToken(token, SECRET);
-        req.user = decodedToken.user;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    next();
-  };
-
-  app.use(addUser);
 
   // Set up and connect to the databases
   const { db_rent, db_user } = await configureDB();

@@ -7,23 +7,13 @@ import { Apollo, gql } from 'apollo-angular';
 })
 export class AuthService {
 
-  constructor(public apollo: Apollo /*, private jwtHelper: JwtHelperService*/) {}
+  constructor(public apollo: Apollo) {}
 
-  /*
-  public isAuthenticated(): boolean {
-    // Get token from localstorage
-    let token = localStorage.getItem('token');
-    // Check if token is null or empty
-    if (token){
-      // Check whether the token is expired and return
-      // true or false
-      return !this.jwtHelper.isTokenExpired(token);
-    }
-    else{
-      return false
-    }
+  isLoggedIn = localStorage.getItem('token')!=null;
+
+  isAuthenticated(){
+    return this.isLoggedIn;
   }
-  */
 
   register(user: any): Observable<any> {
     const register = gql`

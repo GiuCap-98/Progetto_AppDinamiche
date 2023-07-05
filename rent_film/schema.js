@@ -446,11 +446,9 @@ const resolvers = {
         `;
         const result = await db_user.query(queryCheckUser, [email]);
         const user = result.rows[0];
-  
         if (!user) {
           throw new Error('Email non valida');
         }
-  
         // Verify the password
         const isPasswordMatched = await bcrypt.compare(password, user.password);
         if (!isPasswordMatched) {
