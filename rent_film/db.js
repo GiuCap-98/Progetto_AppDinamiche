@@ -9,8 +9,8 @@ async function configureDB() {
     user: 'postgres',
     host: 'localhost',
     database: 'data_rent',
-    //password: '1324',
-    password: 'giulisa',
+    password: '1324',
+    //password: 'giulisa',
     port: 5432,
   });
   
@@ -18,8 +18,8 @@ async function configureDB() {
     user: 'postgres',
     host: 'localhost',
     database: 'user_web',
-    //password: '1324',
-    password: 'giulisa',
+    password: '1324',
+    //password: 'giulisa',
     port: 5432,
   });
   

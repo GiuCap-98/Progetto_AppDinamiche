@@ -1,32 +1,32 @@
 .login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 
-  mat-card {
-    height: auto;
-    width: auto;
-    padding: 80px;
-  }
-  mat-card-content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 200px;
+mat-card {
+  height: auto;
+  width: auto;
+  padding: 80px;
+}
+mat-card-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
 
-  }
+}
 
 
-  mat-card mat-card-title{
-    font-size: 200%;
-    padding-bottom: 20px;
-  }
+mat-card mat-card-title{
+  font-size: 200%;
+  padding-bottom: 20px;
+}
 
-  .button-flex-container {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-  }
+.button-flex-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}

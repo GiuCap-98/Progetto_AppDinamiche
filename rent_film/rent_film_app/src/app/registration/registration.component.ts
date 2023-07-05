@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -11,7 +12,9 @@ export class RegistrationComponent {
   form: FormGroup;
   error: string | null | undefined;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder,     
+    private _router: Router,    
+    private authService: AuthService) {
     this.form = this.fb.group({
       customer_id: ['', Validators.required],
       first_name: ['', Validators.required],
@@ -29,6 +32,7 @@ export class RegistrationComponent {
           console.log('Registration successful:', response);
           // Optionally, you can redirect the user to the login page
           // after successful registration.
+          this._router.navigate(['/']);
         },
         error => {
           console.error('Registration failed:', error);
