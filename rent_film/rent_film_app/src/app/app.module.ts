@@ -37,6 +37,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import { RentDetailsComponent } from './rent-details/rent-details.component';
 import {MatTableModule} from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+
+
 export function tokenGetter(): string | null {
   return localStorage.getItem('token');
 }

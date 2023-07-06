@@ -17,3 +17,14 @@
 mat-icon{
   font-size: 15px;
 }
+
+.button-row{
+  text-align: center;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.button-container {
+  display: inline-block;
+  margin-right: 10px;
+}
