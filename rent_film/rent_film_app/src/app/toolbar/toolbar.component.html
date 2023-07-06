@@ -1,9 +1,5 @@
-  <mat-toolbar [ngClass]="currentTheme"
-  role="toolbar"
-  aria-label="App Toolbar"
-  aria-orientation="horizontal"
-  class="toolbar">
-
+  <div class="container">
+  <mat-toolbar class="toolbar" [ngClass]="currentTheme"  role="toolbar"  aria-label="App Toolbar"  aria-orientation="horizontal" >
     <button mat-button (click)="home()"  aria-label="Go to Home" tabindex="1">
       My App
     </button>
@@ -56,7 +52,7 @@
   </mat-toolbar>
 
   <router-outlet></router-outlet>
-
+</div>
 
 
 

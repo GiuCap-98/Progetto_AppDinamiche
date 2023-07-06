@@ -30,3 +30,17 @@
     width: 100%;
     justify-content: flex-end;
   }
+
+  @media screen and (max-width: 768px) {
+  .login {
+    padding: 20px;
+  }
+
+  mat-card {
+    padding: 40px;
+  }
+
+  mat-card-content {
+    width: 100%;
+  }
+}
