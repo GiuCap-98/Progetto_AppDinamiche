@@ -1,12 +1,4 @@
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Rent DVD APP</title>
-</head>
-
-<body>
-  <main>
     <section aria-label="Page Content">
       <div class="login" aria-label="login-form-page" role="form" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
 
@@ -14,7 +6,7 @@
 
           <mat-card-content>
 
-            <mat-card-title>Login</mat-card-title>
+            <h2>Login</h2>
 
             <form [formGroup]="form" (ngSubmit)="login()" role="form" aria-label="login-form">
 
@@ -23,11 +15,13 @@
               </mat-form-field>
 
               <mat-form-field>
-                <input matInput placeholder="Password" formControlName="password" [(ngModel)]="password" name="password" type="password" aria-label="Username">
+                <input matInput placeholder="Password" formControlName="password" [(ngModel)]="password" name="password" type="password" aria-label="Password">
               </mat-form-field>
 
-              <button mat-raised-button color="primary" type="submit" role="button" title="Clicca qui per effettuare il login" aria-labelledby="login button">Login</button>
-              <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente" aria-labelledby="register button">Registrati</button>
+              <div class="div_button">
+                <button mat-raised-button color="primary" type="submit" role="button" title="Clicca qui per effettuare il login" aria-labelledby="login button">Login</button>
+                <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente" aria-labelledby="register button">Registrati</button>
+              </div>
               <p *ngIf="error" class="error-message">{{ error }}</p>
 
             </form>
@@ -37,7 +31,4 @@
 
       </div>
     </section>
-  </main>
-</body>
 
-</html>

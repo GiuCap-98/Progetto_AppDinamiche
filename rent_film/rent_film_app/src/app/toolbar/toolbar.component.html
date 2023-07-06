@@ -1,18 +1,18 @@
 <html lang = "en-US">
   <meta charset="UTF-8">
-  
+
   <mat-toolbar [ngClass]="currentTheme" role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" class="toolbar">
 
-    <button mat-button (click)="home()" aria-label="back-home" role="button" title="Clicca qui per tornare alla lista dei film" aria-labelledby="back home button"> DVD Rent </button>
+    <button mat-button (click)="home()" aria-label="back-home" role="button" title="Clicca qui per tornare alla lista dei film" aria-labelledby="back home button"><h1>DVD Rent</h1>  </button>
     <span class="spacer"></span>
 
     <button mat-button  [matMenuTriggerFor]="menu" aria-label="open menu" role="button" title="Clicca qui per aprire il menù a tendina" aria-haspopup="true" aria-controls="menu-items">
       <mat-icon>account_circle</mat-icon></button>
-    
+
       <mat-menu #menu="matMenu" role="menu" aria-label="app menu" aria-orientation="vertical">
 
         <button mat-menu-item (click)="rentalList()" role="menuitem" aria-labelledby="logout menu button" title="Clicca qui per aprire i tuoi noleggi">
-          <mat-icon> 
+          <mat-icon>
             <span class="material-symbols-outlined">list_alt</span>
           </mat-icon >
           <span>Noleggi </span>

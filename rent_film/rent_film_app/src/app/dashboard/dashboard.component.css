@@ -27,31 +27,27 @@ body{
 }
 
 
-.search{
+.serach-content{
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-.serach-content{
-  display: block;
-  width: 400px;
-  height: 60px;
-  margin: 20px;
-  padding-top: 10px;
-  padding-bottom: 0px;
+  margin-left: 35%;
+  margin-right: 35%;
+  margin-top: 10px;
   border-radius: 60px;
 }
 
 
 .search-field .mat-mdc-text-field-wrapper {
   border-radius: 25px;
-  height: 50px;
+
+  margin-top: 10px;
+
 }
 
 .serach-content button{
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 
@@ -131,3 +127,34 @@ mat-drawer{
   padding: 8px 12px;
   cursor: pointer;
 }
+.filter{
+  width: 100%;
+}
+
+
+
+/* Stili per schermi fino a 480px */
+@media screen and (max-width: 635px) {
+  .serach-content {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+  .search-field .mat-mdc-text-field-wrapper {
+    height: auto;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+  }
+  .item {
+    margin: 2%;
+  }
+  .title {
+    font-size: 16px;
+  }
+}
+
+/* Altri stili per il layout responsive */
+/* Aggiungi qui le tue regole CSS specifiche per il layout responsive */
+

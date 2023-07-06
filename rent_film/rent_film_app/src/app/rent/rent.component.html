@@ -1,13 +1,12 @@
 <div class="login" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
   <mat-card  [style.background-color]="coloreCard" [style.color]="coloreTextCard" >
-    <mat-card-title >
-      {{film.film.title}}
+    <mat-card-title class="card-title">
+      <strong>{{film.film.title}}</strong>
       <br>
     </mat-card-title>
     <mat-card-content >
       <form [formGroup]="form" (ngSubmit)="rent()">
-        Da quando vuoi far partire il tuo noleggio?
-        <br>
+        <label for="data">Da quando vuoi far partire il tuo noleggio?</label>
         <br>
         <mat-form-field  >
           <mat-label>Seleziona una data</mat-label>

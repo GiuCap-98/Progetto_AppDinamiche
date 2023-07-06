@@ -44,12 +44,8 @@ export class DashboardComponent implements OnInit {
   //array per memorizzare le categorie
   categories: Category[] =[];
 
-  //per stampare un errore
-  public error: any | null | undefined;
-
   storesByFilm: StoreOccorrency[] = [];
   isFilmPresent!: boolean ;
-  //stores: any[] = []; // array to store the shops
 
 
 
@@ -183,7 +179,16 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
+  isSelected(category: Category): boolean {
+    if(this.selectedOption === category){
+      return true;
+    }
+    return false;
+  }
+
   filterByCategory(category: Category) : void{
+    this.selectedOption = category;
     this.serviceRent.searchFilmsByCategory(category.name).subscribe((response) => {
       this.films = response.data.searchFilmsByCategory as FilmCategoryStore[];  // Aggiorna l'array films con i risultati della ricerca
 

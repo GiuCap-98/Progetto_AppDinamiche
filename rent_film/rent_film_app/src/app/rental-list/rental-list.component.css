@@ -8,12 +8,51 @@
 
 .serach-content{
   display: block;
+  width: 300px;
   margin-top: 15px;
   padding: 15px;
   border-radius: 60px;
-  background-color: darkseagreen;
+  background-color: gainsboro;
 }
 
 mat-icon{
   font-size: 15px;
 }
+
+.button-row{
+  text-align: center;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.button-container {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+
+/* Stili per la tabella */
+.table-container {
+  max-width: 100%; /* Assicura che la tabella non superi la larghezza massima del contenitore */
+  overflow-x: auto; /* Abilita lo scorrimento orizzontale se la tabella supera la larghezza del contenitore */
+
+  font-size: 12px;
+}
+
+table.table {
+  width: 30px; /* Imposta la larghezza della tabella al 100% del contenitore */
+}
+
+table.table td,
+table.table th {
+  white-space: nowrap; /* Evita il wrapping del testo nelle celle */
+  padding: 8px; /* Imposta il padding delle celle */
+}
+
+/* Media query per la larghezza della schermata inferiore a 600px */
+@media (max-width: 600px) {
+  table.table {
+    font-size: 12px; /* Riduci la dimensione del font del testo nella tabella */
+  }
+}
+

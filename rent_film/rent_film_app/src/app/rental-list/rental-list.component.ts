@@ -3,10 +3,9 @@ import { ServiceRentService } from '../service/service-rent.service';
 import { PageEvent } from '@angular/material/paginator';
 import { RentalFilmPayment } from '../Type/interface';
 import { Dialog} from '@angular/cdk/dialog';
-import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
 import { RentDetailsComponent } from '../rent-details/rent-details.component';
 
-import { MatSort, Sort } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-rental-list',
@@ -15,8 +14,13 @@ import { MatSort, Sort } from '@angular/material/sort';
 })
 export class RentalListComponent implements OnInit{
 
-  displayedColumns: string[] = ['film', 'address', 'payment', 'rental'];
+  displayedColumns: string[] = ['film', 'address', 'payment', 'rental', 'action'];
   rentals: RentalFilmPayment[] = []; // array to store user rentals
+  columns_title: Array<string> = ['Film', 'Indirizzo', 'Pagamento', 'Data']
+  columns_action:Array<string> = ['film', 'address', 'payment', 'rental']
+  selectedOption!: String;
+  isDropdownOpen: boolean = false;
+
   tot_sum   : number = 0;
   totalAmount: number = 0;
 
@@ -37,6 +41,14 @@ export class RentalListComponent implements OnInit{
 
   ngOnInit(): void {
     this.getRent();
+  }
+
+  openDropdown() {
+    this.isDropdownOpen = true;
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 
   sortData(sort: Sort) {
@@ -70,6 +82,8 @@ export class RentalListComponent implements OnInit{
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+
+
   // get all films from service
   getRent() : void {
     this.serviceRent.getRentalsByCustomer(544).subscribe((response) => {
@@ -83,16 +97,15 @@ export class RentalListComponent implements OnInit{
     });
   }
 
-  //
-  updatePageIndex() : void {
-    this.startIndex = this.pageIndex * this.pageSize;
-    this.endIndex = this.startIndex + this.pageSize;
-  }
 
-  onPageChange(event: PageEvent) : void {
+  onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.updatePageIndex();
+  }
+  updatePageIndex() : void {
+    this.startIndex = this.pageIndex * this.pageSize;
+    this.endIndex = this.startIndex + this.pageSize;
   }
 
 
@@ -107,6 +120,4 @@ export class RentalListComponent implements OnInit{
       data: {film_rent: rent}
     });
   }
-
-
 }
