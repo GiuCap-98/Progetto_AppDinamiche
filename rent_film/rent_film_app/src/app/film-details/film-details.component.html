@@ -1,17 +1,16 @@
-<div class="dialog-window" [ngClass]="currentTheme">
+<div class="dialog-window" role="dialog" title="Dialog window for film details" aria-labelledby="dialog-title" [ngClass]="currentTheme">
   <div class="title"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
     <mat-card-actions >
 
-      <button mat-button (click)="closeDialog()">
+      <button mat-button aria-label="Close dialog" role="button" title="Button for close dialog" (click)="closeDialog()" >
         <mat-icon>
-          <span class="material-symbols-outlined">close</span>
+          <span>close</span>
         </mat-icon>
         Close
       </button>
     </mat-card-actions>
 
-
-    <h2 mat-dialog-title>{{ film.film.title }}</h2>
+    <h2 mat-dialog-title id="dialog-title">{{ film.film.title }}</h2>
   </div>
   <div class="dialog-content" >
       <p><strong>Genere:</strong> {{ film.film.film_id }}</p>
@@ -23,32 +22,22 @@
 
       <mat-form-field>
         <mat-label>Store</mat-label>
-        <mat-select >
-          <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address.address}}</mat-option>
+        <mat-select aria-label="Select store">
+          <mat-option #matOption *ngFor="let store of stores" value="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address.address}}</mat-option>
         </mat-select>
       </mat-form-field>
 
 
       <div class="content-rent">
-        <button mat-button
-        tabindex="0"
-        [style.color]="coloreTextCard"
-        class="button-rent"
-        [disabled]="!storeSelected"
-        (click)="rent_page(film, stores)">
+        <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard" class="button-rent" [disabled]="!storeSelected" (click)="rent_page(film, stores)">
           {{ film.film.rental_rate}}
           <mat-icon>
-            <span class="material-symbols-outlined">euro</span>
+            <span >euro</span>
           </mat-icon>
           NOLEGGIA
         </button>
       </div>
-
-
   </div>
-
-
-
 
 </div>
 
