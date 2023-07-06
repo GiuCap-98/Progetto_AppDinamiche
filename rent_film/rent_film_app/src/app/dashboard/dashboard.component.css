@@ -36,10 +36,10 @@ body{
 
 .serach-content{
   display: block;
-  width: 400px;
+  width: 350px;
   height: 60px;
-  margin: 20px;
-  padding-top: 10px;
+
+  margin: 10px;
   padding-bottom: 0px;
   border-radius: 60px;
 }
@@ -47,11 +47,11 @@ body{
 
 .search-field .mat-mdc-text-field-wrapper {
   border-radius: 25px;
-  height: 50px;
+  height: auto;
 }
 
 .serach-content button{
-  margin-left: 20px;
+  margin-left: 10px;
 }
 
 
@@ -131,3 +131,31 @@ mat-drawer{
   padding: 8px 12px;
   cursor: pointer;
 }
+.filter{
+  width: 100%;
+}
+
+
+
+/* Stili per schermi fino a 480px */
+@media screen and (max-width: 480px) {
+  .serach-content {
+    height: auto;
+    width: 73%;
+  }
+  .search-field .mat-mdc-text-field-wrapper {
+    height: auto;
+    width: 100px;
+    margin-top: 10px;
+  }
+  .item {
+    margin: 2%;
+  }
+  .title {
+    font-size: 16px;
+  }
+}
+
+/* Altri stili per il layout responsive */
+/* Aggiungi qui le tue regole CSS specifiche per il layout responsive */
+
