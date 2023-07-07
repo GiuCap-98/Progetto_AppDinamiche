@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getFilms();
+    this.getFilms(this.startIndex, this.endIndex);
     this.searchFilms();
     this.getCategories();
     this.serviceRent.theme$.subscribe((theme) => {
@@ -84,8 +84,8 @@ export class DashboardComponent implements OnInit {
 
 
   // get all films from service
-  getFilms() : void {
-    this.serviceRent.getFilms().subscribe((response) => {
+  getFilms(start:number, end:number) : void {
+    this.serviceRent.getFilms(start, end).subscribe((response) => {
       this.films = response.data.films as FilmCategory[];
 
       this.updatePageIndex();

@@ -114,7 +114,7 @@ const typeDefs = gql`
 
   type Query {
     customers: [Customer]
-    films: [Film_Category]
+    films(startIndex: Int, endIndex: Int): [Film_Category]
     searchFilms(searchTerm: String!): [Film_Category]
     searchFilmsByCategory(category: String!): [Film_Category]
     films_cat_stores: [Film_Category_Stores]
@@ -142,7 +142,7 @@ const resolvers = {
       }
     },
 
-    films: async (_, __, { db_rent }) => {
+    films: async (_, { startIndex, endIndex }, { db_rent }) => {
       try {
         const query = `
         SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name
@@ -151,7 +151,8 @@ const resolvers = {
         LEFT JOIN category cat ON cat.category_id = f_cat.category_id
         `;
         
-        const result = await db_rent.query(query);
+        const values = [endIndex - startIndex, startIndex];
+        const result = await db_rent.query(query, values);
 
         const film_obj = result.rows.map(row => ({
           film: { 

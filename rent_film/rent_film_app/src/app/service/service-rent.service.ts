@@ -32,7 +32,9 @@ export class ServiceRentService {
 
   constructor(private apollo: Apollo) {}
 
-  getFilms(): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
+
+
+  getFilmsPr(): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
     return this.apollo.query<FilmsCategoryResponse>({
       query: gql`
         query {
@@ -58,6 +60,36 @@ export class ServiceRentService {
     });
   }
 
+  getFilms(startIndex:number, endIndex:number): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
+    const FilmQuery = gql`
+    query GetFilms($startIndex: Int!, $endIndex: Int!) {
+      films(startIndex: $startIndex, endIndex: $endIndex) {
+        film {
+          film_id
+          title
+          description
+          release_year
+          language_id
+          rental_duration
+          rental_rate
+          length
+          rating
+          last_update
+        }
+        category {
+          name
+        }
+      }
+    }
+  `;
+    return this.apollo.query<FilmsCategoryResponse>({
+      query: FilmQuery ,
+      variables: {
+        startIndex,
+      endIndex
+      }
+    });
+  }
 
   getStores(film_id: any): Observable<any>{
     const StoreQuery = gql`

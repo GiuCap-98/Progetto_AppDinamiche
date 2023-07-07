@@ -1,83 +1,71 @@
-<body title="Dashboard" [ngClass]="currentTheme" class="start">
+<body title="Dashboard" [ngClass]="currentTheme" >
 
-  <mat-drawer-container>
+  <div class="content">
+    <mat-form-field class="field">
+      <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film"  [formControl]="searchControl" />
+      <mat-icon matPrefix  aria-hidden="true">search</mat-icon>
+    </mat-form-field>
 
-    <mat-drawer #drawer aria-label="Sidebar" mode="side" role="complementary">
-      <p>Seleziona un genere:</p>
+    <span class="spacer"></span>
 
-      <mat-radio-group aria-label="radio group category label" role="radiogroup" class="radio-group" [(ngModel)]="selectedOption" >
-        <mat-radio-button  role="radio" title="Click for filter" aria-label="filter" *ngFor="let category of categories" [value]="category"  [attr.aria-checked]="isSelected(category) ? 'true' : 'false'" tabindex="0">
-          <span class="radio-label" tabindex="0">{{category.name}}</span>
-        </mat-radio-button>
-      </mat-radio-group>
+    <mat-form-field class="field">
+      <mat-select  aria-label="Filtra per categoria" placeholder="Filtra per categoria">
+        <mat-option *ngFor="let category of categories" [value]="category" (click)="filterByCategory(category)">
+          {{category.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-      <br>
+  <div role="list">
+    <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+      <mat-card-header>
+        <mat-card-title class="title" aria-label="Film title">
+          {{film.film.title}}
+        </mat-card-title>
+      </mat-card-header>
 
-      <button class="filter" mat-raised-button color="accent" aria-label="filter button" (click)="filterByCategory(selectedOption)" tabindex="0">Filtra</button>
-    </mat-drawer>
+      <mat-card-content>
+        <p>{{ film.film.description }}</p>
+        <p><a>Anno:</a> {{ film.film.release_year }}</p>
+        <p><a>Genere:</a> {{ film.category.name }}</p>
+        <p>{{ film.film.rating }}</p>
+        <p>ID: {{film.film.film_id}}</p>
+        <!-- Altri dettagli del film -->
+      </mat-card-content>
 
+      <mat-card-actions align="start">
+        <button class="details" mat-button aria-labelledby="Details button" role="button" title="Button for show film details" (click)="openDetails(film)" [style.color]="coloreTextCard">
+          Dettagli
+          <mat-icon>
+            <span aria-hidden="true">add</span>
+          </mat-icon>
+        </button>
+      </mat-card-actions>
 
+      <mat-card-actions align="end">
+        <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
+          {{ film.film.rental_rate }}
+          <mat-icon>
+            <span aria-hidden="true">euro</span>
+          </mat-icon>
+          NOLEGGIA
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <div role="navigation" aria-label="pagination" class="paginator-div">
+    <!-- Paginazione -->
+    <mat-paginator [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"
+      showFirstLastButtons class="paginator">
+    </mat-paginator>
+  </div>
 
-    <div class="serach-content" [style.background-color]="coloreCard">
-      <mat-form-field class="search-field">
-        <input matInput placeholder="Select a film" type="text" role="searchbox" aria-label="Search field"  [formControl]="searchControl" />
-        <mat-icon matPrefix>search</mat-icon>
-      </mat-form-field>
-      <button mat-icon-button color="warn" role="button" aria-label="Filter button by category" title="Filter films by category" (click)="drawer.toggle()" >
-        <mat-icon>filter_list</mat-icon>
-      </button>
-    </div>
+  <div id="scroll-up">
+    <!-- Bottone per tornare all'inizio della pagina -->
+    <button mat-fab class="back-to-top-button" aria-label="Return to top of page" role="button" title="Button for return to top of page" *ngIf="scrolled == 1" (click)="scrollToTop()" [class.show]="isScrolled">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+  </div>
 
-    <div role="list">
-      <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
-        <mat-card-header>
-          <mat-card-title class="title" aria-label="Film title">
-            {{film.film.title}}
-          </mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-          <p>{{ film.film.description }}</p>
-          <p><a>Anno:</a> {{ film.film.release_year }}</p>
-          <p><a>Genere:</a> {{ film.category.name }}</p>
-          <p>{{ film.film.rating }}</p>
-          <p>ID: {{film.film.film_id}}</p>
-          <!-- Altri dettagli del film -->
-        </mat-card-content>
-
-        <mat-card-actions align="start">
-          <button class="details" mat-button aria-labelledby="Details button" role="button" title="Button for show film details" (click)="openDetails(film)" [style.color]="coloreTextCard">
-            Dettagli
-            <mat-icon>
-              <span aria-hidden="true">add</span>
-            </mat-icon>
-          </button>
-        </mat-card-actions>
-
-        <mat-card-actions align="end">
-          <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
-            {{ film.film.rental_rate }}
-            <mat-icon>
-              <span aria-hidden="true">euro</span>
-            </mat-icon>
-            NOLEGGIA
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <div role="navigation" aria-label="pagination" class="paginator-div">
-      <!-- Paginazione -->
-      <mat-paginator [length]="films.length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"
-        showFirstLastButtons class="paginator">
-      </mat-paginator>
-    </div>
-
-    <div id="scroll-up">
-      <!-- Bottone per tornare all'inizio della pagina -->
-      <button mat-fab class="back-to-top-button" aria-label="Return to top of page" role="button" title="Button for return to top of page" *ngIf="scrolled == 1" (click)="scrollToTop()" [class.show]="isScrolled">
-        <mat-icon>arrow_upward</mat-icon>
-      </button>
-    </div>
-
-  </mat-drawer-container>
 </body>

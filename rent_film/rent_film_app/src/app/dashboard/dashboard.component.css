@@ -3,16 +3,12 @@
   height: 100%;
   width: 100%;
   border: 1px solid black;
-
 }
 
-body{
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  height: 100vh;
+.spacer {
+  flex: 0.1 1 auto;
 }
+
 
 #scroll-up
 {
@@ -26,31 +22,23 @@ body{
   visibility: visible;
 }
 
+.field .mat-mdc-text-field-wrapper {
+  border-radius: 25px;
+  margin-top: 10px;
+  margin-right: 30px;
 
-.serach-content{
+}
+
+.content{
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-left: 35%;
-  margin-right: 35%;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 10px;
   border-radius: 60px;
 }
-
-
-.search-field .mat-mdc-text-field-wrapper {
-  border-radius: 25px;
-
-  margin-top: 10px;
-
-}
-
-.serach-content button{
-  margin-left: 10px;
-}
-
-
 
 .item {
   border: 1px solid black;
@@ -61,28 +49,17 @@ body{
   width: auto;
 }
 
-.start{
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-}
-
 mat-card {
   padding: 1%;
   border: 1px solid;
   box-shadow: 0px 0px 21px 0px #000000;
-
 }
 
 .details:hover{
   cursor: pointer;
-
 }
 
 mat-card-content a{
-
   font-weight: bold;
 }
 
@@ -92,12 +69,9 @@ mat-card-content a{
   font-weight: bold;
   font-size: 20px;
   padding-bottom: 10px;
-
-
 }
 .title:hover{
   font-size: 25px;
-
 }
 
 .paginator-div{
@@ -107,44 +81,20 @@ mat-card-content a{
 }
 
 .paginator {
-
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius:50px;
-}
-
-mat-drawer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  padding: 10px;
-}
-
-.radio-label {
-  display: inline-block;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-.filter{
-  width: 100%;
 }
 
 
 
 /* Stili per schermi fino a 480px */
 @media screen and (max-width: 635px) {
-  .serach-content {
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
-  }
+
   .search-field .mat-mdc-text-field-wrapper {
-    height: auto;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+
+    margin-left: 10%;
+    margin-right: 0%;
     margin-top: 10px;
   }
   .item {
