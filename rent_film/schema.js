@@ -22,7 +22,7 @@ const typeDefs = gql`
     film_id: ID!
     title: String
     description: String
-    release_year: Int
+    release_year: String
     language_id: Int
     rental_duration: Int
     rental_rate: Float
@@ -73,10 +73,10 @@ const typeDefs = gql`
 
   type Rental {
     rental_id: ID!
-    rental_date: Float
+    rental_date: String
     inventory_id: ID!
     customer_id: ID!
-    return_date: Float
+    return_date: String
     staff_id: ID
     last_update: String
     
@@ -254,84 +254,7 @@ const resolvers = {
         throw new Error('Errore del server');
       }
     },
-    
-
-
-    searchFilms: async (_, { searchTerm }, { db_rent }) => {
-      try {
-        const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
-        FROM film f
-        JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
-        WHERE f.title ILIKE '%' || $1 || '%'
-        `;
-        const result = await db_rent.query(query, [searchTerm]);    
-        const filmObj = result.rows.map(row => ({
-          film: {
-            film_id: row.film_id,
-            title: row.title,
-            description: row.description,
-            release_year: row.release_year,
-            language_id: row.language_id,
-            rental_duration: row.rental_duration,
-            rental_rate: row.rental_rate,
-            length: row.length,
-            rating: row.rating,
-            last_update: row.last_update
-          },
-          category: { name: row.name }
-        }));
-      
-        return filmObj;
-      } 
-      catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },
-    
-
-    searchFilmsByCategory: async (_, { category }, { db_rent }) => {
-      try {
-        const client = await db_rent.connect();
-        const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
-        FROM film f
-        JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
-        WHERE cat.name= $1
-        `;
-        const result = await client.query(query, [category]);  
-        
-        
-        const categoryObj = result.rows.map(row => ({
-          film: {
-            film_id: row.film_id,
-            title: row.title,
-            description: row.description,
-            release_year: row.release_year,
-            language_id: row.language_id,
-            rental_duration: row.rental_duration,
-            rental_rate: row.rental_rate,
-            length: row.length,
-            rating: row.rating,
-            last_update: row.last_update
-          },
-          category: { name: row.name }
-           
-      }));
-    
-        return categoryObj;
-
-      } 
-      
-      catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },
-
+ 
     categories: async (_, __, { db_rent }) => {
       try {
         const client = await db_rent.connect();
@@ -397,15 +320,18 @@ const resolvers = {
     rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
       try{
         const query = `
-          SELECT f.title, p.amount, r.return_date, r.rental_date, r.rental_id, addr.address
-          FROM film f
-          JOIN inventory i ON f.film_id = i.film_id
-          JOIN rental r ON i.inventory_id = r.inventory_id
-          LEFT JOIN payment p ON r.rental_id = p.rental_id
-          LEFT JOIN customer cust ON cust.customer_id = p.customer_id
-          LEFT JOIN address addr ON addr.address_id = cust.address_ID
-          WHERE r.customer_id = $1 AND p.amount is not NULL
-          order by r.rental_date desc;
+        SELECT f.title, p.amount, 
+                to_char(r.return_date, 'DD/MM/YYYY') as return_date,
+                to_char(r.rental_date, 'DD/MM/YYYY') as rental_date,
+                r.rental_id, addr.address
+        FROM film f
+        JOIN inventory i ON f.film_id = i.film_id
+        JOIN rental r ON i.inventory_id = r.inventory_id
+        LEFT JOIN payment p ON r.rental_id = p.rental_id
+        LEFT JOIN customer cust ON cust.customer_id = p.customer_id
+        LEFT JOIN address addr ON addr.address_id = cust.address_ID
+        WHERE r.customer_id = $1 AND p.amount is not NULL
+        ORDER BY r.rental_date DESC;
         `;
         const result = await db_rent.query(query, [customerId]);
         

@@ -28,7 +28,7 @@ export class ToolbarComponent implements OnInit{
 
 
   home() : void{
-    this._router.navigate(['start-button'])
+    this._router.navigate(['dashboard'])
   }
 
   rentalList() : void {

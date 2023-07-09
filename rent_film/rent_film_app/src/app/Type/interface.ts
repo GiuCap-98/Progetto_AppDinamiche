@@ -27,7 +27,7 @@ export interface Film {
   film_id: number;
   title: string;
   description: string;
-  release_year: number;
+  release_year: string;
   rental_duration: number;
   rental_rate: number;
   length: number;
@@ -92,10 +92,10 @@ export interface Payment {
 
 export interface Rental {
   rental_id: number;
-  rental_date: number;
+  rental_date: string;
   inventory_id: number;
   customer_id: number;
-  return_date: number;
+  return_date: string;
   staff_id: number;
   last_update: string;
 }

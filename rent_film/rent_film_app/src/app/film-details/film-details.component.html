@@ -13,19 +13,19 @@
     <h2 mat-dialog-title id="dialog-title">{{ film.film.title }}</h2>
   </div>
   <div class="dialog-content" >
-      <p><strong>Anno:</strong> {{ film.film.film_id }}</p>
+      <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
       <p><strong>Lingua:</strong> {{ film.film.title }}</p>
       <p><strong>Genere:</strong> {{ film.category.name }}</p>
       <p><strong>Durata massima noleggio:</strong> {{ film.film.rental_duration }}</p>
       <p><strong>Durata film:</strong> {{ film.film.length }}</p>
 
       <!-- Aggiungi il seguente blocco per stampare gli attori -->
-      <p><strong>Attori:</strong></p>
-      <ul>
-        <li *ngFor="let actor of actors">
-          {{ actor.first_name }} {{ actor.last_name }}
-        </li>
-      </ul>
+      <p><strong>Attori:</strong>
+      <a *ngFor="let actor of actors">
+        {{ actor.first_name }} {{ actor.last_name }},
+      </a>
+      </p>
+
 
       <mat-form-field>
         <mat-label>Store</mat-label>

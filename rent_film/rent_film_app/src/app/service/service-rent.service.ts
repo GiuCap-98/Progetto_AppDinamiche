@@ -22,8 +22,6 @@ export class ServiceRentService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
   private themeSubject = new BehaviorSubject<string>('theme1-toolbar');
   public theme$ = this.themeSubject.asObservable();
-  private film: any;
-  private stores: any[] =[];
 
 
   changeTheme(theme: string) {
