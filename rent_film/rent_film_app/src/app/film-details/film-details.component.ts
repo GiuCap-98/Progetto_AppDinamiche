@@ -3,9 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ServiceRentService } from '../service/service-rent.service';
 import {NgIf} from '@angular/common';
-import {Dialog, DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
-import { FilmCategoryStore, StoreOccorrency } from '../Type/interface';
-import { FilmCategory } from '../Type/Model';
+import { DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
+import { FilmDetails, StoreOccorrency } from '../Type/interface';
 
 
 
@@ -16,19 +15,21 @@ import { FilmCategory } from '../Type/Model';
 })
 export class FilmDetailsComponent implements OnInit {
 
-  film:  FilmCategory;
+  film:  FilmDetails;
   stores!: StoreOccorrency[];
   currentTheme!: string;
   coloreCard!: string;
   coloreTextCard!: string;
   storeSelected : boolean = false;
 
+
+
   public error: string | null | undefined;
 
   constructor(
     private _router: Router,
     private serviceRent: ServiceRentService,
-    @Inject(DIALOG_DATA) public data: {film_and_category: FilmCategory, stores: StoreOccorrency[]},
+    @Inject(DIALOG_DATA) public data: {film_and_category: FilmDetails, stores: StoreOccorrency[]},
     public dialogRef: DialogRef<FilmDetailsComponent>
   ) {
     this.film= data.film_and_category
@@ -52,7 +53,7 @@ export class FilmDetailsComponent implements OnInit {
     this.storeSelected = selected
   }
 
-  rent_page(film : FilmCategory, stores: StoreOccorrency[]) : void{
+  rent_page(film : FilmDetails, stores: StoreOccorrency[]) : void{
     this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(stores)])
     this.closeDialog()
 

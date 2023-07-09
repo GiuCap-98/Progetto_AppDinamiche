@@ -4,7 +4,7 @@ import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { BehaviorSubject, Observable} from "rxjs";
 
 import { ApolloQueryResult } from '@apollo/client/core';
-import { CategoryResponse, FilmsCategoryResponse, RentalResponse } from '../Type/interface';
+import { CategoryResponse, FilmsCatLangResponse, RentalResponse, Tot_Films } from '../Type/interface';
 
 
 // injectable vuol dire che è iniettabile, ovvero che possiamo
@@ -31,11 +31,19 @@ export class ServiceRentService {
   }
 
   constructor(private apollo: Apollo) {}
+  getNumFilms(): any {
+    const query = gql`
+      query {
+        totalFilms
+      }
+    `;
+    return this.apollo.query({ query });
+  }
 
 
 
-  getFilmsPr(): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
-    return this.apollo.query<FilmsCategoryResponse>({
+  getFilmsPr(): Observable<ApolloQueryResult<FilmsCatLangResponse>>{
+    return this.apollo.query<FilmsCatLangResponse>({
       query: gql`
         query {
           films {
@@ -44,7 +52,6 @@ export class ServiceRentService {
               title
               description
               release_year
-              language_id
               rental_duration
               rental_rate
               length
@@ -54,16 +61,20 @@ export class ServiceRentService {
             category {
               name
             }
+            language {
+              name
+            }
           }
         }
       `
     });
   }
 
-  getFilms(startIndex:number, endIndex:number): Observable<ApolloQueryResult<FilmsCategoryResponse>>{
+
+  getFilms(page:number, pageSize:number): Observable<ApolloQueryResult<FilmsCatLangResponse>>{
     const FilmQuery = gql`
-    query GetFilms($startIndex: Int!, $endIndex: Int!) {
-      films(startIndex: $startIndex, endIndex: $endIndex) {
+    query GetFilms($page: Int!, $pageSize: Int!) {
+      films(page: $page, pageSize: $pageSize) {
         film {
           film_id
           title
@@ -79,14 +90,21 @@ export class ServiceRentService {
         category {
           name
         }
+        language {
+          name
+        }
+        actor {
+          first_name
+          last_name
+        }
       }
     }
   `;
-    return this.apollo.query<FilmsCategoryResponse>({
+    return this.apollo.query<FilmsCatLangResponse>({
       query: FilmQuery ,
       variables: {
-        startIndex,
-      endIndex
+        page: page,
+        pageSize: pageSize
       }
     });
   }
@@ -160,7 +178,7 @@ export class ServiceRentService {
     });
   }
 
-  searchFilms(searchTerm: string): Observable<ApolloQueryResult<FilmsCategoryResponse>> {
+  searchFilms(searchTerm: string): Observable<ApolloQueryResult<FilmsCatLangResponse>> {
     const SEARCH_FILMS_QUERY = gql`
       query SearchFilms($searchTerm: String!) {
         searchFilms(searchTerm: $searchTerm) {
@@ -183,7 +201,7 @@ export class ServiceRentService {
     }
     `;
 
-    return this.apollo.query<FilmsCategoryResponse>({
+    return this.apollo.query<FilmsCatLangResponse>({
       query: SEARCH_FILMS_QUERY,
       variables: {
         searchTerm: searchTerm
@@ -191,7 +209,7 @@ export class ServiceRentService {
     });
   }
 
-  searchFilmsByCategory(name_category: string): Observable<ApolloQueryResult<FilmsCategoryResponse>> {
+  searchFilmsByCategory(name_category: string): Observable<ApolloQueryResult<FilmsCatLangResponse>> {
     const SEARCH_FILMS_BY_CATEGORY = gql`
       query SearchFilms($searchCategory: String!) {
         searchFilmsByCategory(category: $searchCategory) {
@@ -214,7 +232,7 @@ export class ServiceRentService {
     }
     `;
 
-    return this.apollo.query<FilmsCategoryResponse>({
+    return this.apollo.query<FilmsCatLangResponse>({
       query: SEARCH_FILMS_BY_CATEGORY,
       variables: {
         searchCategory: name_category

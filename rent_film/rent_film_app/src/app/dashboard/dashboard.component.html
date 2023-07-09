@@ -26,12 +26,11 @@
       </mat-card-header>
 
       <mat-card-content>
-        <p>{{ film.film.description }}</p>
-        <p><a>Anno:</a> {{ film.film.release_year }}</p>
-        <p><a>Genere:</a> {{ film.category.name }}</p>
+        <p><strong>Anno:</strong> {{ film.film.release_year }}</p>
+        <p><strong>Lingua:</strong> {{ film.language.name }}</p>
+        <p><strong>Genere:</strong> {{ film.category.name }}</p>
+        <p><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
         <p>{{ film.film.rating }}</p>
-        <p>ID: {{film.film.film_id}}</p>
-        <!-- Altri dettagli del film -->
       </mat-card-content>
 
       <mat-card-actions align="start">
@@ -56,9 +55,8 @@
   </div>
   <div role="navigation" aria-label="pagination" class="paginator-div">
     <!-- Paginazione -->
-    <mat-paginator [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"
-      showFirstLastButtons class="paginator">
-    </mat-paginator>
+    <mat-paginator [length]="numFilms" [pageSize]="pageSize" [pageIndex]="currentPage - 1" (page)="handlePageChange($event)"></mat-paginator>
+
   </div>
 
   <div id="scroll-up">

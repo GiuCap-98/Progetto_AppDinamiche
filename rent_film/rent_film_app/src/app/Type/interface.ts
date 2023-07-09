@@ -1,9 +1,9 @@
 //QUERY
 // Crea un tipo per rappresentare la risposta della query GraphQL
-export interface FilmsCategoryResponse {
-  films: FilmCategory[];
-  searchFilmsByCategory : FilmCategory[]
-  searchFilm : FilmCategory[]
+export interface FilmsCatLangResponse {
+  films: FilmDetails[];
+  searchFilmsByCategory : FilmDetails[]
+  searchFilm : FilmDetails[]
 }
 
 export interface CategoryResponse {
@@ -26,7 +26,6 @@ export interface Film {
   title: string;
   description: string;
   release_year: number;
-  language_id: number;
   rental_duration: number;
   rental_rate: number;
   length: number;
@@ -38,8 +37,21 @@ export interface Category {
   name: string;
 }
 
+export interface Language {
+  name: string;
+}
+
+export interface Actor {
+  first_name: string;
+  last_name: string;
+}
+
 export interface Address {
   address: string;
+}
+
+export interface Tot_Films {
+  total_films: number;
 }
 
 export interface Store {
@@ -62,9 +74,11 @@ export interface FilmCategoryStore {
   stores: StoreOccorrency[];
 }
 
-export interface FilmCategory {
+export interface FilmDetails {
   film: Film;
   category: Category;
+  language: Language;
+  actor: Actor;
 }
 
 export interface Payment {

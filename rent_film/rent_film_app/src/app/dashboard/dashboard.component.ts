@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { FilmCategory, FilmCategoryStore, StoreOccorrency } from '../Type/interface';
+import { FilmDetails, StoreOccorrency, Tot_Films } from '../Type/interface';
 import { Category } from '../Type/interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -21,14 +21,16 @@ import { map } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   searchControl : FormControl = new FormControl('');
-  films: FilmCategory[] = []; // array to store the films
+  films: FilmDetails[] = []; // array to store the films
 
   // variabili per la paginazione
   startIndex : number = 0;
+  currentPage: number = 1;
   endIndex : number = 10;
   pageSize : number = 10;
   pageSizeOptions : Array<number> = [5, 10, 20];
   pageIndex : number = 0;
+
 
   //variabili per il cambio tema
   currentTheme: string = 'theme1-other';
@@ -47,7 +49,7 @@ export class DashboardComponent implements OnInit {
   storesByFilm: StoreOccorrency[] = [];
   isFilmPresent!: boolean ;
 
-
+  numFilms: number = 0;
 
   constructor(
     private serviceRent: ServiceRentService,
@@ -56,7 +58,11 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getFilms(this.startIndex, this.endIndex);
+    this.getFilms();
+    this.serviceRent.getNumFilms().subscribe((result: any) => {
+      this.numFilms = result.data.totalFilms;
+      console.log(this.numFilms)
+    });
     this.searchFilms();
     this.getCategories();
     this.serviceRent.theme$.subscribe((theme) => {
@@ -84,13 +90,21 @@ export class DashboardComponent implements OnInit {
 
 
   // get all films from service
-  getFilms(start:number, end:number) : void {
-    this.serviceRent.getFilms(start, end).subscribe((response) => {
-      this.films = response.data.films as FilmCategory[];
-
-      this.updatePageIndex();
+  getFilms() : void {
+    this.serviceRent.getFilms(this.currentPage, this.pageSize).subscribe((response) => {
+      this.films = response.data.films as FilmDetails[];
+      console.log(this.films.length)
+       // Aggiungi il calcolo del totale dei film nel server
     });
+
   }
+
+  handlePageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getFilms();
+  }
+
 
   getStoresByFilm(film: any)  {
     this.serviceRent.getStores(film.film_id).subscribe((response) => {
@@ -136,7 +150,7 @@ export class DashboardComponent implements OnInit {
       .subscribe((response: any) => {
         const responseData: any = response.data;
         if (responseData) {
-          this.films = responseData.searchFilms as FilmCategory[]; // Aggiorna l'array films con i risultati della ricerca
+          this.films = responseData.searchFilms as FilmDetails[]; // Aggiorna l'array films con i risultati della ricerca
         }
       });
   }
@@ -148,7 +162,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  rent_page(film : FilmCategory) : void{
+  rent_page(film : FilmDetails) : void{
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
       if (storesByFilm[0].num_film || storesByFilm[1].num_film) {
         this.isFilmPresent = true;
@@ -190,7 +204,7 @@ export class DashboardComponent implements OnInit {
   filterByCategory(category: Category) : void{
     this.selectedOption = category;
     this.serviceRent.searchFilmsByCategory(category.name).subscribe((response) => {
-      this.films = response.data.searchFilmsByCategory as FilmCategoryStore[];  // Aggiorna l'array films con i risultati della ricerca
+      this.films = response.data.searchFilmsByCategory as FilmDetails[];  // Aggiorna l'array films con i risultati della ricerca
 
     });
   }
@@ -199,7 +213,7 @@ export class DashboardComponent implements OnInit {
 
 
   // dialog for film details
-  openDetails(film: FilmCategory) : void {
+  openDetails(film: FilmDetails) : void {
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
       this.dialog.open(FilmDetailsComponent, {
         width: '90%',

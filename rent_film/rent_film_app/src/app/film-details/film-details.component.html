@@ -13,12 +13,12 @@
     <h2 mat-dialog-title id="dialog-title">{{ film.film.title }}</h2>
   </div>
   <div class="dialog-content" >
-      <p><strong>Genere:</strong> {{ film.film.film_id }}</p>
-      <p><strong>Genere:</strong> {{ film.film.title }}</p>
-      <p><strong>Genere:</strong> {{ film.film.title }}</p>
-
+      <p><strong>Anno:</strong> {{ film.film.film_id }}</p>
+      <p><strong>Lingua:</strong> {{ film.film.title }}</p>
       <p><strong>Genere:</strong> {{ film.category.name }}</p>
-      <p><strong>Descrizione:</strong> {{ film.film.description }}</p>
+      <p><strong>Attori:</strong> {{ film.actor.first_name}} {{ film.actor.last_name}}</p>
+      <p><strong>Durata massima noleggio:</strong> {{ film.film.rental_duration }}</p>
+      <p><strong>Durata film:</strong> {{ film.film.length }}</p>
 
       <mat-form-field>
         <mat-label>Store</mat-label>

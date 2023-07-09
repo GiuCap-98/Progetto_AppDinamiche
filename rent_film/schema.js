@@ -40,6 +40,19 @@ const typeDefs = gql`
     last_update: String
   }
 
+  type Language{
+    language_id: ID!
+    name: String
+    last_update: String
+  }
+
+  type Actor{
+    actor_id: ID!
+    first_name: String
+    last_name: String
+    last_update: String
+  }
+
   type Address {
     address_id: ID!
     address: String
@@ -87,16 +100,13 @@ const typeDefs = gql`
     payment_date: String
   }
 
-  type Film_Category {
+  type Films_Details {
     film: Film
     category: Category
+    language: Language
+    actor: Actor[]
   }
 
-  type Film_Category_Stores {
-    film: Film
-    category: Category
-    stores: [StoreOccorrency]
-  }
 
   type StoreOccorrency{
     store: Store
@@ -112,12 +122,13 @@ const typeDefs = gql`
     password: String!
   }
 
+
   type Query {
     customers: [Customer]
-    films(startIndex: Int, endIndex: Int): [Film_Category]
-    searchFilms(searchTerm: String!): [Film_Category]
-    searchFilmsByCategory(category: String!): [Film_Category]
-    films_cat_stores: [Film_Category_Stores]
+    films(page: Int, pageSize: Int): [Films_Details]
+    searchFilms(searchTerm: String!): [Films_Details]
+    totalFilms: Int
+    searchFilmsByCategory(category: String!): [Films_Details]
     categories: [Category]
     stores(film_id: ID!): [StoreOccorrency]
     rentalsByCustomer(customerId: ID!): [Rental_FilmPaymant]
@@ -140,19 +151,41 @@ const resolvers = {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
+    },  
+
+    totalFilms: async (_, __, { db_rent }) => {
+      try {
+        const query = 'SELECT COUNT(*) AS total_films FROM film';
+        const result = await db_rent.query(query);
+        return result.rows[0].total_films;
+      } catch (error) {
+        console.error('Errore durante l\'esecuzione della query:', error);
+        throw new Error('Errore del server');
+      }
     },
 
-    films: async (_, { startIndex, endIndex }, { db_rent }) => {
+    films: async (_, { page, pageSize }, { db_rent }) => {
       try {
+        const offset = (page - 1) * pageSize;
+        const limit = pageSize;
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name
+        SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
+              lang.name as language_name, cat.name as category_name, 
+              ARRAY_AGG(ROW(act.first_name, act.last_name)) as actor_names
         FROM film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
+        JOIN language lang ON lang.language_id = f.language_id
+        JOIN category cat ON cat.category_id = f_cat.category_id
+        JOIN film_actor f_actor ON f_actor.film_id = f.film_id
+        JOIN actor act ON act.actor_id = f_actor.actor_id
+        GROUP BY f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
+                lang.name, cat.name
+        ORDER BY f.film_id
+        OFFSET $1 LIMIT $2
         `;
         
-        const values = [endIndex - startIndex, startIndex];
-        const result = await db_rent.query(query, values);
+        
+        const result = await db_rent.query(query,  [offset, limit]);
 
         const film_obj = result.rows.map(row => ({
           film: { 
@@ -160,14 +193,15 @@ const resolvers = {
             title: row.title,
             description: row.description,
             release_year: row.release_year,
-            language_id: row.language_id,
             rental_duration: row.rental_duration,
             rental_rate: row.rental_rate,
             length: row.length,
             rating: row.rating,
             last_update: row.last_update
           },
-          category: { name: row.name }
+          category: {name: row.category_name },
+          language:{ name: row.language_name},
+          actors: { actor_names: row.actor_names}
         }));
 
         return film_obj; 
@@ -179,79 +213,6 @@ const resolvers = {
       }
     },
 
-
-    films_cat_stores: async (_, __, { db_rent }) => {
-      try {
-        const query = `
-        SELECT
-        f.film_id,
-        f.title,
-        f.description,
-        f.release_year,
-        f.language_id,
-        f.rental_duration,
-        f.rental_rate,
-        f.length,
-        f.rating,
-        f.last_update,
-        cat.name,
-        (
-          SELECT
-            json_agg(json_build_object('address', sf.address, 'num_film', COALESCE(sf.num_film, 0))) 
-          FROM (
-            SELECT
-              addr.address,
-              COALESCE(COUNT(i.film_id), 0) AS num_film
-            FROM
-              store s
-              JOIN address addr ON s.address_id = addr.address_id
-              LEFT JOIN inventory i ON s.store_id = i.store_id AND i.film_id = f.film_id 
-              LEFT JOIN rental r ON i.inventory_id = r.inventory_id AND r.return_date IS NULL
-            WHERE
-              r.inventory_id IS NULL
-            GROUP BY
-              addr.address
-          ) AS sf
-        ) AS stores
-      FROM
-        film f
-        JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
-      
-        `;
-    
-        const result = await db_rent.query(query);
-        
-        
-        const filmObj = result.rows.map(row => ({
-          film: {
-            film_id: row.film_id,
-            title: row.title,
-            description: row.description,
-            release_year: row.release_year,
-            language_id: row.language_id,
-            rental_duration: row.rental_duration,
-            rental_rate: row.rental_rate,
-            length: row.length,
-            rating: row.rating,
-            last_update: row.last_update
-          },
-          category: { name: row.name },
-          //stores:  row.stores || []
-          stores: row.stores.map(store => ({
-            address:  { address: store.address || 'No address available'}, // Assegna una stringa vuota se l'indirizzo è null
-            num_film: store.num_film
-          }))
-            
-            
-      }));
-    
-        return filmObj;
-      } catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },
 
     searchFilms: async (_, { searchTerm }, { db_rent }) => {
       try {
