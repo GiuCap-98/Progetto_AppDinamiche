@@ -31,13 +31,19 @@ export class ServiceRentService {
   }
 
   constructor(private apollo: Apollo) {}
-  getNumFilms(): any {
-    const query = gql`
-      query {
-        totalFilms
-      }
+  getNumFilms(searchCat: string, searchTerm: string): Observable<ApolloQueryResult<Number>> {
+    const NumFilmsQuery = gql`
+    query GetNumFilms($searchCat: String!, $searchTerm: String!) {
+      totalFilms(searchCat: $searchCat, searchTerm: $searchTerm)
+    }
     `;
-    return this.apollo.query({ query });
+    return this.apollo.query<Number>({
+      query: NumFilmsQuery,
+      variables: {
+        searchCat: searchCat,
+        searchTerm: searchTerm
+      }
+    });
   }
 
 

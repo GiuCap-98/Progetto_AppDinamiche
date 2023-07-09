@@ -2,8 +2,6 @@
 // Crea un tipo per rappresentare la risposta della query GraphQL
 export interface FilmsCatLangResponse {
   films: FilmDetails[];
-  searchFilmsByCategory : FilmDetails[]
-  searchFilm : FilmDetails[]
 }
 
 export interface CategoryResponse {

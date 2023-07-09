@@ -124,7 +124,7 @@ const typeDefs = gql`
     customers: [Customer]
     films(searchCat: String!, searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
     searchFilms(searchTerm: String!): [Films_Details]
-    totalFilms: Int
+    totalFilms(searchCat: String!, searchTerm: String!): Int
     searchFilmsByCategory(category: String!): [Films_Details]
     categories: [Category]
     searchActorsByFilm(film_id: ID!): [Actor]
@@ -151,16 +151,47 @@ const resolvers = {
       }
     },  
 
-    totalFilms: async (_, __, { db_rent }) => {
+    totalFilms: async (_, { searchCat, searchTerm}, { db_rent }) => {
       try {
-        const query = 'SELECT COUNT(*) AS total_films FROM film';
-        const result = await db_rent.query(query);
+        let query = '';
+        let values = [];
+        
+    
+        if (!searchCat) {
+          query = `
+          SELECT COUNT(*) AS total_films FROM film f
+          JOIN film_category f_cat ON f_cat.film_id = f.film_id
+          JOIN language lang ON lang.language_id= f.language_id
+          JOIN category cat ON cat.category_id = f_cat.category_id
+          WHERE f.title ILIKE '%' || $1 || '%'
+          
+          `;
+          
+          values= [searchTerm]
+        }else{
+          query = `
+          SELECT COUNT(*) AS total_films FROM film f
+          JOIN film_category f_cat ON f_cat.film_id = f.film_id
+          JOIN language lang ON lang.language_id= f.language_id
+          JOIN category cat ON cat.category_id = f_cat.category_id
+          WHERE f.title ILIKE '%' || $1 || '%' AND cat.name= $2
+          
+          `;
+          
+          values= [searchTerm, searchCat]
+        }
+
+        const result = await db_rent.query(query, values);
+
         return result.rows[0].total_films;
       } catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
     },
+
+    
+          
 
     films: async (_, { searchCat, searchTerm, page, pageSize }, { db_rent }) => {
       try {

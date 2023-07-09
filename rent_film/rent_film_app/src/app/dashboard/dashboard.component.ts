@@ -21,7 +21,7 @@ import { map } from 'rxjs/operators';
 })
 export class DashboardComponent implements OnInit {
   searchControl : FormControl = new FormControl('');
-  films: FilmDetails[] = []; // array to store the films
+  films!: FilmDetails[]; // array to store the films
 
   title: string = "";
   category : string= "";
@@ -63,10 +63,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.serviceRent.getNumFilms().subscribe((result: any) => {
-      this.numFilms = result.data.totalFilms;
-      console.log(this.numFilms)
-    });
+    this.getNumFilms()
     this.getCategories();
     this.getFilms()
     this.serviceRent.theme$.subscribe((theme) => {
@@ -95,7 +92,15 @@ export class DashboardComponent implements OnInit {
   getFilms(){
     this.serviceRent.getFilms(this.category, this.title, this.currentPage, this.pageSize).subscribe((response) => {
       this.films = response.data.films as FilmDetails[];
-      console.log(this.films.length)
+      this.getNumFilms()
+    });
+
+  }
+
+  getNumFilms(){
+    this.serviceRent.getNumFilms(this.category, this.title).subscribe((response: any) => {
+      this.numFilms =  response.data.totalFilms;
+      console.log(this.numFilms)
     });
   }
 
