@@ -119,13 +119,15 @@ const typeDefs = gql`
     email: String!
     password: String!
   }
-  
+
+
+
   type Query {
     customers: [Customer]
-    films(searchCat: String!, searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
-    searchFilms(searchTerm: String!): [Films_Details]
+    films(searchCategory: String, searchTerm: String ,page: Int, pageSize: Int): [Films_Details]
+    searchFilms(searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
     totalFilms: Int
-    searchFilmsByCategory(category: String!): [Films_Details]
+    searchFilmsByCategory(category: String!, page: Int, pageSize: Int): [Films_Details]
     categories: [Category]
     searchActorsByFilm(film_id: ID!): [Actor]
     stores(film_id: ID!): [StoreOccorrency]
@@ -162,29 +164,31 @@ const resolvers = {
       }
     },
 
-    films: async (_, { searchCat, searchTerm, page, pageSize }, { db_rent }) => {
+    films: async (_,  {searchCategory, searchTerm, page, pageSize }, { db_rent }) => {
       try {
         const offset = (page - 1) * pageSize;
         const limit = pageSize;
-    
-        let query = '';
-        let values = [];
+        let query = ` `
         
-    
-        if (!searchCat) {
-          query = `
-            SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
-              lang.name as language_name, cat.name as category_name
-            FROM film f
-            JOIN film_category f_cat ON f_cat.film_id = f.film_id
-            JOIN language lang ON lang.language_id= f.language_id
-            JOIN category cat ON cat.category_id = f_cat.category_id
-            WHERE f.title ILIKE '%' || $1 || '%'
-            ORDER BY f.film_id
-            OFFSET $2 LIMIT $3
+
+        if(searchCategory == ''){
+
+          query= `
+          SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
+            lang.name as language_name, cat.name as category_name
+          FROM film f
+          JOIN film_category f_cat ON f_cat.film_id = f.film_id
+          JOIN language lang ON lang.language_id= f.language_id
+          JOIN category cat ON cat.category_id = f_cat.category_id
+          WHERE f.title ILIKE '%' || $1 || '%'
+          ORDER BY f.film_id
+          OFFSET $2 LIMIT $3
           `;
-          values= [searchTerm,offset, limit]
-        }else{
+
+        }
+        
+        else{
+          
           query = `
           SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
             lang.name as language_name, cat.name as category_name
@@ -196,11 +200,10 @@ const resolvers = {
           ORDER BY f.film_id
           OFFSET $2 LIMIT $3
           `;
-          values = [searchTerm,offset, limit, searchCat]
+          
         }
-    
-        const result = await db_rent.query(query, values);
-    
+        const result = await db_rent.query(query,  [searchTerm,offset, limit, category]);
+
         const film_obj = result.rows.map(row => ({
           film: { 
             film_id: row.film_id,
@@ -213,29 +216,36 @@ const resolvers = {
             rating: row.rating,
             last_update: row.last_update
           },
-          category: { name: row.category_name },
-          language: { name: row.language_name }
+          category: {name: row.category_name },
+          language:{ name: row.language_name}
         }));
-    
-        return film_obj;
-      } catch (error) {
+
+        return film_obj; 
+      } 
+      
+      catch (error) {
         console.error('Errore durante l\'esecuzione della query:', error);
         throw new Error('Errore del server');
       }
     },
-    
 
 
-    searchFilms: async (_, { searchTerm }, { db_rent }) => {
+    searchFilms: async (_, { searchTerm, page, pageSize }, { db_rent }) => {
       try {
+        const offset = (page - 1) * pageSize;
+        const limit = pageSize;
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
+        SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
+          lang.name as language_name, cat.name as category_name
         FROM film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
+        JOIN language lang ON lang.language_id= f.language_id
+        JOIN category cat ON cat.category_id = f_cat.category_id
         WHERE f.title ILIKE '%' || $1 || '%'
+        ORDER BY f.film_id
+        OFFSET $2 LIMIT $3
         `;
-        const result = await db_rent.query(query, [searchTerm]);    
+        const result = await db_rent.query(query, [searchTerm, offset, limit]);    
         const filmObj = result.rows.map(row => ({
           film: {
             film_id: row.film_id,
@@ -249,7 +259,8 @@ const resolvers = {
             rating: row.rating,
             last_update: row.last_update
           },
-          category: { name: row.name }
+          category: { name: row.name },
+          language:{ name: row.language_name}
         }));
       
         return filmObj;
@@ -261,17 +272,23 @@ const resolvers = {
     },
     
 
-    searchFilmsByCategory: async (_, { category }, { db_rent }) => {
+    searchFilmsByCategory: async (_, { category,page, pageSize }, { db_rent }) => {
       try {
+        const offset = (page - 1) * pageSize;
+        const limit = pageSize;
         const client = await db_rent.connect();
         const query = `
-        SELECT f.film_id, f.title, f.description, f.release_year, f.language_id, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, cat.name AS name 
+        SELECT f.film_id, f.title, f.description, f.release_year, f.rental_duration, f.rental_rate, f.length, f.rating, f.last_update, 
+          lang.name as language_name, cat.name as category_name
         FROM film f
         JOIN film_category f_cat ON f_cat.film_id = f.film_id
-        LEFT JOIN category cat ON cat.category_id = f_cat.category_id
+        JOIN language lang ON lang.language_id= f.language_id
+        JOIN category cat ON cat.category_id = f_cat.category_id
         WHERE cat.name= $1
+        ORDER BY f.film_id
+        OFFSET $2 LIMIT $3
         `;
-        const result = await client.query(query, [category]);  
+        const result = await client.query(query, [category,offset, limit]);  
         
         
         const categoryObj = result.rows.map(row => ({
@@ -287,7 +304,8 @@ const resolvers = {
             rating: row.rating,
             last_update: row.last_update
           },
-          category: { name: row.name }
+          category: { name: row.name },
+          language:{ name: row.language_name}
            
       }));
     

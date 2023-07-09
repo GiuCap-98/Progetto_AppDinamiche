@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { ServiceRentService } from '../service/service-rent.service';
 import {NgIf} from '@angular/common';
 import { DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
-import { FilmDetails, StoreOccorrency } from '../Type/interface';
+import { FilmDetails, StoreOccorrency, Actor } from '../Type/interface';
 
 
 
@@ -21,6 +21,7 @@ export class FilmDetailsComponent implements OnInit {
   coloreCard!: string;
   coloreTextCard!: string;
   storeSelected : boolean = false;
+  actors!: Actor[]
 
 
 
@@ -37,12 +38,18 @@ export class FilmDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getActors(this.film.film.film_id)
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
       this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
+  }
 
+  getActors(film_id:number): void {
+    this.serviceRent.getActors(film_id).subscribe((response) => {
+      this.actors = response.data.searchActorsByFilm as Actor[];
+    });
   }
 
   closeDialog(): void {

@@ -23,6 +23,9 @@ export class DashboardComponent implements OnInit {
   searchControl : FormControl = new FormControl('');
   films: FilmDetails[] = []; // array to store the films
 
+  title: string = "";
+  category : string= "";
+
   // variabili per la paginazione
   startIndex : number = 0;
   currentPage: number = 1;
@@ -51,6 +54,8 @@ export class DashboardComponent implements OnInit {
 
   numFilms: number = 0;
 
+  timer: any;
+
   constructor(
     private serviceRent: ServiceRentService,
     public dialog: Dialog,
@@ -58,13 +63,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getFilms();
     this.serviceRent.getNumFilms().subscribe((result: any) => {
       this.numFilms = result.data.totalFilms;
       console.log(this.numFilms)
     });
-    this.searchFilms();
     this.getCategories();
+    this.getFilms()
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
       this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
@@ -88,15 +92,19 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
-  // get all films from service
-  getFilms() : void {
-    this.serviceRent.getFilms(this.currentPage, this.pageSize).subscribe((response) => {
+  getFilms(){
+    this.serviceRent.getFilms(this.category, this.title, this.currentPage, this.pageSize).subscribe((response) => {
       this.films = response.data.films as FilmDetails[];
       console.log(this.films.length)
-       // Aggiungi il calcolo del totale dei film nel server
     });
+  }
 
+  onSearchTitleChange(event: any) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.title = event.target.value;
+      this.getFilms();
+    }, 500);
   }
 
   handlePageChange(event: PageEvent): void {
@@ -106,13 +114,15 @@ export class DashboardComponent implements OnInit {
   }
 
 
+
+
+
+
   getStoresByFilm(film: any)  {
     this.serviceRent.getStores(film.film_id).subscribe((response) => {
       this.storesByFilm= response.data.stores;
 
     });
-
-
   }
 
   getStoresByFilm2(film: any): Observable<StoreOccorrency[]> {
@@ -128,39 +138,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  updatePageIndex() : void {
-    this.startIndex = this.pageIndex * this.pageSize;
-    this.endIndex = this.startIndex + this.pageSize;
-  }
-
-  // search films by title
-  private searchFilms() : void{
-    // emits a value whenever the value in the FormControl changes
-    this.searchControl.valueChanges
-      .pipe(
-        // emits the most recent value after a delay of 300 milliseconds from the end of the last output value
-        debounceTime(300),
-        // emits the most recent value only if different from the previous one
-        distinctUntilChanged(),
-        /* Pass the search term emitted by the observable to the searchFilms method,
-        / then map the result of the call to a new observable */
-        switchMap((searchTerm: string | null) => this.serviceRent.searchFilms(searchTerm || ''))
-      )
-      // call subscribe on the observable returned by this.serviceRent.searchFilms
-      .subscribe((response: any) => {
-        const responseData: any = response.data;
-        if (responseData) {
-          this.films = responseData.searchFilms as FilmDetails[]; // Aggiorna l'array films con i risultati della ricerca
-        }
-      });
-  }
-
-  onPageChange(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.updatePageIndex();
-  }
-
 
   rent_page(film : FilmDetails) : void{
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
@@ -173,24 +150,6 @@ export class DashboardComponent implements OnInit {
       }
       console.log(this.isFilmPresent);
     });
-    /*
-    this.getStoresByFilm(film.film)
-    if(this.storesByFilm[0].num_film || this.storesByFilm[1].num_film){
-      this.isFilmPresent= true
-    }else{
-      this.isFilmPresent= false
-    }
-    console.log(this.isFilmPresent)
-    */
-    /*
-    if(film.stores[0].num_film || film.stores[1].num_film){
-      this._router.navigate(['rent', JSON.stringify(film)])
-    }else{
-      this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
-
-    }
-    */
-
   }
 
 
@@ -203,10 +162,13 @@ export class DashboardComponent implements OnInit {
 
   filterByCategory(category: Category) : void{
     this.selectedOption = category;
-    this.serviceRent.searchFilmsByCategory(category.name).subscribe((response) => {
+    this.category = category.name
+    this.getFilms()
+    /*
+    this.serviceRent.searchFilmsByCategory(category.name, this.currentPage, this.pageSize).subscribe((response) => {
       this.films = response.data.searchFilmsByCategory as FilmDetails[];  // Aggiorna l'array films con i risultati della ricerca
 
-    });
+    }); */
   }
 
 
@@ -227,25 +189,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  /*
-  getStores() {
-    this.serviceRent.getStores(this.films).subscribe((response) => {
-      this.stores= response.data.stores;
-    });
-  }
-
-
-
-  getStoresByFilm(film: any): boolean {
-    this.serviceRent.getStores(film.film_id).subscribe((response) => {
-      this.storesByFilm= response.data.stores;
-
-    });
-    console.log( this.storesByFilm.every(store => store.num_film === 0));
-    return  this.storesByFilm.every(store => store.num_film === 0);
-
-  }
-  */
 
 
 }

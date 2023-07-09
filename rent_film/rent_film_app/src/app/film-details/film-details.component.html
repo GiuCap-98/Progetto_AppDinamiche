@@ -16,9 +16,16 @@
       <p><strong>Anno:</strong> {{ film.film.film_id }}</p>
       <p><strong>Lingua:</strong> {{ film.film.title }}</p>
       <p><strong>Genere:</strong> {{ film.category.name }}</p>
-      <p><strong>Attori:</strong> {{ film.actor.first_name}} {{ film.actor.last_name}}</p>
       <p><strong>Durata massima noleggio:</strong> {{ film.film.rental_duration }}</p>
       <p><strong>Durata film:</strong> {{ film.film.length }}</p>
+
+      <!-- Aggiungi il seguente blocco per stampare gli attori -->
+      <p><strong>Attori:</strong></p>
+      <ul>
+        <li *ngFor="let actor of actors">
+          {{ actor.first_name }} {{ actor.last_name }}
+        </li>
+      </ul>
 
       <mat-form-field>
         <mat-label>Store</mat-label>

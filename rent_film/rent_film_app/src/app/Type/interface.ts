@@ -10,6 +10,10 @@ export interface CategoryResponse {
   categories: Category[];
 }
 
+export interface ActorsResponse {
+  actors: Actor[];
+}
+
 export interface RentalResponse {
   rentalsByCustomer: RentalFilmPayment[];
 }
@@ -78,7 +82,6 @@ export interface FilmDetails {
   film: Film;
   category: Category;
   language: Language;
-  actor: Actor;
 }
 
 export interface Payment {
