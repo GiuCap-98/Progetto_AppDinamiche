@@ -1,20 +1,63 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Apollo, gql } from 'apollo-angular';
+import jwt_decode from 'jwt-decode';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(public apollo: Apollo) {}
+  private TOKEN_KEY = 'token';
 
-  isLoggedIn = localStorage.getItem('token')!=null;
+  constructor(
+    public apollo: Apollo,     
+    private _router: Router    
+    ) {}
 
-  isAuthenticated(){
-    return this.isLoggedIn;
+  // Metodo per salvare il token nel localStorage
+  saveToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  // Metodo per ottenere il token dal localStorage
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  // Metodo per verificare se l'utente è autenticato
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return !!token; // Restituisce true se il token esiste, altrimenti false
+  }
+
+  // Metodo per effettuare il logout
+  logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+    this._router.navigate(['']);
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      const currentTimestamp: number = Math.floor(Date.now() / 1000);
+      return decodedToken.exp < currentTimestamp;
+    }
+    return false;
+  }
+
+  checkTokenExpiration(): void {
+    if (this.isTokenExpired()) {
+      // Token scaduto, si viene reindirizzati alla login      
+      alert('Token scaduto. Sarai reindirizzato al login.');      this.logout();
+      this.logout()
+    }
+  }
+  
+
+  // Mutation graphql: registrazione e login
   register(user: any): Observable<any> {
     const register = gql`
     mutation RegisterUser($customer_id: ID!, $first_name: String!, $last_name: String!, $email: String!, $password: String!) {

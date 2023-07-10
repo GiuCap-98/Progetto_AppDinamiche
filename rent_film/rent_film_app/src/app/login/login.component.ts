@@ -48,7 +48,7 @@ export class LoginComponent  implements OnInit  {
   this.authService.login(this.email, this.password).subscribe(
     response => {
       const token = response.data.login;
-      // Salva il token JWT nel sessionstorage
+      // Salva il token nel localStorage
       localStorage.setItem('token', token);
       // Reindirizza alla pagina del dashboard dopo il login
       this._router.navigateByUrl('/dashboard')

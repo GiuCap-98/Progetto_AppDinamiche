@@ -11,7 +11,7 @@ import { FilmDetails, StoreOccorrency, Tot_Films } from '../Type/interface';
 import { Category } from '../Type/interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +19,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./dashboard.component.css'],
   encapsulation: ViewEncapsulation.None
 })
+
 export class DashboardComponent implements OnInit {
   searchControl : FormControl = new FormControl('');
   films!: FilmDetails[]; // array to store the films
@@ -58,11 +59,13 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private serviceRent: ServiceRentService,
+    private authService: AuthService, 
     public dialog: Dialog,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
+    this.authService.checkTokenExpiration()
     this.getNumFilms()
     this.getCategories();
     this.getFilms()

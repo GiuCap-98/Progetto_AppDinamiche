@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
-import { Router , ActivatedRoute} from '@angular/router';
+import { Router } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'toolbar',
@@ -13,7 +14,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
 export class ToolbarComponent implements OnInit{
   currentTheme!: string ;
 
-  constructor( private serviceRent: ServiceRentService, private _router: Router, private _activatedRoute:ActivatedRoute) { }
+  constructor( 
+    private serviceRent: ServiceRentService, 
+    private authService: AuthService, 
+    private _router: Router
+    ) { }
 
   ngOnInit(): void {
     this.serviceRent.theme$.subscribe(theme => {
@@ -25,8 +30,6 @@ export class ToolbarComponent implements OnInit{
     this._router.navigate(['login'])
   }
 
-
-
   home() : void{
     this._router.navigate(['dashboard'])
   }
@@ -37,8 +40,7 @@ export class ToolbarComponent implements OnInit{
 
 
   logout(): void {
-    // Effettua il logout utilizzando il servizio AuthService
-    //this.servizioRent.setValue(false);
+    this.authService.logout();
   }
 
   changeTheme(theme: string) : void {
