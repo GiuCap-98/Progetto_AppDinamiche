@@ -13,28 +13,30 @@
   </div>
 
   <mat-list class="list" id="dialog-description" role="list">
-    <mat-list-item role="listitem"><strong>Release year:</strong> {{ film.film.release_year }}</mat-list-item>
-    <mat-list-item>
-      <strong>Language:</strong> {{ film.film.title }}
+    <mat-list-item role="listitem"  >
+      <strong>Release year:</strong> {{ film.film.release_year }}
     </mat-list-item>
-    <mat-list-item>
+    <mat-list-item role="listitem" >
+      <strong>Language:</strong> {{ film.language.name }}
+    </mat-list-item>
+    <mat-list-item role="listitem">
       <strong>Category:</strong> {{ film.category.name }}
     </mat-list-item>
-    <mat-list-item>
+    <mat-list-item role="listitem" >
       <strong>Rental duration:</strong> {{ film.film.rental_duration }}
     </mat-list-item>
-
-    <mat-list-item>
+    <mat-list-item role="listitem">
       <strong>Film duration:</strong> {{ film.film.length }}
-    </mat-list-item>
-    <mat-list-item lines="3">
+    </mat-list-item >
+    <mat-list-item role="listitem" lines="3">
       <span matListItemTitle><strong>Actors: </strong> </span>
       <a *ngFor="let actor of actors">{{ actor.first_name }} {{ actor.last_name }},</a>
     </mat-list-item>
 
-    <mat-list-item>
+    <mat-list-item role="listitem">
       <span matListItemTitle> <strong>Stores available: </strong> </span>
-      <span *ngFor="let store of stores" matListItemLine>{{ store.address.address }}</span>
+      <a *ngFor="let store of stores"><span *ngIf="storeAvailable(store)" matListItemLine>{{ store.address.address }}</span> </a>
+      <span *ngIf="!isStoreAvailable" matListItemLine>No stores available for rental</span>
     </mat-list-item>
   </mat-list>
 
@@ -42,7 +44,7 @@
 
 
       <div class="rent-button" >
-        <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard"  [disabled]="!filmPresent()" (click)="rent_page(film, stores)">
+        <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard"  [disabled]="!isStoreAvailable" (click)="rent_page(film, stores)">
           {{ film.film.rental_rate}}
           <mat-icon>
             <span >euro</span>

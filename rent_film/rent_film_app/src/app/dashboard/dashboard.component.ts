@@ -184,7 +184,6 @@ export class DashboardComponent implements OnInit {
       this.dialog.open(FilmDetailsComponent, {
         width: '90%',
         maxWidth: '800px',
-        height: '90%',
         data: {film_and_category: film, stores: storesByFilm}
       });
     });

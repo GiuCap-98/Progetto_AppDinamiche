@@ -23,6 +23,8 @@ export class FilmDetailsComponent implements OnInit {
   storeSelected : boolean = false;
   actors!: Actor[]
   isFilmPresent!: boolean ;
+  isStoreAvailable: boolean =false;
+  count_numfilm: number=0;
 
 
 
@@ -39,6 +41,8 @@ export class FilmDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.count_numfilm=0;
+    this.isStoreAvailable=false;
     this.getActors(this.film.film.film_id)
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
@@ -79,12 +83,21 @@ export class FilmDetailsComponent implements OnInit {
 
 
 
-  filmPresent() : boolean{
-      if (this.stores[0].num_film || this.stores[1].num_film) {
-        return this.isFilmPresent = true;
-      } else {
-        return this.isFilmPresent = false;
-      }
+  storeAvailable(store: StoreOccorrency): boolean{
+    if(store.num_film == 0){
+      this.isFilmPresent = false;
+    }else{
+      this.count_numfilm+=1;
+      this.isFilmPresent= true;
+    }
+
+    if((this.count_numfilm >= 1) ){
+      this.isStoreAvailable=true;
+    }
+
+    return this.isFilmPresent
+
+
   }
 
 }
