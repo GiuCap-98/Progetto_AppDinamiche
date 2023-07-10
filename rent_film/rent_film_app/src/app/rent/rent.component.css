@@ -63,10 +63,17 @@ button[type="submit"] {
   }
 }
 
-.mat-option:focus {
-  outline: 2px solid #2E90FF; /* Esempio: evidenzia l'opzione selezionata con un bordo blu */
+mat-card-content{
+  text-align: center;
 }
 
+mat-radio-group{
+  margin-bottom: 100px;
+}
+
+ul.error-message {
+  list-style: none;
+}
 @media (max-width: 400px) {
   .card-title {
     font-size: 18px;

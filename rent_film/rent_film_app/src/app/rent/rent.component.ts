@@ -13,7 +13,7 @@ import { FilmCategory } from '../Type/Model';
 })
 export class RentComponent implements OnInit{
 
-  public error: string | null | undefined;
+  public errors: string[]= [];
   form!: FormGroup;
 
   film!: FilmCategory;
@@ -25,7 +25,9 @@ export class RentComponent implements OnInit{
   currentTheme!: string;
   coloreCard!: string;
   coloreTextCard!: string;
-
+  data_selected: string = '';
+  store_selected: string = '';
+  data_group : string[]= [ 'Today', 'In two days' ]
 
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog) {
@@ -47,7 +49,22 @@ export class RentComponent implements OnInit{
 
 
   rent() : void {
-    this.openDialog()
+    this.errors=[]
+    if (this.data_selected=='' ||  this.store_selected == '') {
+      console.log(this.data_selected)
+      // Verifica se il campo data è vuoto
+      if (this.data_selected=='') {
+        this.errors.push('Il campo data è obbligatorio.')
+        console.log(this.errors)
+      }
+      // Verifica se il campo store è vuoto
+      if (this.store_selected=='') {
+        this.errors.push('Il campo store è obbligatorio.');
+      }
+
+    }else{
+      this.openDialog()
+    }
   }
 
   click_data(selected: boolean) : void {

@@ -5,32 +5,32 @@
       <br>
     </mat-card-title>
     <mat-card-content >
-      <form [formGroup]="form" (ngSubmit)="rent()">
-        <label for="data">Da quando vuoi far partire il tuo noleggio?</label>
+      <p><label id="label_data"><strong>When do you want to start your rental?</strong></label></p>
+        <mat-radio-group aria-labelledby="label_data"
+          class="data-radio-group"
+          [(ngModel)]="data_selected">
+          <mat-radio-button class="radio" *ngFor="let data of data_group" [value]="data">{{data}}</mat-radio-button>
+        </mat-radio-group>
         <br>
-        <mat-form-field  >
-          <mat-label>Seleziona una data</mat-label>
-          <mat-select #dayOption formControlName="data"  aria-label="Seleziona una data">
-            <mat-option  value="today"  (click)="click_data(true)">Oggi</mat-option>
-            <mat-option  value="in-two-days"  (click)="click_data(true)">Entro due giorni</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field >
-          <mat-label>Store</mat-label>
-          <mat-select formControlName="store" aria-label="Seleziona uno store">
-            <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click_store(matOption.selected)" >{{store.address.address}}</mat-option>
-          </mat-select>
-        </mat-form-field>
         <br>
 
-        <button mat-raised-button color="accent" type="submit">Noleggia</button>
+        <p><label id="label_store"><strong>Select a store:</strong> </label></p>
+        <mat-radio-group
+          aria-labelledby="label_store"
+          class="store-radio-group"
+          [(ngModel)]="store_selected">
+          <mat-radio-button class="store-radio-button" *ngFor="let store of stores" [value]="store.store.store_id"  [disabled]="!store.num_film">
+            {{store.address.address}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <br>
+        <br>
 
 
-        <p *ngIf="error" class="error-message">{{ error }}</p>
-
-
-    </form>
+      <button mat-raised-button color="accent" type="submit" aria-describedby="error-message" (click)="rent()">Noleggia</button>
+      <ul *ngIf="errors.length > 0" class="error-message" id="error-message">
+          <li *ngFor="let error of errors">{{ error }}</li>
+      </ul>
     </mat-card-content>
 
   </mat-card>
