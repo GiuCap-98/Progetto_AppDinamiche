@@ -408,7 +408,7 @@ const resolvers = {
         }
   
         // Generate a JWT token
-        const token = jwt.sign({ customer_id: user.customer_id }, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ customer_id: user.customer_id }, SECRET, { expiresIn: '2h' });
   
         return token;
       } catch (error) {

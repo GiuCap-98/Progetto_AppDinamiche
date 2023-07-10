@@ -1,42 +1,48 @@
 <div class="dialog-window" role="dialog" title="Dialog window for film details" aria-labelledby="dialog-title" [ngClass]="currentTheme">
   <div class="title"  [style.background-color]="coloreCard" [style.color]="coloreTextCard">
-    <mat-card-actions >
 
-      <button mat-button aria-label="Close dialog" role="button" title="Button for close dialog" (click)="closeDialog()" >
+
+      <button mat-button class="close" aria-label="Close dialog" role="button" title="Button for close dialog" (click)="closeDialog()" >
         <mat-icon>
           <span>close</span>
         </mat-icon>
         Close
       </button>
-    </mat-card-actions>
-
-    <h2 mat-dialog-title id="dialog-title">{{ film.film.title }}</h2>
+    <br>
+    <h1 class="title-dialog" mat-dialog-title aria-describedby="dialog-description" id="dialog-title">{{ film.film.title }}</h1>
   </div>
-  <div class="dialog-content" >
-      <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
-      <p><strong>Lingua:</strong> {{ film.film.title }}</p>
-      <p><strong>Genere:</strong> {{ film.category.name }}</p>
-      <p><strong>Durata massima noleggio:</strong> {{ film.film.rental_duration }}</p>
-      <p><strong>Durata film:</strong> {{ film.film.length }}</p>
 
-      <!-- Aggiungi il seguente blocco per stampare gli attori -->
-      <p><strong>Attori:</strong>
-      <a *ngFor="let actor of actors">
-        {{ actor.first_name }} {{ actor.last_name }},
-      </a>
-      </p>
+  <mat-list class="list" id="dialog-description" role="list">
+    <mat-list-item role="listitem"><strong>Release year:</strong> {{ film.film.release_year }}</mat-list-item>
+    <mat-list-item>
+      <strong>Language:</strong> {{ film.film.title }}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Category:</strong> {{ film.category.name }}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Rental duration:</strong> {{ film.film.rental_duration }}
+    </mat-list-item>
+
+    <mat-list-item>
+      <strong>Film duration:</strong> {{ film.film.length }}
+    </mat-list-item>
+    <mat-list-item lines="3">
+      <span matListItemTitle><strong>Actors: </strong> </span>
+      <a *ngFor="let actor of actors">{{ actor.first_name }} {{ actor.last_name }},</a>
+    </mat-list-item>
+
+    <mat-list-item>
+      <span matListItemTitle> <strong>Stores available: </strong> </span>
+      <span *ngFor="let store of stores" matListItemLine>{{ store.address.address }}</span>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="dialog-content"  id="dialog-description">
 
 
-      <mat-form-field>
-        <mat-label>Store</mat-label>
-        <mat-select aria-label="Select store">
-          <mat-option #matOption *ngFor="let store of stores" value="store" [disabled]="!store.num_film" (click)="click(matOption.selected)">{{store.address.address}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-
-      <div class="content-rent">
-        <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard" class="button-rent" [disabled]="!storeSelected" (click)="rent_page(film, stores)">
+      <div class="rent-button" >
+        <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard"  [disabled]="!filmPresent()" (click)="rent_page(film, stores)">
           {{ film.film.rental_rate}}
           <mat-icon>
             <span >euro</span>

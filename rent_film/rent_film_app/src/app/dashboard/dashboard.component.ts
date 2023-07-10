@@ -57,9 +57,10 @@ export class DashboardComponent implements OnInit {
 
   timer: any;
 
+
   constructor(
     private serviceRent: ServiceRentService,
-    private authService: AuthService, 
+    private authService: AuthService,
     public dialog: Dialog,
     private _router: Router
   ) {}
@@ -172,11 +173,6 @@ export class DashboardComponent implements OnInit {
     this.selectedOption = category;
     this.category = category.name
     this.getFilms()
-    /*
-    this.serviceRent.searchFilmsByCategory(category.name, this.currentPage, this.pageSize).subscribe((response) => {
-      this.films = response.data.searchFilmsByCategory as FilmDetails[];  // Aggiorna l'array films con i risultati della ricerca
-
-    }); */
   }
 
 
@@ -189,14 +185,9 @@ export class DashboardComponent implements OnInit {
         width: '90%',
         maxWidth: '800px',
         height: '90%',
-        maxHeight: '600px',
         data: {film_and_category: film, stores: storesByFilm}
       });
     });
 
   }
-
-
-
-
 }

@@ -22,6 +22,7 @@ export class FilmDetailsComponent implements OnInit {
   coloreTextCard!: string;
   storeSelected : boolean = false;
   actors!: Actor[]
+  isFilmPresent!: boolean ;
 
 
 
@@ -54,6 +55,8 @@ export class FilmDetailsComponent implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
+    // Naviga all'URL della dashboard
+    this._router.navigate(['dashboard']);
   }
 
   click(selected: boolean) : void {
@@ -61,10 +64,27 @@ export class FilmDetailsComponent implements OnInit {
   }
 
   rent_page(film : FilmDetails, stores: StoreOccorrency[]) : void{
-    this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(stores)])
     this.closeDialog()
+    this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(stores)])
+
 
   }
 
+  handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      const selectedOption = document.activeElement as HTMLElement;
+      this.click(selectedOption.getAttribute('aria-selected') === 'true');
+    }
+  }
+
+
+
+  filmPresent() : boolean{
+      if (this.stores[0].num_film || this.stores[1].num_film) {
+        return this.isFilmPresent = true;
+      } else {
+        return this.isFilmPresent = false;
+      }
+  }
 
 }

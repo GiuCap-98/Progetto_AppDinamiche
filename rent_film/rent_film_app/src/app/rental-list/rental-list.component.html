@@ -13,8 +13,8 @@
   <div class="button-container" *ngFor="let column of columns_title; let i = index">
     <button mat-button [matMenuTriggerFor]="menu">{{ column }}</button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="sortData({ active: columns_action[i], direction: 'asc' })">Ascendente</button>
-      <button mat-menu-item (click)="sortData({ active: columns_action[i], direction: 'desc' })">Discendente</button>
+      <button mat-menu-item role="menuitem" (click)="sortData({ active: columns_action[i], direction: 'asc' })">Ascendente</button>
+      <button mat-menu-item role="menuitem"  (click)="sortData({ active: columns_action[i], direction: 'desc' })">Discendente</button>
     </mat-menu>
   </div>
 </div>

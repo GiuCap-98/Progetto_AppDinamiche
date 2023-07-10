@@ -1,69 +1,65 @@
-<body title="Dashboard" [ngClass]="currentTheme" >
+<div class="content">
+  <mat-form-field class="field">
+    <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film" value="" (input)="onSearchTitleChange($event)" name="title" />
+    <mat-icon matPrefix  aria-hidden="true">search</mat-icon>
+  </mat-form-field>
 
-  <div class="content">
-    <mat-form-field class="field">
-      <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film" value="" (input)="onSearchTitleChange($event)" name="title" />
-      <mat-icon matPrefix  aria-hidden="true">search</mat-icon>
-    </mat-form-field>
+  <span class="spacer"></span>
 
-    <span class="spacer"></span>
+  <mat-form-field class="field">
+    <mat-select  aria-label="Filtra per categoria" placeholder="Filtra per categoria">
+      <mat-option *ngFor="let category of categories" [value]="category" (click)="filterByCategory(category)">
+        {{category.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
-    <mat-form-field class="field">
-      <mat-select  aria-label="Filtra per categoria" placeholder="Filtra per categoria">
-        <mat-option *ngFor="let category of categories" [value]="category" (click)="filterByCategory(category)">
-          {{category.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+<div role="list">
+  <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+    <mat-card-header>
+      <mat-card-title class="title" aria-label="Film title">
+        <a class="link_details" href="javascript:void(0)" (click)="openDetails(film)">{{film.film.title}} </a>
+      </mat-card-title>
+    </mat-card-header>
 
-  <div role="list">
-    <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
-      <mat-card-header>
-        <mat-card-title class="title" aria-label="Film title">
-          <a class="link_details" (click)="openDetails(film)">{{film.film.title}} </a>
-        </mat-card-title>
-      </mat-card-header>
+    <mat-card-content>
+      <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
+      <p><strong>Lingua:</strong> {{ film.language.name }}</p>
+      <p><strong>Genere:</strong> {{ film.category.name }}</p>
+      <p><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
+      <p>{{ film.film.rating }}</p>
+    </mat-card-content>
 
-      <mat-card-content>
-        <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
-        <p><strong>Lingua:</strong> {{ film.language.name }}</p>
-        <p><strong>Genere:</strong> {{ film.category.name }}</p>
-        <p><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
-        <p>{{ film.film.rating }}</p>
-      </mat-card-content>
+    <mat-card-actions align="start">
+      <button class="details" mat-button aria-labelledby="Details button" role="button" title="Button for show film details" (click)="openDetails(film)" [style.color]="coloreTextCard">
+        Dettagli
+        <mat-icon>
+          <span aria-hidden="true">add</span>
+        </mat-icon>
+      </button>
+    </mat-card-actions>
 
-      <mat-card-actions align="start">
-        <button class="details" mat-button aria-labelledby="Details button" role="button" title="Button for show film details" (click)="openDetails(film)" [style.color]="coloreTextCard">
-          Dettagli
-          <mat-icon>
-            <span aria-hidden="true">add</span>
-          </mat-icon>
-        </button>
-      </mat-card-actions>
+    <mat-card-actions align="end">
+      <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
+        {{ film.film.rental_rate }}
+        <mat-icon>
+          <span aria-hidden="true">euro</span>
+        </mat-icon>
+        NOLEGGIA
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<div role="navigation" aria-label="pagination" class="paginator-div">
+  <!-- Paginazione -->
+  <mat-paginator [length]="numFilms" [pageSize]="pageSize" [pageIndex]="currentPage - 1" (page)="handlePageChange($event)"></mat-paginator>
 
-      <mat-card-actions align="end">
-        <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
-          {{ film.film.rental_rate }}
-          <mat-icon>
-            <span aria-hidden="true">euro</span>
-          </mat-icon>
-          NOLEGGIA
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  <div role="navigation" aria-label="pagination" class="paginator-div">
-    <!-- Paginazione -->
-    <mat-paginator [length]="numFilms" [pageSize]="pageSize" [pageIndex]="currentPage - 1" (page)="handlePageChange($event)"></mat-paginator>
+</div>
 
-  </div>
-
-  <div id="scroll-up">
-    <!-- Bottone per tornare all'inizio della pagina -->
-    <button mat-fab class="back-to-top-button" aria-label="Return to top of page" role="button" title="Button for return to top of page" *ngIf="scrolled == 1" (click)="scrollToTop()" [class.show]="isScrolled">
-      <mat-icon>arrow_upward</mat-icon>
-    </button>
-  </div>
-
-</body>
+<div id="scroll-up">
+  <!-- Bottone per tornare all'inizio della pagina -->
+  <button mat-fab class="back-to-top-button" aria-label="Return to top of page" role="button" title="Button for return to top of page" *ngIf="scrolled == 1" (click)="scrollToTop()" [class.show]="isScrolled">
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
+</div>

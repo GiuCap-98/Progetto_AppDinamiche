@@ -20,9 +20,9 @@ const routes: Routes = [
   },
 
   { path: 'rent/:film/:stores', component: RentComponent, canActivate : [AuthGuard]},
-  
+
   { path:'film-details', component: FilmDetailsComponent, canActivate : [AuthGuard]},
-  
+
   { path:'rental-list', component: RentalListComponent, canActivate : [AuthGuard]}
 
 ];
