@@ -1,17 +1,19 @@
-import { Component, HostListener, OnDestroy, OnInit, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { ServiceRentService } from '../service/service-rent.service';
 import { Dialog} from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
 import { FilmDetailsComponent } from '../film-details/film-details.component';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { FilmDetails, StoreOccorrency, Tot_Films } from '../Type/interface';
+import { Actor, FilmDetails, StoreOccorrency } from '../Type/interface';
 import { Category } from '../Type/interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -51,11 +53,18 @@ export class DashboardComponent implements OnInit {
   categories: Category[] =[];
 
   storesByFilm: StoreOccorrency[] = [];
-  isFilmPresent!: boolean ;
 
   numFilms: number = 0;
 
   timer: any;
+
+
+  storeSelected : boolean = false;
+  actors!: Actor[]
+  isFilmPresent!: boolean ;
+  isStoreAvailable: boolean =false;
+  count_numfilm: number=0;
+
 
 
   constructor(
@@ -92,7 +101,6 @@ export class DashboardComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-
   getFilms(){
     this.serviceRent.getFilms(this.category, this.title, this.currentPage, this.pageSize).subscribe((response) => {
       this.films = response.data.films as FilmDetails[];
@@ -122,11 +130,6 @@ export class DashboardComponent implements OnInit {
     this.getFilms();
   }
 
-
-
-
-
-
   getStoresByFilm(film: any)  {
     this.serviceRent.getStores(film.film_id).subscribe((response) => {
       this.storesByFilm= response.data.stores;
@@ -146,18 +149,32 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  storeAvailable(store: StoreOccorrency): boolean{
+    if(store.num_film == 0){
+      this.isFilmPresent = false;
+    }else{
+      this.count_numfilm+=1;
+      this.isFilmPresent= true;
+    }
 
+    if((this.count_numfilm >= 1) ){
+      this.isStoreAvailable=true;
+    }
+
+    return this.isFilmPresent
+
+  }
 
   rent_page(film : FilmDetails) : void{
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
-      if (storesByFilm[0].num_film || storesByFilm[1].num_film) {
-        this.isFilmPresent = true;
+      this.count_numfilm=0
+      this.storeAvailable(storesByFilm[0])
+      this.storeAvailable(storesByFilm[1])
+      if (this.isStoreAvailable) {
         this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(storesByFilm)])
       } else {
-        this.isFilmPresent = false;
         this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
       }
-      console.log(this.isFilmPresent);
     });
   }
 
@@ -181,12 +198,18 @@ export class DashboardComponent implements OnInit {
   // dialog for film details
   openDetails(film: FilmDetails) : void {
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
-      this.dialog.open(FilmDetailsComponent, {
-        width: '90%',
-        maxWidth: '800px',
-        data: {film_and_category: film, stores: storesByFilm}
-      });
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {film_and_category: film, stores: storesByFilm};
+      dialogConfig.width = '600px';
+      dialogConfig.autoFocus = false;
+      dialogConfig.ariaLabel =  film.film.title,
+      dialogConfig.panelClass = 'custom-dialog-class'; // Aggiungi la classe CSS personalizzata al dialog
+
+      this.dialog.open(FilmDetailsComponent, dialogConfig)
     });
 
   }
+
+
+
 }

@@ -38,7 +38,7 @@ import { RentDetailsComponent } from './rent-details/rent-details.component';
 import {MatTableModule} from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import {MatListModule} from '@angular/material/list';
-
+import {MatDialogModule} from '@angular/material/dialog';
 export function tokenGetter(): string | null {
   return localStorage.getItem('token');
 }
@@ -73,7 +73,8 @@ const modules = [
   MatRadioModule,
   MatTableModule,
   MatSortModule,
-  MatListModule
+  MatListModule,
+  MatDialogModule
 ];
 
 @NgModule({

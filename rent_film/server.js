@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const express = require('express');
 const { typeDefs, resolvers } = require('./schema');
-const { db_rent, db_user, SECRET } = require('./db'); // Import database
+const { SECRET } = require('./db'); // Import database
 
 url = 'http://localhost:4000';
 const server = new ApolloServer({ 
@@ -25,8 +25,6 @@ const server = new ApolloServer({
         }
 
         return {
-            db_rent,
-            db_user,
             customer_id: customer_id,
             SECRET
         }

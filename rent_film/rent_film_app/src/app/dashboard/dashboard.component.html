@@ -13,6 +13,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
 </div>
 
 <div role="list">
@@ -31,15 +32,6 @@
       <p>{{ film.film.rating }}</p>
     </mat-card-content>
 
-    <mat-card-actions align="start">
-      <button class="details" mat-button aria-labelledby="Details button" role="button" title="Button for show film details" (click)="openDetails(film)" [style.color]="coloreTextCard">
-        Dettagli
-        <mat-icon>
-          <span aria-hidden="true">add</span>
-        </mat-icon>
-      </button>
-    </mat-card-actions>
-
     <mat-card-actions align="end">
       <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
         {{ film.film.rental_rate }}
@@ -51,6 +43,7 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
 <div role="navigation" aria-label="pagination" class="paginator-div">
   <!-- Paginazione -->
   <mat-paginator [length]="numFilms" [pageSize]="pageSize" [pageIndex]="currentPage - 1" (page)="handlePageChange($event)"></mat-paginator>

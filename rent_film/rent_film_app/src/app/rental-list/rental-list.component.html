@@ -3,21 +3,24 @@
     [style.background-color]="coloreCard" >
     <div><p><strong>Spesa totale:</strong> {{ totalAmount}}
     </div>
-    <button  aria-label="Button order"  (click)="isDropdownOpen = !isDropdownOpen" mat-raised-button>
-      Ordina</button>
   </div>
 </div>
 
 
-<div class="button-row" *ngIf="isDropdownOpen">
+
+<div class="button-row" >
+  <span style="text-align: center; color:black">Opzioni di ordinamento:  </span>
+  <br>
+  <br>
   <div class="button-container" *ngFor="let column of columns_title; let i = index">
-    <button mat-button [matMenuTriggerFor]="menu">{{ column }}</button>
-    <mat-menu #menu="matMenu">
+    <button mat-raised-button mat-button [matMenuTriggerFor]="menu">{{ column }}</button>
+     <mat-menu #menu="matMenu">
       <button mat-menu-item role="menuitem" (click)="sortData({ active: columns_action[i], direction: 'asc' })">Ascendente</button>
       <button mat-menu-item role="menuitem"  (click)="sortData({ active: columns_action[i], direction: 'desc' })">Discendente</button>
     </mat-menu>
   </div>
 </div>
+
 
 
 

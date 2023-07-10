@@ -1,9 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
-import {NgIf} from '@angular/common';
-import { DialogRef, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
+import { DialogRef, DIALOG_DATA} from '@angular/cdk/dialog';
 import { FilmDetails, StoreOccorrency, Actor } from '../Type/interface';
 
 
@@ -25,6 +23,7 @@ export class FilmDetailsComponent implements OnInit {
   isFilmPresent!: boolean ;
   isStoreAvailable: boolean =false;
   count_numfilm: number=0;
+  filmTitle!: string;
 
 
 
@@ -38,6 +37,7 @@ export class FilmDetailsComponent implements OnInit {
   ) {
     this.film= data.film_and_category
     this.stores= data.stores
+    this.filmTitle = data.film_and_category.film.title;
   }
 
   ngOnInit(): void {

@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { db_rent, db_user } = require('./db');
 
 // Define GraphQL schema
 const typeDefs = gql`
@@ -141,7 +142,7 @@ const typeDefs = gql`
 // Resolvers GraphQL query
 const resolvers = {
   Query: {
-    customers: async (_, __, { db_rent }) => {
+    customers: async (_, __,) => {
       try {
         const result = await db_rent.query('SELECT * FROM customer');
         return result.rows;
@@ -151,7 +152,7 @@ const resolvers = {
       }
     },  
 
-    totalFilms: async (_, { searchCat, searchTerm}, { db_rent }) => {
+    totalFilms: async (_, { searchCat, searchTerm}) => {
       try {
         let query = '';
         let values = [];
@@ -193,7 +194,7 @@ const resolvers = {
     
           
 
-    films: async (_, { searchCat, searchTerm, page, pageSize }, { db_rent }) => {
+    films: async (_, { searchCat, searchTerm, page, pageSize }) => {
       try {
         const offset = (page - 1) * pageSize;
         const limit = pageSize;
@@ -255,7 +256,7 @@ const resolvers = {
       }
     },
  
-    categories: async (_, __, { db_rent }) => {
+    categories: async (_, __,) => {
       try {
         const client = await db_rent.connect();
         const result = await client.query('SELECT name FROM category');
@@ -289,7 +290,7 @@ const resolvers = {
       }
     },
 
-    stores: async (_, { film_id }, { db_rent }) => {
+    stores: async (_, { film_id }) => {
       try {
         const query = `
         SELECT s.store_id, addr.address, COALESCE(COUNT(i.film_id), 0) AS num_film
@@ -317,7 +318,7 @@ const resolvers = {
       }
     },
     
-    rentalsByCustomer: async (_, { customerId }, { db_rent }) => {
+    rentalsByCustomer: async (_, { customerId }) => {
       try{
         const query = `
         SELECT f.title, p.amount, 
@@ -359,7 +360,7 @@ const resolvers = {
   },
 
   Mutation: {
-    register: async (_, { customer_id, first_name, last_name, email, password }, { db_user }) => {
+    register: async (_, { customer_id, first_name, last_name, email, password }) => {
       try {
         // Verifica se l'utente esiste già nel database
         const queryCheckUser = `
@@ -390,7 +391,7 @@ const resolvers = {
       }
     },
 
-    login: async (_, { email, password }, { db_user, SECRET }) => {
+    login: async (_, { email, password }, { SECRET }) => {
       try {
         // Check if the user exists in the database
         const queryCheckUser = `
