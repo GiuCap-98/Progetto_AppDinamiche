@@ -10,7 +10,7 @@
         <br>
         <mat-form-field  >
           <mat-label>Seleziona una data</mat-label>
-          <mat-select #dayOption formControlName="data"  >
+          <mat-select #dayOption formControlName="data"  aria-label="Seleziona una data">
             <mat-option  value="today"  (click)="click_data(true)">Oggi</mat-option>
             <mat-option  value="in-two-days"  (click)="click_data(true)">Entro due giorni</mat-option>
           </mat-select>
@@ -18,7 +18,7 @@
 
         <mat-form-field >
           <mat-label>Store</mat-label>
-          <mat-select formControlName="store" >
+          <mat-select formControlName="store" aria-label="Seleziona uno store">
             <mat-option #matOption *ngFor="let store of stores" [value]="store" [disabled]="!store.num_film" (click)="click_store(matOption.selected)" >{{store.address.address}}</mat-option>
           </mat-select>
         </mat-form-field>
