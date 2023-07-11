@@ -6,6 +6,7 @@ import { DialogComponentComponent } from '../dialog-component/dialog-component.c
 import { FilmCategoryStore, StoreOccorrency } from '../Type/interface';
 import { FilmCategory } from '../Type/Model';
 import { ServiceRentService } from '../service/service-rent.service';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-rent',
@@ -53,12 +54,15 @@ export class RentComponent implements OnInit{
 
 
 
-  // dialog for film details 
-  openDialog() : void { 
+  // dialog for film details
+  openDialog() : void {
     this.errors=[]
-    if(this.storeSelected && this.dataSelected){ 
-      this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }}); 
- 
+    if(this.storeSelected && this.dataSelected){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {text:'Rent success!' };
+      dialogConfig.ariaLabel =  'Available-rent',
+      this.dialog.open(DialogComponentComponent, dialogConfig);
+
     }else{
       if (!this.storeSelected ) {
         this.errors.push('The field store is required')
@@ -69,7 +73,7 @@ export class RentComponent implements OnInit{
         this.errors.push('The field data is required');
       }
     }
-  } 
+  }
 
 
 }

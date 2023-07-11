@@ -1,21 +1,14 @@
-import { Component, HostListener } from '@angular/core';
-import { ServiceRentService } from './service/service-rent.service';
+import { Component,  } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers:[ServiceRentService]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'rent_film_app';
-  currentTheme!: string;
-  theme: string = 'theme1-toolbar';
+  title = 'RentFilm';
 
+  constructor() {}
 
-  constructor( private serviceRent: ServiceRentService) {}
-
-  ngOnInit(): void {
-  }
 
 }

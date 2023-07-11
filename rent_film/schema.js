@@ -124,10 +124,8 @@ const typeDefs = gql`
   
   type Query {
     customers: [Customer]
-    films(searchCat: String!, searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
-    searchFilms(searchTerm: String!): [Films_Details]
     totalFilms(searchCat: String!, searchTerm: String!): Int
-    searchFilmsByCategory(category: String!): [Films_Details]
+    films(searchCat: String!, searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
     categories: [Category]
     searchActorsByFilm(film_id: ID!): [Actor]
     stores(film_id: ID!): [StoreOccorrency]

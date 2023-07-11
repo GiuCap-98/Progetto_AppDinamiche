@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Angular Website</title>
 </head>
-<body [ngClass]="currentTheme" >
+<body >
   <header >
     <toolbar #toolbar class="component-style"></toolbar>
   </header>
@@ -14,7 +14,7 @@
 
   <main >
   <!--attiva la componente che verrà chiamata con router link -->
-  <router-outlet class="component-style"></router-outlet>
+  <router-outlet class="component-style" ></router-outlet>
   </main>
 
   <footer>

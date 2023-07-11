@@ -164,7 +164,10 @@ export class DashboardComponent implements OnInit {
       if (this.isStoreAvailable) {
         this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(storesByFilm)])
       } else {
-        this.dialog.open(DialogComponentComponent, {data: {text:'Ci dispiace, il film non è disponibile per il noleggio.' }});
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {text:'Sorry, the film is not available for rent' };
+        dialogConfig.ariaLabel =  'Not-available-rent'
+        this.dialog.open(DialogComponentComponent,dialogConfig);
       }
     });
   }
@@ -192,10 +195,7 @@ export class DashboardComponent implements OnInit {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {film_and_category: film, stores: storesByFilm};
       dialogConfig.width = '600px';
-      dialogConfig.autoFocus = false;
       dialogConfig.ariaLabel =  film.film.title,
-      dialogConfig.panelClass = 'custom-dialog-class'; // Aggiungi la classe CSS personalizzata al dialog
-
       this.dialog.open(FilmDetailsComponent, dialogConfig)
     });
 

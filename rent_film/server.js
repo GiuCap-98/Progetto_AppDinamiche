@@ -1,6 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const { typeDefs, resolvers } = require('./schema');
 const { SECRET } = require('./db'); // Import database
+const jwt = require('jsonwebtoken')
 
 url = 'http://localhost:4000';
 const server = new ApolloServer({ 
@@ -9,22 +10,17 @@ const server = new ApolloServer({
     resolvers, 
     context: async({req}) => {
 
-        const token = req.headers.authorization || ''; // Ottieni il token dalle intestazioni della richiesta
-        let customer_id = 0;
-
+        let token = req.headers.authorization ?? ''; // Ottieni il token dalle intestazioni della richiesta
+        let customer_id = null;
         if (token) {
-
             try {
-                console.log("verify token");
                 const decoded  = jwt.verify(token, SECRET);
-                customer_id = decoded.customer_id;
-                console.log(customer_id);
+                return {
+                    customer_id: decoded.customer_id
+                }
             } catch (e) {}
-
         } 
-
         return {
-            
             customer_id: customer_id
         }
     }

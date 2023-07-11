@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Apollo, gql } from 'apollo-angular';
 import jwt_decode from 'jwt-decode';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,8 @@ export class AuthService {
   private TOKEN_KEY = 'token';
 
   constructor(
-    public apollo: Apollo,     
-    private _router: Router    
+    public apollo: Apollo,
+    private _router: Router
     ) {}
 
   // Metodo per salvare il token nel localStorage
@@ -50,12 +50,12 @@ export class AuthService {
 
   checkTokenExpiration(): void {
     if (this.isTokenExpired()) {
-      // Token scaduto, si viene reindirizzati alla login      
+      // Token scaduto, si viene reindirizzati alla login
       alert('Token scaduto. Sarai reindirizzato al login.');      this.logout();
       this.logout()
     }
   }
-  
+
 
   // Mutation graphql: registrazione e login
   register(user: any): Observable<any> {

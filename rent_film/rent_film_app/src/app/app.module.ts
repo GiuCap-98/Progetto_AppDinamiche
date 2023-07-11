@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatCheckboxModule} from '@angular/material/checkbox';
@@ -28,7 +28,6 @@ import { FilmDetailsComponent } from './film-details/film-details.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSelectModule } from '@angular/material/select';
 import { RentalListComponent } from './rental-list/rental-list.component';
-import { JwtInterceptor } from './jwt.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
 import { RentComponent } from './rent/rent.component';
 import { DialogComponentComponent } from './dialog-component/dialog-component.component';
@@ -39,6 +38,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import {MatListModule} from '@angular/material/list';
 import {MatDialogModule} from '@angular/material/dialog';
+import { NotFoundComponent } from './not-found/not-found.component';
 export function tokenGetter(): string | null {
   return localStorage.getItem('token');
 }
@@ -88,11 +88,11 @@ const modules = [
     RegistrationComponent,
     RentComponent,
     DialogComponentComponent,
-    RentDetailsComponent
+    RentDetailsComponent,
+    NotFoundComponent
   ],
 
   imports: modules,
-  providers: [ { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
