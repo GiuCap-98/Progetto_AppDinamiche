@@ -28,14 +28,15 @@
       <p ><strong>Film duration:</strong> {{ film.film.length }}</p>
     </mat-list-item >
     <mat-list-item role="listitem" lines="3">
-      <span matListItemTitle><p tabindex="0"><strong>Actors:</strong></p>
-      </span>
+      <p tabindex="0" matListItemTitle><strong>Actors:</strong></p>
       <a *ngFor="let actor of actors">{{ actor.first_name }} {{ actor.last_name }},</a>
     </mat-list-item>
 
     <mat-list-item role="listitem">
-      <span matListItemTitle> <p tabindex="0"> <strong>Stores available: </strong> </p></span>
-      <a *ngFor="let store of stores"><span *ngIf="storeAvailable(store)" matListItemLine>{{ store.address.address }}</span> </a>
+      <p tabindex="0" matListItemTitle> <strong>Stores available: </strong> </p>
+      <ul *ngFor="let store of stores" matListItemLine>
+        <li *ngIf="storeAvailable(store)" >{{ store.address.address }}</li>
+      </ul>
       <span *ngIf="!isStoreAvailable" matListItemLine> <p>No stores available for rental </p> </span>
     </mat-list-item>
   </mat-list>
