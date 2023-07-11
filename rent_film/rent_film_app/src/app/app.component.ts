@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { ServiceRentService } from './service/service-rent.service';
-import { ThemeService } from './service/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +13,9 @@ export class AppComponent {
   theme: string = 'theme1-toolbar';
 
 
-  constructor( public themeService: ThemeService, private serviceRent: ServiceRentService) {}
+  constructor( private serviceRent: ServiceRentService) {}
 
   ngOnInit(): void {
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-    });
   }
 
 }

@@ -1,11 +1,8 @@
-
-<section aria-label="Page Content">
-  <div class="login" aria-label="login-form-page" role="form" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
+<section aria-label="Page Content" class="component-style">
+  <div class="login" aria-label="login-form-page" role="form" fxLayout="column" fxLayoutAlign="center center">
 
     <mat-card>
-
       <mat-card-content>
-
         <h2>Login</h2>
 
         <form [formGroup]="form" (ngSubmit)="login()" role="form" aria-label="login-form" class="login_">

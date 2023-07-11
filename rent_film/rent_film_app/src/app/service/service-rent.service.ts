@@ -1,32 +1,16 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { gql } from 'apollo-angular'; // Import gql from the correct package
-import { BehaviorSubject, Observable} from "rxjs";
+import { Observable} from "rxjs";
 
 import { ApolloQueryResult } from '@apollo/client/core';
-import { ActorsResponse, CategoryResponse, FilmsCatLangResponse, RentalResponse, Tot_Films } from '../Type/interface';
+import { CategoryResponse, FilmsCatLangResponse, RentalResponse, Tot_Films } from '../Type/interface';
 
-
-// injectable vuol dire che è iniettabile, ovvero che possiamo
-// iniettare il nostro service 'in giro' all'applicazione
-
-//il service è il cervello dell'applicazione
-
-// provide in : ovvero dove è stato messo a disposizione, in
-//questo caso dalla root in poi, ma potevamo specificare da un determinato punto
 @Injectable({
   providedIn: 'root'
 })
 
 export class ServiceRentService {
-  isLoggedIn$ = new BehaviorSubject<boolean>(false);
-  private themeSubject = new BehaviorSubject<string>('theme1-toolbar');
-  public theme$ = this.themeSubject.asObservable();
-
-
-  changeTheme(theme: string) {
-    this.themeSubject.next(theme);
-  }
 
   constructor(private apollo: Apollo) {}
   getNumFilms(searchCat: string, searchTerm: string): Observable<ApolloQueryResult<Number>> {

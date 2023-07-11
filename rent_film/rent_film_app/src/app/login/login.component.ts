@@ -1,8 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthServiceService } from '../service/authservice.service';
 import { AuthService } from '../service/auth.service';
 
 
@@ -12,21 +11,15 @@ import { AuthService } from '../service/auth.service';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent  implements OnInit  {
+export class LoginComponent {
 
   email!: string;
   password!: string;
   form!: FormGroup;
 
-
   public errors: string[]= [];
 
-  theme: string = 'theme1-toolbar';
-  currentTheme!: string;
-  coloreCard!: string;
-  coloreTextCard!: string;
-
-  constructor( private serviceRent: ServiceRentService,
+  constructor(
     private _router: Router,
     private authService: AuthService,
     private fb: FormBuilder
@@ -37,11 +30,6 @@ export class LoginComponent  implements OnInit  {
     });
      }
 
-  ngOnInit(): void {
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-    });
-  }
 
   login(): void {
     this.errors=[]

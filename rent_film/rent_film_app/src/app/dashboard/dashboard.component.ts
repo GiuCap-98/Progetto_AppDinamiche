@@ -37,11 +37,6 @@ export class DashboardComponent implements OnInit {
   pageSizeOptions : Array<number> = [5, 10, 20];
   pageIndex : number = 0;
 
-
-  //variabili per il cambio tema
-  currentTheme: string = 'theme1-other';
-  coloreText!: string;
-
   //variabili per il bottone di ritorno ad inizio pagina
   isScrolled: boolean = false;
   scrolled = 0;
@@ -80,10 +75,6 @@ export class DashboardComponent implements OnInit {
     this.getNumFilms()
     this.getCategories();
     this.getFilms()
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreText = theme === 'theme1-toolbar' ? 'black' : 'white';
-    });
   }
 
   // Funzioni per il bottone di ritorno ad inizo pagina
@@ -188,7 +179,6 @@ export class DashboardComponent implements OnInit {
 
   filterByCategory(category: Category) : void{
     this.selectedOption = category;
-    const cat: Category = { name: ''}
     this.category = category.name
     this.getFilms()
   }

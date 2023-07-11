@@ -1,4 +1,4 @@
-<div [ngClass]="currentTheme" [style.color]="coloreTextCard">
+<div>
   <div class="search" >
     <div class="serach-content">
       <div>
@@ -49,7 +49,7 @@
   <!-- Colonna Noleggio -->
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef> Action </th>
-    <td mat-cell *matCellDef="let rental"> <button mat-button [style.color]="coloreTextCard" (click)="openDetails(rental)">Dettagli</button>  </td>
+    <td mat-cell *matCellDef="let rental"> <button mat-button (click)="openDetails(rental)">Dettagli</button>  </td>
   </ng-container>
 
   <!-- Definizione delle colonne -->

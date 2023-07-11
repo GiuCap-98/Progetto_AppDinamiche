@@ -1,4 +1,4 @@
-<div class="content" [ngClass]="currentTheme" >
+<div class="content" >
   <mat-form-field class="field">
     <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film" (input)="onSearchTitleChange($event)" />
     <mat-icon matPrefix aria-hidden="true">search</mat-icon>
@@ -33,7 +33,7 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-button aria-label="Rent button" role="button" title="Button for rent film" [style.color]="coloreText"  (click)="rent_page(film)">
+      <button mat-button aria-label="Rent button" role="button" title="Button for rent film"  (click)="rent_page(film)">
         {{ film.film.rental_rate }} NOLEGGIA
         <mat-icon>
           <span aria-hidden="true">euro</span>

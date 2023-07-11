@@ -15,19 +15,12 @@ export class FilmDetailsComponent implements OnInit {
 
   film:  FilmDetails;
   stores!: StoreOccorrency[];
-  currentTheme!: string;
-  coloreDialog!: string;
-  coloreTextDialog!: string;
   storeSelected : boolean = false;
   actors!: Actor[]
   isFilmPresent!: boolean ;
   isStoreAvailable: boolean =false;
   count_numfilm: number=0;
   filmTitle!: string;
-
-
-
-  public error: string | null | undefined;
 
   constructor(
     private _router: Router,
@@ -44,11 +37,6 @@ export class FilmDetailsComponent implements OnInit {
     this.count_numfilm=0;
     this.isStoreAvailable=false;
     this.getActors(this.film.film.film_id)
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreDialog = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
-      this.coloreTextDialog = theme === 'theme1-toolbar' ? 'black' : 'white';
-    });
   }
 
   getActors(film_id:number): void {
@@ -80,9 +68,6 @@ export class FilmDetailsComponent implements OnInit {
       this.click(selectedOption.getAttribute('aria-selected') === 'true');
     }
   }
-
-
-
   storeAvailable(store: StoreOccorrency): boolean{
     if(store.num_film == 0){
       this.isFilmPresent = false;
@@ -90,14 +75,10 @@ export class FilmDetailsComponent implements OnInit {
       this.count_numfilm+=1;
       this.isFilmPresent= true;
     }
-
     if((this.count_numfilm >= 1) ){
       this.isStoreAvailable=true;
     }
-
     return this.isFilmPresent
-
-
   }
 
 }

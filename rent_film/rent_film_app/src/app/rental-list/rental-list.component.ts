@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ServiceRentService } from '../service/service-rent.service';
 import { PageEvent } from '@angular/material/paginator';
 import { RentalFilmPayment } from '../Type/interface';
@@ -30,10 +30,6 @@ export class RentalListComponent implements OnInit{
   pageIndex : number = 0;
   pageSizeOptions : Array<number> = [5, 10, 20];
 
-  currentTheme: string = 'theme1-other';
-  coloreCard!: string;
-  coloreTextCard!: string;
-
   constructor(
     private serviceRent: ServiceRentService, private dialog : Dialog // iniettiamo il servizio
   ){}
@@ -41,11 +37,6 @@ export class RentalListComponent implements OnInit{
 
   ngOnInit(): void {
     this.getRent();
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
-      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
-    });
   }
 
   openDropdown() {

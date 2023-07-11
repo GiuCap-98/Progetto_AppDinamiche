@@ -22,11 +22,6 @@ export class RentComponent implements OnInit{
   dataSelected: boolean = false;
   storeSelected : boolean = false;
 
-
-  theme: string = 'theme1-toolbar';
-  currentTheme!: string;
-  coloreCard!: string;
-  coloreTextCard!: string;
   data_selected: string = '';
   store_selected: string = '';
   data_group : string[]= [ 'Today', 'In two days' ]
@@ -45,11 +40,6 @@ export class RentComponent implements OnInit{
       this.stores = JSON.parse(params['stores']);
 
     });
-    this.serviceRent.theme$.subscribe((theme) => {
-      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
-      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
-    });
   }
 
 
@@ -67,7 +57,6 @@ export class RentComponent implements OnInit{
       if (this.store_selected=='') {
         this.errors.push('Il campo store è obbligatorio.');
       }
-
     }else{
       this.openDialog()
     }
