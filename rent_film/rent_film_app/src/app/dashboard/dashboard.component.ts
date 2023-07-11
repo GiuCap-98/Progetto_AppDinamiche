@@ -188,6 +188,7 @@ export class DashboardComponent implements OnInit {
 
   filterByCategory(category: Category) : void{
     this.selectedOption = category;
+    const cat: Category = { name: ''}
     this.category = category.name
     this.getFilms()
   }
