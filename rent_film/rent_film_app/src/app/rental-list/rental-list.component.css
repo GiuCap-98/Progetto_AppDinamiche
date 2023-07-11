@@ -30,23 +30,11 @@ mat-icon{
 }
 
 
-/* Stili per la tabella */
-.table-container {
-  max-width: 100%; /* Assicura che la tabella non superi la larghezza massima del contenitore */
-  overflow-x: auto; /* Abilita lo scorrimento orizzontale se la tabella supera la larghezza del contenitore */
-
-  font-size: 12px;
-}
 
 table.table {
   width: 30px; /* Imposta la larghezza della tabella al 100% del contenitore */
 }
 
-table.table td,
-table.table th {
-  white-space: nowrap; /* Evita il wrapping del testo nelle celle */
-  padding: 8px; /* Imposta il padding delle celle */
-}
 
 /* Media query per la larghezza della schermata inferiore a 600px */
 @media (max-width: 600px) {
