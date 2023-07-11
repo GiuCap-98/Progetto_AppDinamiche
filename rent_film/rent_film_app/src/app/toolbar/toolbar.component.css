@@ -2,12 +2,26 @@
   flex: 1 1 auto;
 }
 .toolbar{
-
   width: 100%;
 }
+button h1{
+  margin-top: 15px;
+}
+
 @media screen and (max-width: 768px) {
   .toolbar {
     flex-wrap: wrap;
   }
 
+  button h1{
+    font-size: 15px;
+  }
+
+  button{
+    font-size: 10px;
+  }
+
+
 }
+
+

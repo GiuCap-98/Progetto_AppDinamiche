@@ -1,4 +1,4 @@
-<mat-dialog-content [attr.aria-labelledby]="filmTitle" class="dialog-window" tabindex="-1" role="dialog" aria-label="Dialog" [ngClass]="currentTheme" >
+<mat-dialog-content class="dialog-window" tabindex="-1" role="dialog" aria-label="Dialog" [ngClass]="currentTheme" >
 
   <mat-dialog-actions align="end">
     <button mat-button class="close" aria-label="Close dialog" role="button" title="Button for close dialog" (click)="closeDialog()" >
@@ -11,32 +11,32 @@
 
   <h2 mat-dialog-title id="{{ film.film.title }}" class="title-dialog" tabindex="0" aria-describedby="dialog-description" >{{ film.film.title }}</h2>
 
-
   <mat-list class="list" id="dialog-description" role="list">
-    <mat-list-item role="listitem"  >
-      <strong>Release year:</strong> {{ film.film.release_year }}
+    <mat-list-item role="listitem">
+      <p tabindex="0"><strong>Release year:</strong> {{ film.film.release_year }}</p>
     </mat-list-item>
     <mat-list-item role="listitem" >
-      <strong>Language:</strong> {{ film.language.name }}
+     <p tabindex="0"><strong>Language:</strong> {{ film.language.name }}</p>
     </mat-list-item>
     <mat-list-item role="listitem">
-      <strong>Category:</strong> {{ film.category.name }}
+     <p tabindex="0"><strong>Category:</strong> {{ film.category.name }}</p>
     </mat-list-item>
     <mat-list-item role="listitem" >
-      <strong>Rental duration:</strong> {{ film.film.rental_duration }}
+     <p tabindex="0"><strong>Rental duration:</strong> {{ film.film.rental_duration }}</p>
     </mat-list-item>
     <mat-list-item role="listitem">
-      <strong>Film duration:</strong> {{ film.film.length }}
+      <p ><strong>Film duration:</strong> {{ film.film.length }}</p>
     </mat-list-item >
     <mat-list-item role="listitem" lines="3">
-      <span matListItemTitle><strong>Actors: </strong> </span>
+      <span matListItemTitle><p tabindex="0"><strong>Actors:</strong></p>
+      </span>
       <a *ngFor="let actor of actors">{{ actor.first_name }} {{ actor.last_name }},</a>
     </mat-list-item>
 
     <mat-list-item role="listitem">
-      <span matListItemTitle> <strong>Stores available: </strong> </span>
+      <span matListItemTitle> <p tabindex="0"> <strong>Stores available: </strong> </p></span>
       <a *ngFor="let store of stores"><span *ngIf="storeAvailable(store)" matListItemLine>{{ store.address.address }}</span> </a>
-      <span *ngIf="!isStoreAvailable" matListItemLine>No stores available for rental</span>
+      <span *ngIf="!isStoreAvailable" matListItemLine> <p>No stores available for rental </p> </span>
     </mat-list-item>
   </mat-list>
 

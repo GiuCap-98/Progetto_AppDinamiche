@@ -20,7 +20,7 @@
 
               <div class="div_button">
                 <button mat-raised-button color="primary" type="submit" role="button" title="Clicca qui per effettuare il login" aria-describedby="error-message">Login</button>
-                <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente" aria-labelledby="register button">Registrati</button>
+                <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente">Registrati</button>
               </div>
               <ul *ngIf="errors.length > 0" class="error-message" id="error-message">
                 <li *ngFor="let error of errors">{{ error }}</li>

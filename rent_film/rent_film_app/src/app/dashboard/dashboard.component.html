@@ -17,7 +17,7 @@
 </div>
 
 <div role="list">
-  <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+  <mat-card class="item" role="listitem" aria-label="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
     <mat-card-header>
       <mat-card-title class="title" aria-label="Film title">
         <a class="link_details" href="javascript:void(0)" (click)="openDetails(film)">{{film.film.title}} </a>
@@ -25,11 +25,11 @@
     </mat-card-header>
 
     <mat-card-content>
-      <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
-      <p><strong>Lingua:</strong> {{ film.language.name }}</p>
-      <p><strong>Genere:</strong> {{ film.category.name }}</p>
-      <p><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
-      <p>{{ film.film.rating }}</p>
+      <p tabindex="0"><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
+      <p tabindex="0"><strong>Lingua:</strong> {{ film.language.name }}</p>
+      <p tabindex="0"><strong>Genere:</strong> {{ film.category.name }}</p>
+      <p tabindex="0"><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
+      <p tabindex="0">{{ film.film.rating }}</p>
     </mat-card-content>
 
     <mat-card-actions align="end">

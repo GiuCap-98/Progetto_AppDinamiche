@@ -77,13 +77,9 @@ export class RentComponent implements OnInit{
 
   // dialog for film details
   openDialog() : void {
-    if(this.storeSelected && this.dataSelected){
+    if(this.store_selected!='' && this.data_selected!=''){
       this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }});
-
     }
-
-
-
   }
 
 

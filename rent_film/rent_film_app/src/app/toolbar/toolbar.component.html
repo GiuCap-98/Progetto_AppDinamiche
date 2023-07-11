@@ -3,29 +3,23 @@
 
   <mat-toolbar [ngClass]="currentTheme" role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" class="toolbar">
 
-    <button mat-button (click)="home()" aria-label="back-home" role="button" title="Clicca qui per tornare alla lista dei film" aria-labelledby="back home button"><h1>DVD Rent</h1>  </button>
+    <button mat-button (click)="home()" aria-label="back home" role="button" title="Clicca qui per tornare alla lista dei film" tabindex="0">
+      <h1>DVD Rent </h1>  </button>
     <span class="spacer"></span>
 
-    <button mat-button  [matMenuTriggerFor]="menu" aria-label="open menu" role="button" title="Clicca qui per aprire il menù a tendina" aria-haspopup="true" aria-controls="menu-items">
-      <mat-icon>account_circle</mat-icon></button>
-
-      <mat-menu #menu="matMenu" role="menu" aria-label="app menu" aria-orientation="vertical">
-
-        <button mat-menu-item (click)="rentalList()" role="menuitem" aria-labelledby="logout menu button" title="Clicca qui per aprire i tuoi noleggi">
-          <mat-icon>
-            <span class="material-symbols-outlined">list_alt</span>
-          </mat-icon >
-          <span>Noleggi </span>
-      </button>
-
-      <button mat-menu-item  (click)="logout()" role="menuitem" aria-labelledby="your rentals menu button" title="Clicca qui per fare il logout">
+    <button mat-button (click)="rentalList()" role="button" aria-label="logout button" title="Clicca qui per aprire i tuoi noleggi">
         <mat-icon>
-          <span class="material-symbols-outlined">logout</span>
+          <span aria-hidden="true">list_alt</span>
         </mat-icon >
-        <span>Log out </span>
-      </button>
+        <span >Noleggi </span>
+    </button>
 
-    </mat-menu>
+    <button mat-button (click)="logout()" role="button" aria-label="your rentals button" title="Clicca qui per fare il logout">
+      <mat-icon>
+        <span aria-hidden="true">logout</span>
+      </mat-icon >
+      <span>Log out </span>
+    </button>
 
     <button mat-button [matMenuTriggerFor]="theme"
     aria-label="Open Menu"
@@ -34,7 +28,6 @@
     tabindex="0" >
     Tema
     </button>
-
 
     <mat-menu #theme="matMenu">
       <button mat-menu-item (click)="changeTheme('theme1-toolbar')" tabindex="0" >Light</button>
