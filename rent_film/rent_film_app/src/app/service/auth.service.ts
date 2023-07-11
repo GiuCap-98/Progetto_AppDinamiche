@@ -16,14 +16,9 @@ export class AuthService {
     private _router: Router
     ) {}
 
-  // Metodo per salvare il token nel localStorage
-  saveToken(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
-  }
-
   // Metodo per ottenere il token dal localStorage
-  getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+  getToken(): string{
+    return localStorage.getItem(this.TOKEN_KEY) || "";
   }
 
   // Metodo per verificare se l'utente è autenticato
@@ -51,8 +46,8 @@ export class AuthService {
   checkTokenExpiration(): void {
     if (this.isTokenExpired()) {
       // Token scaduto, si viene reindirizzati alla login
-      alert('Token scaduto. Sarai reindirizzato al login.');      this.logout();
-      this.logout()
+      alert('Token scaduto. Sarai reindirizzato al login.');
+      this.logout();
     }
   }
 

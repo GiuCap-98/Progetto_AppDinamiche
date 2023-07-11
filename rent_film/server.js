@@ -9,21 +9,18 @@ const server = new ApolloServer({
     typeDefs, 
     resolvers, 
     context: async({req}) => {
-
-        let token = req.headers.authorization ?? ''; // Ottieni il token dalle intestazioni della richiesta
-        let customer_id = null;
-        if (token) {
-            try {
-                const decoded  = jwt.verify(token, SECRET);
-                return {
-                    customer_id: decoded.customer_id
-                }
-            } catch (e) {}
-        } 
-        return {
-            customer_id: customer_id
-        }
-    }
+        // Ottieni il token dalle intestazioni della richiesta
+        let token = req.headers.authorization || ''; 
+        console.log(token)
+        try {
+            const decoded  = jwt.verify(token, SECRET); //Decodifica del token
+            console.log(SECRET)
+            return {
+                customer_id: decoded.customer_id
+            }
+        } catch (e) {}
+    } 
+    
 });
 
 server.listen().then(({url}) => {

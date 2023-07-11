@@ -59,10 +59,6 @@ export class DashboardComponent implements OnInit {
   isStoreAvailable: boolean =false;
   count_numfilm: number=0;
 
-
-
-
-
   constructor(
     private serviceRent: ServiceRentService,
     private authService: AuthService,

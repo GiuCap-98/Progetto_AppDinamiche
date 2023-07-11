@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { gql } from 'apollo-angular'; // Import gql from the correct package
 import { Observable} from "rxjs";
-
+import { HttpHeaders } from '@angular/common/http';
+import { AuthService } from './auth.service';
 import { ApolloQueryResult } from '@apollo/client/core';
-import { CategoryResponse, FilmsCatLangResponse, RentalResponse, Tot_Films } from '../Type/interface';
+import { CategoryResponse, FilmsCatLangResponse, RentalResponse} from '../Type/interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ import { CategoryResponse, FilmsCatLangResponse, RentalResponse, Tot_Films } fro
 
 export class ServiceRentService {
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, private authService: AuthService) {}
+
   getNumFilms(searchCat: string, searchTerm: string): Observable<ApolloQueryResult<Number>> {
     const NumFilmsQuery = gql`
     query GetNumFilms($searchCat: String!, $searchTerm: String!) {
@@ -25,36 +27,6 @@ export class ServiceRentService {
         searchCat: searchCat,
         searchTerm: searchTerm
       }
-    });
-  }
-
-
-
-  getFilmsPr(): Observable<ApolloQueryResult<FilmsCatLangResponse>>{
-    return this.apollo.query<FilmsCatLangResponse>({
-      query: gql`
-        query {
-          films {
-            film{
-              film_id
-              title
-              description
-              release_year
-              rental_duration
-              rental_rate
-              length
-              rating
-              last_update
-            }
-            category {
-              name
-            }
-            language {
-              name
-            }
-          }
-        }
-      `
     });
   }
 
@@ -91,7 +63,10 @@ export class ServiceRentService {
         searchTerm: searchTerm,
         page: page,
         pageSize: pageSize
-      }
+      },
+      context: {
+        headers : new HttpHeaders().set('Authorization', this.authService.getToken())
+       }
     });
   }
 
@@ -247,6 +222,9 @@ export class ServiceRentService {
       query: User_Rentals,
       variables: {
         customerId: customer_id
+      },
+      context: {
+        headers : new HttpHeaders().set('Authorization', this.authService.getToken())
       }
     });
   }

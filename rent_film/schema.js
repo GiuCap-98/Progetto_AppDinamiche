@@ -193,7 +193,17 @@ const resolvers = {
     
           
 
-    films: async (_, { searchCat, searchTerm, page, pageSize }) => {
+    films: async (_, { searchCat, searchTerm, page, pageSize }, {customer_id}) => {
+      
+      if(!customer_id){
+        throw new GraphQLError('Token not found', {
+          extensions: {
+              code: 'UNAUTHENTICATED',
+              http: { status: 401 },
+          },
+        })
+      }
+
       try {
         const offset = (page - 1) * pageSize;
         const limit = pageSize;
@@ -317,7 +327,17 @@ const resolvers = {
       }
     },
     
-    rentalsByCustomer: async (_, { customerId }) => {
+    rentalsByCustomer: async (_, { customerId }, {customer_id}) => {
+      
+      if(!customer_id){
+        throw new GraphQLError('Token not found', {
+          extensions: {
+              code: 'UNAUTHENTICATED',
+              http: { status: 401 },
+          },
+        })
+      }
+
       try{
         const query = `
         SELECT f.title, p.amount, 
@@ -408,7 +428,7 @@ const resolvers = {
         }
   
         // Generate a JWT token
-        const token = jwt.sign({ customer_id: user.customer_id }, SECRET, { expiresIn: '2h' });
+        const token = jwt.sign({ customer_id: user.customer_id }, SECRET, { expiresIn: '1h' });
   
         return token;
       } catch (error) {
