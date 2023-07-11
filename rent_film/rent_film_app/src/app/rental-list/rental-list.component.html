@@ -1,55 +1,51 @@
-<div>
-  <div class="search" >
+<div class="princ" >
+
+  <div class="button-row"  >
     <div class="serach-content">
-      <div>
-        <p tabindex="0"><strong>Spesa totale:</strong> {{ totalAmount}}</p>
-      </div>
+      <p tabindex="0"><strong>Spesa totale:</strong> {{ totalAmount}}</p>
+    </div>
+    <span style="text-align: center;" >Opzioni di ordinamento:  </span>
+    <br>
+    <br>
+    <div class="button-container" *ngFor="let column of columns_title; let i = index">
+      <button mat-raised-button mat-button [matMenuTriggerFor]="menu">{{ column }}</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item role="menuitem" (click)="sortData({ active: columns_action[i], direction: 'asc' })">Ascendente</button>
+        <button mat-menu-item role="menuitem"  (click)="sortData({ active: columns_action[i], direction: 'desc' })">Discendente</button>
+      </mat-menu>
     </div>
   </div>
 
-<div class="button-row"  >
-  <span style="text-align: center;" >Opzioni di ordinamento:  </span>
-  <br>
-  <br>
-  <div class="button-container" *ngFor="let column of columns_title; let i = index">
-    <button mat-raised-button mat-button [matMenuTriggerFor]="menu">{{ column }}</button>
-     <mat-menu #menu="matMenu">
-      <button mat-menu-item role="menuitem" (click)="sortData({ active: columns_action[i], direction: 'asc' })">Ascendente</button>
-      <button mat-menu-item role="menuitem"  (click)="sortData({ active: columns_action[i], direction: 'desc' })">Discendente</button>
-    </mat-menu>
-  </div>
-</div>
-
 <section class="table-container"  >
-  <table class="table" mat-table [dataSource]="rentals" matSort  (matSortChange)="sortData($event)" aria-label="rentals table" role="table">
+  <table class="table" role="presentation" mat-table [dataSource]="rentals" matSort  (matSortChange)="sortData($event)" aria-label="rentals table" >
   <!-- Colonna Film -->
   <ng-container matColumnDef="film" >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header > Film </th>
-    <td mat-cell *matCellDef="let rental" > {{ rental.film.title }} </td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="custom-column"> Film </th>
+    <td mat-cell *matCellDef="let rental" class="custom-column"> {{ rental.film.title }} </td>
   </ng-container>
 
   <!-- Colonna Indirizzo -->
-  <ng-container matColumnDef="address">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Indirizzo </th>
-    <td mat-cell *matCellDef="let rental"> {{ rental.address.address }} </td>
+  <ng-container matColumnDef="address" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="custom-column"> Indirizzo </th>
+    <td mat-cell *matCellDef="let rental"class="custom-column"> {{ rental.address.address }} </td>
   </ng-container>
 
   <!-- Colonna Pagamento -->
-  <ng-container matColumnDef="payment">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Pagamento </th>
-    <td mat-cell *matCellDef="let rental"> {{ rental.payment.amount }} {{ rental.payment.currency }} </td>
+  <ng-container matColumnDef="payment" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="custom-column"> Pagamento </th>
+    <td mat-cell *matCellDef="let rental" class="custom-column"> {{ rental.payment.amount }} {{ rental.payment.currency }} </td>
   </ng-container>
 
   <!-- Colonna Noleggio -->
-  <ng-container matColumnDef="rental">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Data noleggio </th>
-    <td mat-cell *matCellDef="let rental"> {{ rental.rental.rental_date }} </td>
+  <ng-container matColumnDef="rental" class="custom-column">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="custom-column"> Data noleggio </th>
+    <td mat-cell *matCellDef="let rental" class="custom-column"> {{ rental.rental.rental_date }} </td>
   </ng-container>
 
   <!-- Colonna Noleggio -->
-  <ng-container matColumnDef="action">
-    <th mat-header-cell *matHeaderCellDef> Action </th>
-    <td mat-cell *matCellDef="let rental"> <button mat-button (click)="openDetails(rental)">Dettagli</button>  </td>
+  <ng-container matColumnDef="action" >
+    <th mat-header-cell *matHeaderCellDef class="custom-column"> Action </th>
+    <td mat-cell *matCellDef="let rental" class="custom-column"> <button mat-button (click)="openDetails(rental)">Dettagli</button>  </td>
   </ng-container>
 
   <!-- Definizione delle colonne -->
