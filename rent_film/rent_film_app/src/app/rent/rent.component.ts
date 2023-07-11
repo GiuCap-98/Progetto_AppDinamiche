@@ -5,6 +5,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
 import { FilmCategoryStore, StoreOccorrency } from '../Type/interface';
 import { FilmCategory } from '../Type/Model';
+import { ServiceRentService } from '../service/service-rent.service';
 
 @Component({
   selector: 'app-rent',
@@ -21,6 +22,7 @@ export class RentComponent implements OnInit{
   dataSelected: boolean = false;
   storeSelected : boolean = false;
 
+
   theme: string = 'theme1-toolbar';
   currentTheme!: string;
   coloreCard!: string;
@@ -30,7 +32,7 @@ export class RentComponent implements OnInit{
   data_group : string[]= [ 'Today', 'In two days' ]
 
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog) {
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService) {
       this.form = this.fb.group({
         data: ['', Validators.required],
         store: ['', Validators.required]
@@ -42,6 +44,11 @@ export class RentComponent implements OnInit{
       this.film = JSON.parse(params['film']);
       this.stores = JSON.parse(params['stores']);
 
+    });
+    this.serviceRent.theme$.subscribe((theme) => {
+      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
+      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
+      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
   }
 

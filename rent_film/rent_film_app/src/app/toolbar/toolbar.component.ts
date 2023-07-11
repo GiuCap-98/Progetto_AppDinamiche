@@ -5,6 +5,11 @@ import { Router } from '@angular/router';
 import { ServiceRentService } from '../service/service-rent.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../service/auth.service';
+import { ThemeService } from '../service/theme.service';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { OverlayContainer } from '@angular/cdk/overlay';
+
+
 
 @Component({
   selector: 'toolbar',
@@ -13,22 +18,63 @@ import { AuthService } from '../service/auth.service';
 })
 export class ToolbarComponent implements OnInit{
   currentTheme!: string ;
+  currentZoomLevel = 0;
+  @ViewChild('slideToggler', { static: true })
+  themeToggler!: MatSlideToggle;
+  coloreText!: string;
 
-  constructor( 
-    private serviceRent: ServiceRentService, 
-    private authService: AuthService, 
-    private _router: Router
-    ) { }
+  isDarkTheme = false;
+
+  zoomIn(): void {
+    this.currentZoomLevel += 10;
+  }
+
+  zoomOut(): void{
+    this.currentZoomLevel -= 10;
+  }
+
+
+
+  constructor(
+    private serviceRent: ServiceRentService,
+    private authService: AuthService,
+    private _router: Router,
+    private themeService: ThemeService,
+    readonly darkMode$: ThemeService,
+    private overlayContainer: OverlayContainer) {}
+
 
   ngOnInit(): void {
     this.serviceRent.theme$.subscribe(theme => {
-      this.currentTheme = theme;
+      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
+      this.coloreText = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
+  }
+
+  toggleTheme(): void {
+    this.isDarkTheme = !this.isDarkTheme;
+
+    if (this.isDarkTheme) {
+      this.overlayContainer.getContainerElement().classList.add('dark-theme');
+    } else {
+      this.overlayContainer.getContainerElement().classList.remove('dark-theme');
+    }
   }
 
   navigateToLogin() : void {
     this._router.navigate(['login'])
   }
+
+  setValue(e : any){
+    if(e.checked){
+
+      this.changeTheme('theme2-toolbar');
+      console.log('theme 2')
+   }else{
+    this.changeTheme('theme1-toolbar');
+    console.log('theme 1')
+   }
+}
 
   home() : void{
     this._router.navigate(['dashboard'])

@@ -6,22 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Angular Website</title>
 </head>
-<body>
-  <header>
-    <toolbar #toolbar class="theme2-toolbar"></toolbar>
-
-
+<body [ngClass]="currentTheme" >
+  <header >
+    <toolbar #toolbar ></toolbar>
   </header>
 
 
-  <main>
+  <main >
   <!--attiva la componente che verrà chiamata con router link -->
   <router-outlet class="theme2-other"></router-outlet>
   </main>
 
-  <footer class="rf-zoom">
-    <button class="zoom-in" (click)="increaseFontSize()">+</button>
-    <button class="zoom-out" (click)="decreaseFontSize()">-</button>
+  <footer>
   </footer>
 
 </body>

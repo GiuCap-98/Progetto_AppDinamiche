@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" [ngClass]="currentTheme" >
   <mat-form-field class="field">
     <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film" (input)="onSearchTitleChange($event)" />
     <mat-icon matPrefix aria-hidden="true">search</mat-icon>
@@ -17,7 +17,7 @@
 </div>
 
 <div role="list">
-  <mat-card class="item" role="listitem" aria-label="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+  <mat-card class="item" role="listitem" aria-label="Films items" *ngFor="let film of films | slice: startIndex: endIndex" >
     <mat-card-header>
       <mat-card-title class="title" aria-label="Film title">
         <a class="link_details" href="javascript:void(0)" (click)="openDetails(film)">{{film.film.title}} </a>
@@ -33,12 +33,11 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-button aria-label="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
-        {{ film.film.rental_rate }}
+      <button mat-button aria-label="Rent button" role="button" title="Button for rent film" [style.color]="coloreText"  (click)="rent_page(film)">
+        {{ film.film.rental_rate }} NOLEGGIA
         <mat-icon>
           <span aria-hidden="true">euro</span>
         </mat-icon>
-        NOLEGGIA
       </button>
     </mat-card-actions>
   </mat-card>

@@ -1,36 +1,36 @@
 
-    <section aria-label="Page Content">
-      <div class="login" aria-label="login-form-page" role="form" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
+<section aria-label="Page Content">
+  <div class="login" aria-label="login-form-page" role="form" [ngClass]="currentTheme" fxLayout="column" fxLayoutAlign="center center">
 
-        <mat-card [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+    <mat-card>
 
-          <mat-card-content>
+      <mat-card-content>
 
-            <h2>Login</h2>
+        <h2>Login</h2>
 
-            <form [formGroup]="form" (ngSubmit)="login()" role="form" aria-label="login-form">
+        <form [formGroup]="form" (ngSubmit)="login()" role="form" aria-label="login-form" class="login_">
 
-              <mat-form-field>
-                <input matInput placeholder="Username" formControlName="email" [(ngModel)]="email" name="email" aria-label="Username">
-              </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Username" formControlName="email" [(ngModel)]="email" name="email" aria-label="Username">
+          </mat-form-field>
 
-              <mat-form-field>
-                <input matInput placeholder="Password" formControlName="password" [(ngModel)]="password" name="password" type="password" aria-label="Password">
-              </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Password" formControlName="password" [(ngModel)]="password" name="password" type="password" aria-label="Password">
+          </mat-form-field>
 
-              <div class="div_button">
-                <button mat-raised-button color="primary" type="submit" role="button" title="Clicca qui per effettuare il login" aria-describedby="error-message">Login</button>
-                <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente">Registrati</button>
-              </div>
-              <ul *ngIf="errors.length > 0" class="error-message" id="error-message">
-                <li *ngFor="let error of errors">{{ error }}</li>
-            </ul>
+          <div class="div_button">
+            <button mat-raised-button color="primary" type="submit" role="button" title="Clicca qui per effettuare il login" aria-describedby="error-message">Login</button>
+            <button mat-raised-button color="primary" [routerLink]="['/registration']" role="button" title="Clicca qui per registrare un nuovo utente">Registrati</button>
+          </div>
+          <ul *ngIf="errors.length > 0" class="error-message" id="error-message">
+            <li *ngFor="let error of errors">{{ error }}</li>
+        </ul>
 
-            </form>
+        </form>
 
-          </mat-card-content>
-        </mat-card>
+      </mat-card-content>
+    </mat-card>
 
-      </div>
-    </section>
+  </div>
+</section>
 

@@ -4,7 +4,6 @@
   align-items: center;
   font-family: Calibri;
   font-size: 20px;
-  background-color: white;
 }
 
 .dialog-content-wrapper {
@@ -53,7 +52,7 @@
 
 @media screen and (orientation: landscape) {
   .dialog-window {
-    height: 300px;
+    height: 500px;
     overflow-y: auto;
     overflow-x: auto;
   }

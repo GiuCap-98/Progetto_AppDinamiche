@@ -1,11 +1,17 @@
 .spacer {
   flex: 1 1 auto;
 }
-.toolbar{
-  width: 100%;
+
+.zoom .home{
+  font-size: 20px;
 }
-button h1{
-  margin-top: 15px;
+
+.zoom{
+  font-size: 10px;
+}
+
+mat-toolbar{
+  font-size: 40px;
 }
 
 @media screen and (max-width: 768px) {

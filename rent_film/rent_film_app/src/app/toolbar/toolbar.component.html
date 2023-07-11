@@ -1,44 +1,28 @@
-<html lang = "en-US">
-  <meta charset="UTF-8">
+<mat-toolbar [ngClass]="currentTheme" [style.color]="coloreText" role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" >
 
-  <mat-toolbar [ngClass]="currentTheme" role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" class="toolbar">
+  <button  mat-button (click)="home()" aria-label="back home" role="button" title="Clicca qui per tornare alla lista dei film" tabindex="0">
+    <h1 class="home zoom">DVD Rent </h1>  </button>
+  <span class="spacer"></span>
 
-    <button mat-button (click)="home()" aria-label="back home" role="button" title="Clicca qui per tornare alla lista dei film" tabindex="0">
-      <h1>DVD Rent </h1>  </button>
-    <span class="spacer"></span>
-
-    <button mat-button (click)="rentalList()" role="button" aria-label="logout button" title="Clicca qui per aprire i tuoi noleggi">
-        <mat-icon>
-          <span aria-hidden="true">list_alt</span>
-        </mat-icon >
-        <span >Noleggi </span>
-    </button>
-
-    <button mat-button (click)="logout()" role="button" aria-label="your rentals button" title="Clicca qui per fare il logout">
+  <button  mat-button (click)="rentalList()" role="button" class="zoom" aria-label="logout button" title="Clicca qui per aprire i tuoi noleggi">
       <mat-icon>
-        <span aria-hidden="true">logout</span>
+        <span aria-hidden="true">list_alt</span>
       </mat-icon >
-      <span>Log out </span>
-    </button>
+      <span >Noleggi </span>
+  </button>
 
-    <button mat-button [matMenuTriggerFor]="theme"
-    aria-label="Open Menu"
-    aria-label="Open Theme Menu"
-    aria-haspopup="true"
-    tabindex="0" >
-    Tema
-    </button>
+  <button mat-button (click)="logout()" role="button" class="zoom" aria-label="your rentals button" title="Clicca qui per fare il logout">
+    <mat-icon>
+      <span aria-hidden="true">logout</span>
+    </mat-icon >
+    <span>Log out </span>
+  </button>
 
-    <mat-menu #theme="matMenu">
-      <button mat-menu-item (click)="changeTheme('theme1-toolbar')" tabindex="0" >Light</button>
-      <button mat-menu-item (click)="changeTheme('theme2-toolbar')" tabindex="0" >Dark</button>
-    </mat-menu>
 
-  </mat-toolbar>
+  <mat-slide-toggle #slideToggler [(ngModel)]="isDarkTheme" (change)="setValue( $event )">{{ slideToggler.checked ? 'Light' : 'Dark' }}</mat-slide-toggle>
 
-  <router-outlet></router-outlet>
 
-</html>
+</mat-toolbar>
 
 
 

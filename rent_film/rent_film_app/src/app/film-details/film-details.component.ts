@@ -9,15 +9,15 @@ import { FilmDetails, StoreOccorrency, Actor } from '../Type/interface';
 @Component({
   selector: 'app-film-details',
   templateUrl: './film-details.component.html',
-  styleUrls: ['./film-details.component.css']
+  styleUrls: ['./film-details.component.css'],
 })
 export class FilmDetailsComponent implements OnInit {
 
   film:  FilmDetails;
   stores!: StoreOccorrency[];
   currentTheme!: string;
-  coloreCard!: string;
-  coloreTextCard!: string;
+  coloreDialog!: string;
+  coloreTextDialog!: string;
   storeSelected : boolean = false;
   actors!: Actor[]
   isFilmPresent!: boolean ;
@@ -46,8 +46,8 @@ export class FilmDetailsComponent implements OnInit {
     this.getActors(this.film.film.film_id)
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
-      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
+      this.coloreDialog = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
+      this.coloreTextDialog = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
   }
 

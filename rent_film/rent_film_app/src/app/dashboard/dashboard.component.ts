@@ -40,8 +40,7 @@ export class DashboardComponent implements OnInit {
 
   //variabili per il cambio tema
   currentTheme: string = 'theme1-other';
-  coloreCard!: string;
-  coloreTextCard!: string;
+  coloreText!: string;
 
   //variabili per il bottone di ritorno ad inizio pagina
   isScrolled: boolean = false;
@@ -81,8 +80,7 @@ export class DashboardComponent implements OnInit {
     this.getFilms()
     this.serviceRent.theme$.subscribe((theme) => {
       this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
-      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
-      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
+      this.coloreText = theme === 'theme1-toolbar' ? 'black' : 'white';
     });
   }
 

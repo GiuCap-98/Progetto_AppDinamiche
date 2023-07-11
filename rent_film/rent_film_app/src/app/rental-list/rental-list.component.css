@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: black;
 }
 
 .serach-content{
@@ -12,7 +11,7 @@
   margin-top: 15px;
   padding: 15px;
   border-radius: 60px;
-  background-color: gainsboro;
+  border: 1px solid black;
 }
 
 mat-icon{

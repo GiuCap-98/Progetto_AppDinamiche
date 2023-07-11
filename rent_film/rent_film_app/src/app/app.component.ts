@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { ServiceRentService } from './service/service-rent.service';
+import { ThemeService } from './service/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -9,25 +10,16 @@ import { ServiceRentService } from './service/service-rent.service';
 })
 export class AppComponent {
   title = 'rent_film_app';
-  fontSizePercentage = 100;
+  currentTheme!: string;
+  theme: string = 'theme1-toolbar';
 
-  increaseFontSize() {
-    this.fontSizePercentage += 10;
-    this.updateFontSize();
+
+  constructor( public themeService: ThemeService, private serviceRent: ServiceRentService) {}
+
+  ngOnInit(): void {
+    this.serviceRent.theme$.subscribe((theme) => {
+      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
+    });
   }
 
-  decreaseFontSize() {
-    this.fontSizePercentage -= 10;
-    this.updateFontSize();
-  }
-
-  updateFontSize() {
-    document.documentElement.style.fontSize = this.fontSizePercentage + '%';
-  }
-
-  // Aggiungi questo metodo per consentire l'ascolto dell'evento di ridimensionamento della finestra
-  @HostListener('window:resize')
-  onWindowResize() {
-    this.updateFontSize();
-  }
 }

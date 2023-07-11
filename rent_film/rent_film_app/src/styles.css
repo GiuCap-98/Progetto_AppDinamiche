@@ -4,15 +4,66 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+/* Stili per il tema scuro */
+.dark-theme {
+  background-color: #303030;
+  color: #ffffff;
+}
+
 .theme1-toolbar{
   background-color:  #e8e8e8;
   color: black;
 }
 
+.theme2-other mat-card{
+  background-color: #2E343B;
+  color:white;
+}
+.theme2-other table{
+  background-color: #4b6a88;
+  color:white;
+}
+
+.theme2-other th{
+  background-color: #4b6a88;
+  color:white;
+}
+.theme2-other td{
+  background-color: #4b6a88;
+  color:white;
+}
+
+.theme2-other button.mat-button {
+  background-color: #4b6a88;
+  color: white;
+}
+
+.theme2-other mat-dialog-content{
+  background-color: #303030;
+  color: #ffffff;
+}
+
+
+.theme2-other button{
+  color:white;
+}
+
+
+
 .theme1-other {
   background-color:white;
   color:black;
 }
+
+.theme1-other mat-card{
+  background-color:#e8e8e8;
+  color:black;
+}
+
+.theme1-other button.mat-button {
+  color: black;
+}
+
 
 .theme2-toolbar{
   background-color: #2E343B ;

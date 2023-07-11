@@ -41,6 +41,11 @@ export class RentalListComponent implements OnInit{
 
   ngOnInit(): void {
     this.getRent();
+    this.serviceRent.theme$.subscribe((theme) => {
+      this.currentTheme = theme === 'theme1-toolbar' ? 'theme1-other' : 'theme2-other';
+      this.coloreCard = theme === 'theme1-toolbar' ? '#e8e8e8' : '#2E343B';
+      this.coloreTextCard = theme === 'theme1-toolbar' ? 'black' : 'white';
+    });
   }
 
   openDropdown() {

@@ -1,14 +1,14 @@
-<div class="search">
-  <div class="serach-content"
-    [style.background-color]="coloreCard" >
-    <div>
-      <p tabindex="0"><strong>Spesa totale:</strong> {{ totalAmount}}</p>
+<div [ngClass]="currentTheme" [style.color]="coloreTextCard">
+  <div class="search" >
+    <div class="serach-content">
+      <div>
+        <p tabindex="0"><strong>Spesa totale:</strong> {{ totalAmount}}</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="button-row" >
-  <span style="text-align: center; color:black">Opzioni di ordinamento:  </span>
+<div class="button-row"  >
+  <span style="text-align: center;" >Opzioni di ordinamento:  </span>
   <br>
   <br>
   <div class="button-container" *ngFor="let column of columns_title; let i = index">
@@ -20,12 +20,12 @@
   </div>
 </div>
 
-<section class="table-container">
-  <table class="table" mat-table  [dataSource]="rentals" matSort  (matSortChange)="sortData($event)" aria-label="rentals table" role="table">
+<section class="table-container"  >
+  <table class="table" mat-table [dataSource]="rentals" matSort  (matSortChange)="sortData($event)" aria-label="rentals table" role="table">
   <!-- Colonna Film -->
-  <ng-container matColumnDef="film">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header role="t"> Film </th>
-    <td mat-cell *matCellDef="let rental"> {{ rental.film.title }} </td>
+  <ng-container matColumnDef="film" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header > Film </th>
+    <td mat-cell *matCellDef="let rental" > {{ rental.film.title }} </td>
   </ng-container>
 
   <!-- Colonna Indirizzo -->
@@ -49,7 +49,7 @@
   <!-- Colonna Noleggio -->
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef> Action </th>
-    <td mat-cell *matCellDef="let rental"> <button mat-button (click)="openDetails(rental)">Dettagli</button>  </td>
+    <td mat-cell *matCellDef="let rental"> <button mat-button [style.color]="coloreTextCard" (click)="openDetails(rental)">Dettagli</button>  </td>
   </ng-container>
 
   <!-- Definizione delle colonne -->
@@ -58,3 +58,5 @@
   </table>
 
 </section>
+
+</div>

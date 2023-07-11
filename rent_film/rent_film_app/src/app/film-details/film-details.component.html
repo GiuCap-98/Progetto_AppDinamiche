@@ -1,4 +1,4 @@
-<mat-dialog-content class="dialog-window" tabindex="-1" role="dialog" aria-label="Dialog" [ngClass]="currentTheme" >
+<mat-dialog-content [ngClass]="currentTheme"  class="dialog-window" tabindex="-1" role="dialog" aria-label="Dialog"  >
 
   <mat-dialog-actions align="end">
     <button mat-button class="close" aria-label="Close dialog" role="button" title="Button for close dialog" (click)="closeDialog()" >
@@ -41,7 +41,7 @@
   </mat-list>
 
   <div class="rent-button" >
-    <button mat-button aria-label="Rent film" role="button" title="Button for rent film"  [style.color]="coloreTextCard"  [disabled]="!isStoreAvailable" (click)="rent_page(film, stores)">
+    <button mat-button aria-label="Rent film" role="button" title="Button for rent film" [disabled]="!isStoreAvailable" (click)="rent_page(film, stores)">
       {{ film.film.rental_rate}}
       <mat-icon>
         <span >euro</span>
