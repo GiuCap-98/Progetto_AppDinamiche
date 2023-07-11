@@ -21,9 +21,10 @@ const server = new ApolloServer({
                 console.log(customer_id);
             } catch (e) {}
 
-        }
+        } 
 
         return {
+            
             customer_id: customer_id
         }
     }
