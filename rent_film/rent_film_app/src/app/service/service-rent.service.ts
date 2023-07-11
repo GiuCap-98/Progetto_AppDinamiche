@@ -240,8 +240,8 @@ export class ServiceRentService {
   getRentalsByCustomer(customer_id: number): Observable<ApolloQueryResult<RentalResponse>>{
 
     const User_Rentals = gql`
-    query {
-      rentalsByCustomer(customerId: 534) {
+    query{
+      rentalsByCustomer(customerId: 1) {
         film {
           title
         }
@@ -262,7 +262,7 @@ export class ServiceRentService {
     return this.apollo.query<RentalResponse>({
       query: User_Rentals,
       variables: {
-        customerId: customer_id
+        customer_id: customer_id
       }
     });
   }

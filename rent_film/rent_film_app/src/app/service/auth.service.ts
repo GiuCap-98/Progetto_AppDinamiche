@@ -12,32 +12,33 @@ export class AuthService {
   private TOKEN_KEY = 'token';
 
   constructor(
-    public apollo: Apollo,     
-    private _router: Router    
+    public apollo: Apollo,
+    private _router: Router
     ) {}
 
-  // Metodo per salvare il token nel localStorage
+  // Il token viene salvato nel localStorage
   saveToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-  // Metodo per ottenere il token dal localStorage
+  // Recupera il token da localstorage
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  // Metodo per verificare se l'utente è autenticato
+  // Verifica se l'utente ha un token associato
   isAuthenticated(): boolean {
     const token = this.getToken();
     return !!token; // Restituisce true se il token esiste, altrimenti false
   }
 
-  // Metodo per effettuare il logout
+  // Effettua il Logout
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this._router.navigate(['']);
   }
 
+  // Controlla se il token è attivo
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (token) {
@@ -50,12 +51,20 @@ export class AuthService {
 
   checkTokenExpiration(): void {
     if (this.isTokenExpired()) {
-      // Token scaduto, si viene reindirizzati alla login      
+      // Token scaduto, si viene reindirizzati alla login
       alert('Token scaduto. Sarai reindirizzato al login.');      this.logout();
       this.logout()
     }
   }
-  
+
+  getIdToken(): number {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      return decodedToken.customer_id;
+    }
+    return 0
+  }
 
   // Mutation graphql: registrazione e login
   register(user: any): Observable<any> {

@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { RentalFilmPayment } from '../Type/interface';
 import { Dialog} from '@angular/cdk/dialog';
 import { RentDetailsComponent } from '../rent-details/rent-details.component';
-
+import { AuthService } from '../service/auth.service';
 import { Sort } from '@angular/material/sort';
 
 @Component({
@@ -20,6 +20,7 @@ export class RentalListComponent implements OnInit{
   columns_action:Array<string> = ['film', 'address', 'payment', 'rental']
   selectedOption!: String;
   isDropdownOpen: boolean = false;
+  id_user!: number;
 
   tot_sum   : number = 0;
   totalAmount: number = 0;
@@ -35,9 +36,8 @@ export class RentalListComponent implements OnInit{
   coloreTextCard!: string;
 
   constructor(
-    private serviceRent: ServiceRentService, private dialog : Dialog // iniettiamo il servizio
+    private serviceRent: ServiceRentService, private authService: AuthService, private dialog : Dialog
   ){}
-
 
   ngOnInit(): void {
     this.getRent();
@@ -91,7 +91,9 @@ export class RentalListComponent implements OnInit{
 
   // get all films from service
   getRent() : void {
-    this.serviceRent.getRentalsByCustomer(544).subscribe((response) => {
+    this.id_user = this.authService.getIdToken()
+    console.log(this.id_user)
+    this.serviceRent.getRentalsByCustomer(this.id_user).subscribe((response) => {
       this.rentals = response.data.rentalsByCustomer as RentalFilmPayment[];
 
        // Calcola la somma dei valori rental.payment.amount
