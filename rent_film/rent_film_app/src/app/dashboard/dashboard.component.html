@@ -1,6 +1,6 @@
 <div class="content">
   <mat-form-field class="field">
-    <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="Search film" value="" (input)="onSearchTitleChange($event)" name="title" />
+    <input matInput placeholder="Search a film" type="text" role="searchbox" aria-label="search a film" value="" (input)="onSearchTitleChange($event)" name="title" />
     <mat-icon matPrefix  aria-hidden="true">search</mat-icon>
   </mat-form-field>
 
@@ -8,6 +8,9 @@
 
   <mat-form-field class="field">
     <mat-select  aria-label="Filtra per categoria" placeholder="Filtra per categoria">
+      <mat-option (click)="filterByCategory(category_null)">
+        Reset
+      </mat-option>
       <mat-option *ngFor="let category of categories" [value]="category" (click)="filterByCategory(category)">
         {{category.name}}
       </mat-option>
@@ -17,7 +20,7 @@
 </div>
 
 <div role="list">
-  <mat-card class="item" role="listitem" aria-labelledby="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
+  <mat-card class="item" role="listitem" aria-label="Films items" *ngFor="let film of films | slice: startIndex: endIndex" [style.background-color]="coloreCard" [style.color]="coloreTextCard">
     <mat-card-header>
       <mat-card-title class="title" aria-label="Film title">
         <a class="link_details" href="javascript:void(0)" (click)="openDetails(film)">{{film.film.title}} </a>
@@ -25,15 +28,15 @@
     </mat-card-header>
 
     <mat-card-content>
-      <p><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
-      <p><strong>Lingua:</strong> {{ film.language.name }}</p>
-      <p><strong>Genere:</strong> {{ film.category.name }}</p>
-      <p><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
-      <p>{{ film.film.rating }}</p>
+      <p tabindex="0"><strong>Anno di uscita:</strong> {{ film.film.release_year }}</p>
+      <p tabindex="0"><strong>Lingua:</strong> {{ film.language.name }}</p>
+      <p tabindex="0"><strong>Genere:</strong> {{ film.category.name }}</p>
+      <p tabindex="0"><strong>Descrizione:</strong> <br>{{ film.film.description }}</p>
+      <p tabindex="0">{{ film.film.rating }}</p>
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-button aria-labelledby="Rent button" role="button" title="Button for rent film" [style.color]="coloreTextCard" (click)="rent_page(film)">
+      <button mat-button aria-label="Rent button" role="button" title="rent button" [style.color]="coloreTextCard" (click)="rent_page(film)">
         {{ film.film.rental_rate }}
         <mat-icon>
           <span aria-hidden="true">euro</span>

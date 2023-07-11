@@ -3,29 +3,23 @@
 
   <mat-toolbar [ngClass]="currentTheme" role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" class="toolbar">
 
-    <button mat-button (click)="home()" aria-label="back-home" role="button" title="Clicca qui per tornare alla lista dei film" aria-labelledby="back home button"><h1>DVD Rent</h1>  </button>
+    <button mat-button (click)="home()" aria-label="back-home" role="button" title="Clicca qui per tornare alla lista dei film" tabindex="0"><h1>DVD Rent</h1>  </button>
+    
     <span class="spacer"></span>
 
-    <button mat-button  [matMenuTriggerFor]="menu" aria-label="open menu" role="button" title="Clicca qui per aprire il menù a tendina" aria-haspopup="true" aria-controls="menu-items">
-      <mat-icon>account_circle</mat-icon></button>
+    <button (click)="rentalList()" role="button" aria-label="logout menu button" title="Clicca qui per aprire i tuoi noleggi">
+        <mat-icon>
+          <span class="material-symbols-outlined">list_alt</span>
+        </mat-icon >
+        <span>Noleggi </span>
+    </button>
 
-      <mat-menu #menu="matMenu" role="menu" aria-label="app menu" aria-orientation="vertical">
-
-        <button mat-menu-item (click)="rentalList()" role="menuitem" aria-labelledby="logout menu button" title="Clicca qui per aprire i tuoi noleggi">
-          <mat-icon>
-            <span class="material-symbols-outlined">list_alt</span>
-          </mat-icon >
-          <span>Noleggi </span>
-      </button>
-
-      <button mat-menu-item  (click)="logout()" role="menuitem" aria-labelledby="your rentals menu button" title="Clicca qui per fare il logout">
+    <button (click)="logout()" role="button" aria-label="rentals list button" title="Clicca qui per fare il logout">
         <mat-icon>
           <span class="material-symbols-outlined">logout</span>
         </mat-icon >
         <span>Log out </span>
-      </button>
-
-    </mat-menu>
+    </button>
 
     <button mat-button [matMenuTriggerFor]="theme"
     aria-label="Open Menu"

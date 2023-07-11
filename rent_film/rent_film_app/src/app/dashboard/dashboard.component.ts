@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
   scrolled = 0;
   //variabile per la selezione di una categoria (usata nell'html)
   selectedOption!: Category;
+  category_null :Category = { name: ''}
 
   //array per memorizzare le categorie
   categories: Category[] =[];

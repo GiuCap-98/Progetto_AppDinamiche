@@ -269,7 +269,7 @@ const resolvers = {
       }
     },
 
-    searchActorsByFilm: async (_, { film_id }, { db_rent }) => {
+    searchActorsByFilm: async (_, { film_id }) => {
       try {
         const query = `
         SELECT act.first_name, act.last_name 
