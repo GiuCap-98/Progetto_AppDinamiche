@@ -18,7 +18,8 @@ export class LoginComponent  implements OnInit  {
   password!: string;
   form!: FormGroup;
 
-  public error: string | null | undefined;
+
+  public errors: string[]= [];
 
   theme: string = 'theme1-toolbar';
   currentTheme!: string;
@@ -45,18 +46,31 @@ export class LoginComponent  implements OnInit  {
   }
 
   login(): void {
-  this.authService.login(this.email, this.password).subscribe(
-    response => {
-      const token = response.data.login;
-      // Salva il token nel localStorage
-      localStorage.setItem('token', token);
-      // Reindirizza alla pagina del dashboard dopo il login
-      this._router.navigateByUrl('/dashboard')
-    },
-    error => {
-      console.error(error);
+    this.errors=[]
+    if (this.form.invalid) {
+      // Verifica se il campo data è vuoto
+      if (this.form.controls['email'].errors?.['required']) {
+        this.errors.push('Missing or incorrect email');
+      }
+      // Verifica se il campo store è vuoto
+      if (this.form.controls['password'].errors?.['required']) {
+        this.errors.push('Missing or incorrect password');
+      }
+    } else {
+    this.authService.login(this.email, this.password).subscribe(
+      response => {
+        const token = response.data.login;
+        // Salva il token nel localStorage
+        localStorage.setItem('token', token);
+        // Reindirizza alla pagina del dashboard dopo il login
+        this._router.navigateByUrl('/dashboard')
+      },
+      error => {
+        console.error(error);
+        this.errors.push('Login failed');
+      }
+    );
     }
-  );
-}
+  }
 
 }

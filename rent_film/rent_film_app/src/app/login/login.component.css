@@ -16,7 +16,7 @@ mat-card-content{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 230px;
 
 }
 
@@ -36,6 +36,11 @@ mat-card mat-card-title{
 .div_button button{
   width: 100px;
   margin-bottom: 10px;
+}
+
+
+ul.error-message {
+  list-style: none;
 }
 
 

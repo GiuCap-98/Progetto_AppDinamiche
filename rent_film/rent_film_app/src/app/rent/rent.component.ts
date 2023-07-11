@@ -35,7 +35,6 @@ export class RentComponent implements OnInit{
         data: ['', Validators.required],
         store: ['', Validators.required]
     });
-
   }
 
   ngOnInit() : void {
