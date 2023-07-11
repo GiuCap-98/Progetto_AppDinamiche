@@ -22,10 +22,6 @@ export class RentComponent implements OnInit{
   dataSelected: boolean = false;
   storeSelected : boolean = false;
 
-  data_selected: string = '';
-  store_selected: string = '';
-  data_group : string[]= [ 'Today', 'In two days' ]
-
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService) {
       this.form = this.fb.group({
@@ -43,24 +39,10 @@ export class RentComponent implements OnInit{
   }
 
 
-
   rent() : void {
-    this.errors=[]
-    if (this.data_selected=='' ||  this.store_selected == '') {
-      console.log(this.data_selected)
-      // Verifica se il campo data è vuoto
-      if (this.data_selected=='') {
-        this.errors.push('Il campo data è obbligatorio.')
-        console.log(this.errors)
-      }
-      // Verifica se il campo store è vuoto
-      if (this.store_selected=='') {
-        this.errors.push('Il campo store è obbligatorio.');
-      }
-    }else{
-      this.openDialog()
-    }
+    this.openDialog()
   }
+
 
   click_data(selected: boolean) : void {
     this.dataSelected = selected
@@ -71,12 +53,23 @@ export class RentComponent implements OnInit{
 
 
 
-  // dialog for film details
-  openDialog() : void {
-    if(this.store_selected!='' && this.data_selected!=''){
-      this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }});
+  // dialog for film details 
+  openDialog() : void { 
+    this.errors=[]
+    if(this.storeSelected && this.dataSelected){ 
+      this.dialog.open(DialogComponentComponent, {data: {text:'Noleggio avvenuto con successo!' }}); 
+ 
+    }else{
+      if (!this.storeSelected ) {
+        this.errors.push('The field store is required')
+        console.log(this.errors)
+      }
+      // Verifica se il data store è vuoto
+      if (!this.dataSelected) {
+        this.errors.push('The field data is required');
+      }
     }
-  }
+  } 
 
 
 }

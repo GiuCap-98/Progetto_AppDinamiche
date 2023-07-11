@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { db_rent, db_user } = require('./db');
+const { SECRET } = require('./db'); // Import database
 
 // Define GraphQL schema
 const typeDefs = gql`
@@ -391,7 +392,7 @@ const resolvers = {
       }
     },
 
-    login: async (_, { email, password }, { SECRET }) => {
+    login: async (_, { email, password }) => {
       try {
         // Check if the user exists in the database
         const queryCheckUser = `

@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class RegistrationComponent {
   form: FormGroup;
-  error: string | null | undefined;
+  public errors: string[]= [];
 
   constructor(private fb: FormBuilder,     
     private _router: Router,    
@@ -25,7 +25,18 @@ export class RegistrationComponent {
   }
 
   register() : void {
-    if (this.form.valid) {
+    this.errors=[]
+    if (this.form.invalid) {
+      // Verifica se il campo data è vuoto
+      if (this.form.controls['email'].errors?.['required']) {
+        this.errors.push('Missing or incorrect email');
+      }
+      // Verifica se il campo store è vuoto
+      if (this.form.controls['password'].errors?.['required']) {
+        this.errors.push('Missing or incorrect password');
+      }
+    } else {
+      
       const user = this.form.value;
       this.authService.register(user).subscribe(
         response => {
@@ -36,7 +47,7 @@ export class RegistrationComponent {
         },
         error => {
           console.error('Registration failed:', error);
-          this.error = 'Registration failed. Please try again.';
+          this.errors.push('Registration failed. Please try again.');
         }
       );
     }
