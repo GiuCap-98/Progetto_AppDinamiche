@@ -18,9 +18,6 @@ export interface RentalResponse {
 
 
 
-
-
-
 //COMPONENTS
 
 export interface Film {

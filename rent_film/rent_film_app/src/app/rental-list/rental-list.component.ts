@@ -31,6 +31,7 @@ export class RentalListComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.authService.checkTokenExpiration()
     this.getRent();
   }
 

@@ -40,7 +40,6 @@
           <span tabindex="0"> <mat-icon>
             <span aria-hidden="true" style="font-size: 15px;">euro</span>
             </mat-icon>{{ film.film.rental_rate }} RENT</span>
-
         </button>
       </mat-card-actions>
     </mat-card>
@@ -54,7 +53,7 @@
   <div id="scroll-up" title="paginator content">
     <!-- Bottone per tornare all'inizio della pagina -->
     <button mat-fab class="back-to-top-button" aria-label="Return to top of page button" role="button" title="Button for return to top of page" *ngIf="scrolled == 1" (click)="scrollToTop()" [class.show]="isScrolled">
-      <mat-icon>arrow_upward</mat-icon>
+      <mat-icon aria-hidden="true">arrow_upward</mat-icon>
     </button>
   </div>
 </div>

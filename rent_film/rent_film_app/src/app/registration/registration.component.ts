@@ -12,8 +12,8 @@ export class RegistrationComponent {
   form: FormGroup;
   public errors: string[]= [];
 
-  constructor(private fb: FormBuilder,     
-    private _router: Router,    
+  constructor(private fb: FormBuilder,
+    private _router: Router,
     private authService: AuthService) {
     this.form = this.fb.group({
       customer_id: ['', Validators.required],
@@ -36,7 +36,7 @@ export class RegistrationComponent {
         this.errors.push('Missing or incorrect password');
       }
     } else {
-      
+
       const user = this.form.value;
       this.authService.register(user).subscribe(
         response => {

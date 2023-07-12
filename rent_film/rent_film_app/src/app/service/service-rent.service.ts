@@ -56,7 +56,6 @@ export class ServiceRentService {
         }
       }
     `;
-
     return this.apollo.query<FilmsCatLangResponse>({
       query: FilmQuery,
       variables: {
@@ -65,10 +64,7 @@ export class ServiceRentService {
         page: page,
         pageSize: pageSize
       },
-      context: {
-        headers : new HttpHeaders().set('Authorization', this.authService.getToken())
-       }
-    });
+      context: {   headers : new HttpHeaders().set('Authorization', this.authService.getToken()) }  });
   }
 
   getStores(film_id: any): Observable<any>{

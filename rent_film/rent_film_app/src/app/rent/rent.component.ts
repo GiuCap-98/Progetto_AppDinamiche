@@ -7,6 +7,7 @@ import { FilmCategoryStore, FilmDetails, StoreOccorrency } from '../Type/interfa
 import { ServiceRentService } from '../service/service-rent.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Location } from '@angular/common';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-rent',
@@ -28,7 +29,7 @@ export class RentComponent implements OnInit{
 
 
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService, private location: Location) {
+  constructor( private fb: FormBuilder, private authService: AuthService, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService, private location: Location) {
       this.form = this.fb.group({
         data: ['', Validators.required],
         store: ['', Validators.required]
@@ -36,6 +37,7 @@ export class RentComponent implements OnInit{
   }
 
   ngOnInit() : void {
+    this.authService.checkTokenExpiration()
     this.route.params.subscribe(params => {
       this.film = JSON.parse(params['film']);
       this.stores = JSON.parse(params['stores']);

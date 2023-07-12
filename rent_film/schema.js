@@ -131,7 +131,6 @@ const typeDefs = gql`
   }
   
   type Query {
-    customers: [Customer]
     totalFilms(searchCat: String!, searchTerm: String!): Int
     films(searchCat: String!, searchTerm: String!, page: Int, pageSize: Int): [Films_Details]
     categories: [Category]
@@ -149,16 +148,6 @@ const typeDefs = gql`
 // Resolvers GraphQL query
 const resolvers = {
   Query: {
-    customers: async (_, __,) => {
-      try {
-        const result = await db_rent.query('SELECT * FROM customer');
-        return result.rows;
-      } catch (error) {
-        console.error('Errore durante l\'esecuzione della query:', error);
-        throw new Error('Errore del server');
-      }
-    },  
-
     totalFilms: async (_, { searchCat, searchTerm}) => {
       try {
         let query = '';

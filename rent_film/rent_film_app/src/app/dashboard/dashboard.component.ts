@@ -23,7 +23,6 @@ import { Actor, Category, FilmDetails, StoreOccorrency } from '../Type/interface
 })
 
 export class DashboardComponent implements OnInit {
-  searchControl : FormControl = new FormControl('');
   films!: FilmDetails[]; // array to store the films
 
   title: string = "";
@@ -173,7 +172,7 @@ export class DashboardComponent implements OnInit {
       } else {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {text:'Sorry, the film is not available for rent' };
-        dialogConfig.ariaLabel =  'Not-available-rent'
+        dialogConfig.ariaLabel =  'Not available rent'
         this.dialog.open(DialogComponentComponent,dialogConfig);
       }
     });

@@ -1,5 +1,4 @@
-<div class="login component-style" title="login content" tabindex="-1">
-
+<div class="login component-style" title="login content" >
   <mat-card>
     <mat-card-content>
       <h2 tabindex="0">Login</h2>
@@ -22,7 +21,7 @@
         </div>
         <ul *ngIf="errors.length > 0" class="error-message" >
           <li *ngFor="let error of errors; index i" tabindex="0"><label>{{ error }}</label></li>
-      </ul>
+        </ul>
 
       </form>
 
