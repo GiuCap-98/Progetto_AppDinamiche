@@ -6,12 +6,11 @@ import { FilmDetailsComponent } from '../film-details/film-details.component';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { Actor, FilmDetails, StoreOccorrency } from '../Type/interface';
-import { Category } from '../Type/interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Actor, Category, FilmDetails, StoreOccorrency } from '../Type/interface';
 
 
 

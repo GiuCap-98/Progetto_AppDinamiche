@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
-import { StoreOccorrency } from '../Type/interface';
-import { FilmCategory } from '../Type/Model';
+import { FilmCategoryStore, FilmDetails, StoreOccorrency } from '../Type/interface';
 import { ServiceRentService } from '../service/service-rent.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Location } from '@angular/common';
@@ -19,7 +18,7 @@ export class RentComponent implements OnInit{
   public errors: string[]= [];
   form!: FormGroup;
 
-  film!: FilmCategory;
+  film!: FilmDetails;
   stores!: StoreOccorrency[];
   dataSelected: boolean = false;
   storeSelected : boolean = false;
