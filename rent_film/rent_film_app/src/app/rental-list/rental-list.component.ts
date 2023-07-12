@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceRentService } from '../service/service-rent.service';
-import { PageEvent } from '@angular/material/paginator';
 import { RentalFilmPayment } from '../Type/interface';
 import { Dialog} from '@angular/cdk/dialog';
 import { RentDetailsComponent } from '../rent-details/rent-details.component';
 import { AuthService } from '../service/auth.service';
 import { Sort } from '@angular/material/sort';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-rental-list',
@@ -17,13 +17,16 @@ export class RentalListComponent implements OnInit{
 
   displayedColumns: string[] = ['film', 'address', 'payment', 'rental', 'action'];
   rentals: RentalFilmPayment[] = []; // array to store user rentals
-  columns_title: Array<string> = ['Film', 'Indirizzo', 'Pagamento', 'Data']
+  columns_title: Array<string> = ['Film', 'Address', 'Payment', 'Data']
   columns_action:Array<string> = ['film', 'address', 'payment', 'rental']
   c_id!: number;
   totalAmount: number = 0;
 
   constructor(
-    private serviceRent: ServiceRentService, private dialog : Dialog, private authService : AuthService // iniettiamo il servizio
+    private serviceRent: ServiceRentService,
+    private location: Location,
+    private dialog : Dialog,
+    private authService : AuthService // iniettiamo il servizio
   ){}
 
 
@@ -76,7 +79,10 @@ export class RentalListComponent implements OnInit{
     });
   }
 
-
+  navigateBack(): void {
+    this.serviceRent.isNavigatingBack = true; // Imposta la variabile di stato di navigazione
+    this.location.back(); // Torna indietro utilizzando il servizio Location
+  }
 
 
   // dialog for film details

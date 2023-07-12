@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponentComponent } from '../dialog-component/dialog-component.component';
-import { FilmCategoryStore, StoreOccorrency } from '../Type/interface';
+import { StoreOccorrency } from '../Type/interface';
 import { FilmCategory } from '../Type/Model';
 import { ServiceRentService } from '../service/service-rent.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-rent',
@@ -28,7 +29,7 @@ export class RentComponent implements OnInit{
 
 
 
-  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService) {
+  constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService, private location: Location) {
       this.form = this.fb.group({
         data: ['', Validators.required],
         store: ['', Validators.required]
@@ -56,6 +57,11 @@ export class RentComponent implements OnInit{
     this.storeSelected = selected
   }
 
+  navigateBack(): void {
+    this.serviceRent.isNavigatingBack = true; // Imposta la variabile di stato di navigazione
+    this.location.back(); // Torna indietro utilizzando il servizio Location
+  }
+
 
 
   // dialog for film details
@@ -80,6 +86,4 @@ export class RentComponent implements OnInit{
       this.hasErrors = this.errors.length > 0;
     }
   }
-
-
 }

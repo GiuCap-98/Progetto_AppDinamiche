@@ -15,6 +15,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 
 
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -47,9 +48,7 @@ export class DashboardComponent implements OnInit {
   categories: Category[] =[];
 
   storesByFilm: StoreOccorrency[] = [];
-
   numFilms: number = 0;
-
   timer: any;
 
 
@@ -88,6 +87,31 @@ export class DashboardComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+
+  //funzione che implementa la cattura di ogni modifica fatta nel searchbox per il film e cerca i film con quel termine
+  onSearchTitleChange(event: any) {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.title = event.target.value;
+      this.getFilms();
+    }, 500);
+  }
+
+  // per gestire il cambio pagina del paginator
+  handlePageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getFilms();
+  }
+
+
+  getStoresByFilm(film: any): Observable<StoreOccorrency[]> {
+    return this.serviceRent.getStores(film.film_id).pipe(
+      map((response) => response.data.stores)
+    );
+  }
+
+
   getFilms(){
     this.serviceRent.getFilms(this.category, this.title, this.currentPage, this.pageSize).subscribe((response) => {
       this.films = response.data.films as FilmDetails[];
@@ -102,39 +126,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onSearchTitleChange(event: any) {
-    clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      this.title = event.target.value;
-      this.getFilms();
-    }, 500);
-  }
-
-  handlePageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.getFilms();
-  }
-
-  getStoresByFilm(film: any)  {
-    this.serviceRent.getStores(film.film_id).subscribe((response) => {
-      this.storesByFilm= response.data.stores;
-
-    });
-  }
-
-  getStoresByFilm2(film: any): Observable<StoreOccorrency[]> {
-    return this.serviceRent.getStores(film.film_id).pipe(
-      map((response) => response.data.stores)
-    );
-  }
-
   getCategories() : void{
     this.serviceRent.getCategories().subscribe((response) => {
       this.categories = response.data.categories as Category[];
     });
   }
 
+  filterByCategory(category: Category) : void{
+    this.selectedOption = category;
+    this.category = category.name
+    this.getFilms()
+  }
+
+  // controllo se il film è disponibile in qualche store
   storeAvailable(store: StoreOccorrency): boolean{
     if(store.num_film == 0){
       this.isFilmPresent = false;
@@ -142,17 +146,26 @@ export class DashboardComponent implements OnInit {
       this.count_numfilm+=1;
       this.isFilmPresent= true;
     }
-
     if((this.count_numfilm >= 1) ){
       this.isStoreAvailable=true;
     }
-
     return this.isFilmPresent
-
   }
 
+
+  // per il controllo della selezione di una categoria
+  isSelected(category: Category): boolean {
+    if(this.selectedOption === category){
+      return true;
+    }
+    return false;
+  }
+
+
+
+  // redirect to rent film page
   rent_page(film : FilmDetails) : void{
-    this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
+    this.getStoresByFilm(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
       this.count_numfilm=0
       this.storeAvailable(storesByFilm[0])
       this.storeAvailable(storesByFilm[1])
@@ -168,23 +181,9 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  isSelected(category: Category): boolean {
-    if(this.selectedOption === category){
-      return true;
-    }
-    return false;
-  }
-
-  filterByCategory(category: Category) : void{
-    this.selectedOption = category;
-    this.category = category.name
-    this.getFilms()
-  }
-
-
-  // dialog for film details
-  openDetails(film: FilmDetails) : void {
-    this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
+   // dialog for film details
+   openDetails(film: FilmDetails) : void {
+    this.getStoresByFilm(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {film_and_category: film, stores: storesByFilm};
       dialogConfig.width = '600px';
@@ -193,7 +192,5 @@ export class DashboardComponent implements OnInit {
     });
 
   }
-
-
 
 }

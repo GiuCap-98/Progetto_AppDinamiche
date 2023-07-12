@@ -12,6 +12,7 @@ import { CategoryResponse, FilmsCatLangResponse, RentalResponse} from '../Type/i
 })
 
 export class ServiceRentService {
+  isNavigatingBack!: boolean;
 
   constructor(private apollo: Apollo, private authService: AuthService) {}
 
@@ -199,8 +200,8 @@ export class ServiceRentService {
   getRentalsByCustomer(customer_id: number): Observable<ApolloQueryResult<RentalResponse>>{
 
     const User_Rentals = gql`
-    query {
-      rentalsByCustomer(customerId: 534) {
+    query SearchFilms($customer_Id: ID!) {
+      rentalsByCustomer(customerId: $customer_Id) {
         film {
           title
         }
@@ -225,7 +226,7 @@ export class ServiceRentService {
     return this.apollo.query<RentalResponse>({
       query: User_Rentals,
       variables: {
-        customerId: customer_id
+        customer_Id: customer_id
       },
       context: {
         headers : new HttpHeaders().set('Authorization', this.authService.getToken())

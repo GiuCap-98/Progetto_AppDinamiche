@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServiceRentService } from '../service/service-rent.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { RentalFilmPayment } from '../Type/interface';
 
@@ -36,4 +35,7 @@ export class RentDetailsComponent {
     this.closeDialog()
 
   }
+
+
+
 }
