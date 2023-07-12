@@ -83,7 +83,7 @@ export class RentalListComponent implements OnInit{
   openDetails(rent: RentalFilmPayment) : void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {film_rent: rent};
-    dialogConfig.width = '600px';
+    dialogConfig.width = '400px';
     dialogConfig.ariaLabel = 'Rent Datails of film '+rent.film.title,
     this.dialog.open(RentDetailsComponent, dialogConfig);
   }

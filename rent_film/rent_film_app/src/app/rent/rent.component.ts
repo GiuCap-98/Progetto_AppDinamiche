@@ -24,6 +24,8 @@ export class RentComponent implements OnInit{
   storeSelected : boolean = false;
   selectedValueStore: string = "";
   selectedValueData: string = "";
+  hasErrors: boolean = false;
+
 
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService) {
@@ -74,6 +76,8 @@ export class RentComponent implements OnInit{
       if (!this.selectedValueData) {
         this.errors.push('The field data is required');
       }
+
+      this.hasErrors = this.errors.length > 0;
     }
   }
 

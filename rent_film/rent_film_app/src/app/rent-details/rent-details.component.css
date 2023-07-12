@@ -6,14 +6,10 @@
   font-size: 20px;
 }
 
-.dialog-content-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  padding: 100px;
-}
+
 
 .list {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .close {
@@ -39,27 +35,14 @@
 }
 
 @media screen and (max-width: 768px) {
-  .dialog-window {
-    height: 300px;
-    overflow-y: auto;
-  }
   .title-dialog {
     font-size: 30px;
   }
-  .button-rent {
-    font-size: medium;
-  }
 }
 
-@media screen and (orientation: landscape) {
-  .dialog-window {
-    height: 300px;
+@media screen and (orientation: landscape){
+  .component-style {
+    height: 280px;
     overflow-y: auto;
-    overflow-x: auto;
-  }
-  .dialog-content-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 100px;
   }
 }
