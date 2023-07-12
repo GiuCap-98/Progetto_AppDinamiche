@@ -52,6 +52,10 @@ export interface Address {
   address: string;
 }
 
+export interface City {
+  city: string;
+}
+
 export interface Tot_Films {
   total_films: number;
 }
@@ -102,6 +106,10 @@ export interface Rental {
 
 export interface RentalFilmPayment {
   film: Film;
+  address: Address;
+  city: City;
   payment: Payment;
   rental: Rental;
 }
+
+

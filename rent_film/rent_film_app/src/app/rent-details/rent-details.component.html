@@ -1,31 +1,38 @@
-<div class="dialog-window">
-  <div class="title"  >
-    <mat-card-actions >
+<div  class="component-style">
+  <mat-dialog-content  class="dialog-window" tabindex="-1" role="dialog" aria-label="dialog rent details" >
 
-      <button mat-button (click)="closeDialog()">
-        <mat-icon>
-          <span class="material-symbols-outlined">close</span>
-        </mat-icon>
+
+    <mat-dialog-actions align="end">
+      <button mat-button class="close" aria-label="Close dialog button" role="button" title="Button for close dialog" (click)="closeDialog()" >
+        <mat-icon aria-hidden="true">close</mat-icon>
         Close
       </button>
-    </mat-card-actions>
+    </mat-dialog-actions>
 
 
-    <h2 mat-dialog-title>{{ film.film.title }}</h2>
-  </div>
-  <div class="dialog-content" >
-      <p><strong>Genere:</strong> {{ film.film.film_id }}</p>
-      <p><strong>Genere:</strong> {{ film.film.title }}</p>
-      <p><strong>Genere:</strong> {{ film.film.title }}</p>
-      <p><strong>Descrizione:</strong> {{ film.film.description }}</p>
-      <mat-card-actions >
-      {{ film.film.rental_rate}}
-      <mat-icon>
-        <span class="material-symbols-outlined">euro</span>
-      </mat-icon>
-    </mat-card-actions>
+  <br>
 
-  </div>
+  <h2 mat-dialog-title id="{{ rent.film.title }}" class="title-dialog" tabindex="0" aria-describedby="dialog-description" >{{ rent.film.title }}</h2>
+
+  <mat-list class="list" id="dialog-description" role="list">
+    <mat-list-item role="listitem" >
+      <p tabindex="0"><strong>Rental date:</strong> {{ rent.rental.rental_date}}</p>
+     </mat-list-item>
+     <mat-list-item role="listitem" >
+      <p tabindex="0"><strong>Return date:</strong> {{ rent.rental.return_date}}</p>
+     </mat-list-item>
+
+
+     <mat-list-item role="listitem" >
+      <p tabindex="0"><strong>Film price:</strong>
+        <mat-icon> <span class="material-symbols-outlined" aria-hidden="true">euro</span></mat-icon>
+        {{ rent.film.rental_rate}}</p>
+     </mat-list-item>
+
+
+  </mat-list>
+
+</mat-dialog-content>
 
 </div>
 

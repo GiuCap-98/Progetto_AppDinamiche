@@ -207,8 +207,12 @@ export class ServiceRentService {
         address {
           address
         }
+        city{
+          city
+        }
         payment {
           amount
+          payment_date
         }
         rental {
           rental_date

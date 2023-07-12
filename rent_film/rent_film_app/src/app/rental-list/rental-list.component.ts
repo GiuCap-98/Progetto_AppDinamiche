@@ -4,8 +4,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { RentalFilmPayment } from '../Type/interface';
 import { Dialog} from '@angular/cdk/dialog';
 import { RentDetailsComponent } from '../rent-details/rent-details.component';
-
+import { AuthService } from '../service/auth.service';
 import { Sort } from '@angular/material/sort';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-rental-list',
@@ -18,20 +19,11 @@ export class RentalListComponent implements OnInit{
   rentals: RentalFilmPayment[] = []; // array to store user rentals
   columns_title: Array<string> = ['Film', 'Indirizzo', 'Pagamento', 'Data']
   columns_action:Array<string> = ['film', 'address', 'payment', 'rental']
-  selectedOption!: String;
-  isDropdownOpen: boolean = false;
-
-  tot_sum   : number = 0;
+  c_id!: number;
   totalAmount: number = 0;
 
-  startIndex: number = 0;
-  endIndex  : number = 10;
-  pageSize  : number = 10;
-  pageIndex : number = 0;
-  pageSizeOptions : Array<number> = [5, 10, 20];
-
   constructor(
-    private serviceRent: ServiceRentService, private dialog : Dialog // iniettiamo il servizio
+    private serviceRent: ServiceRentService, private dialog : Dialog, private authService : AuthService // iniettiamo il servizio
   ){}
 
 
@@ -39,13 +31,6 @@ export class RentalListComponent implements OnInit{
     this.getRent();
   }
 
-  openDropdown() {
-    this.isDropdownOpen = true;
-  }
-
-  closeDropdown() {
-    this.isDropdownOpen = false;
-  }
 
   sortData(sort: Sort) {
     const data = this.rentals.slice(); // Crea una copia dell'array rentals
@@ -82,38 +67,24 @@ export class RentalListComponent implements OnInit{
 
   // get all films from service
   getRent() : void {
-    this.serviceRent.getRentalsByCustomer(544).subscribe((response) => {
+    this.c_id = this.authService.getIdToken()
+    console.log(this.c_id)
+    this.serviceRent.getRentalsByCustomer(this.c_id).subscribe((response) => {
       this.rentals = response.data.rentalsByCustomer as RentalFilmPayment[];
-
        // Calcola la somma dei valori rental.payment.amount
       this.totalAmount = this.rentals.reduce((total, rental) => total + rental.payment.amount, 0);
-
-      console.log(this.totalAmount)
-      this.updatePageIndex();
     });
   }
 
-
-  onPageChange(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.updatePageIndex();
-  }
-  updatePageIndex() : void {
-    this.startIndex = this.pageIndex * this.pageSize;
-    this.endIndex = this.startIndex + this.pageSize;
-  }
 
 
 
   // dialog for film details
   openDetails(rent: RentalFilmPayment) : void {
-    this.dialog.open(RentDetailsComponent, {
-      width: '90%',
-      maxWidth: '800px',
-      height: '90%',
-      maxHeight: '600px',
-      data: {film_rent: rent}
-    });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {film_rent: rent};
+    dialogConfig.width = '600px';
+    dialogConfig.ariaLabel = 'Rent Datails of film '+rent.film.title,
+    this.dialog.open(RentDetailsComponent, dialogConfig);
   }
 }

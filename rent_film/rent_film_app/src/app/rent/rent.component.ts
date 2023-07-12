@@ -22,6 +22,8 @@ export class RentComponent implements OnInit{
   stores!: StoreOccorrency[];
   dataSelected: boolean = false;
   storeSelected : boolean = false;
+  selectedValueStore: string = "";
+  selectedValueData: string = "";
 
 
   constructor( private fb: FormBuilder, private route: ActivatedRoute, private dialog: Dialog, private serviceRent: ServiceRentService) {
@@ -57,19 +59,19 @@ export class RentComponent implements OnInit{
   // dialog for film details
   openDialog() : void {
     this.errors=[]
-    if(this.storeSelected && this.dataSelected){
+    if(this.selectedValueStore && this.selectedValueData){
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {text:'Rent success!' };
-      dialogConfig.ariaLabel =  'Available-rent',
+      dialogConfig.ariaLabel =  'Rent success dialog',
       this.dialog.open(DialogComponentComponent, dialogConfig);
 
     }else{
-      if (!this.storeSelected ) {
+      if (!this.selectedValueStore ) {
         this.errors.push('The field store is required')
         console.log(this.errors)
       }
       // Verifica se il data store è vuoto
-      if (!this.dataSelected) {
+      if (!this.selectedValueData) {
         this.errors.push('The field data is required');
       }
     }

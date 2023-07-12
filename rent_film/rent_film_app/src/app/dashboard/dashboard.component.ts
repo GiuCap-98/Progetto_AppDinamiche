@@ -99,7 +99,6 @@ export class DashboardComponent implements OnInit {
   getNumFilms(){
     this.serviceRent.getNumFilms(this.category, this.title).subscribe((response: any) => {
       this.numFilms =  response.data.totalFilms;
-      console.log(this.numFilms)
     });
   }
 
@@ -183,15 +182,13 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
-
   // dialog for film details
   openDetails(film: FilmDetails) : void {
     this.getStoresByFilm2(film.film).subscribe((storesByFilm: StoreOccorrency[]) => {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {film_and_category: film, stores: storesByFilm};
       dialogConfig.width = '600px';
-      dialogConfig.ariaLabel =  film.film.title,
+      dialogConfig.ariaLabel = 'Film Datails of '+ film.film.title,
       this.dialog.open(FilmDetailsComponent, dialogConfig)
     });
 

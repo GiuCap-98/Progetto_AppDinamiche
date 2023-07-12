@@ -11,14 +11,14 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
 
-  { path: '', component: LoginComponent },
-  { path: 'registration', component: RegistrationComponent, canActivate : [AuthGuard],  title: 'Registration - RentApp' },
-  { path:'dashboard', component: DashboardComponent, canActivate : [AuthGuard],  title: 'Dashboard - RentApp',
+  { path: '', component: LoginComponent, title:'DVD Rent'},
+  { path: 'registration', component: RegistrationComponent, canActivate : [AuthGuard],  title: 'Registration - DVD Rent' },
+  { path:'dashboard', component: DashboardComponent, canActivate : [AuthGuard],  title: 'Dashboard - DVD Rent',
     children: [
-      { path: '', component: FilmDetailsComponent , title: 'Film Details - RentApp'}
+      { path: '', component: FilmDetailsComponent}
   ]},
-  { path: 'rent/:film/:stores', component: RentComponent, canActivate : [AuthGuard], title: 'Rent Film - RentApp'},
-  { path:'rental-list', component: RentalListComponent, canActivate : [AuthGuard], title: 'List Rent - RentApp'},
+  { path: 'rent/:film/:stores', component: RentComponent, canActivate : [AuthGuard], title: 'Rent Film - DVD Rent'},
+  { path:'rental-list', component: RentalListComponent, canActivate : [AuthGuard], title: 'List Rent - DVD Rent'},
   {path : '404', component : NotFoundComponent},
   {path : '**', redirectTo : '/404'}
 ];

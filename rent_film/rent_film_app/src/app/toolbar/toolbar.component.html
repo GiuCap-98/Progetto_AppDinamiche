@@ -1,17 +1,17 @@
-<mat-toolbar role="toolbar" aria-label="app-toolbar" aria-orientation="horizontal" >
+<mat-toolbar role="toolbar" aria-label="toolbar" aria-orientation="horizontal" tabindex="-1" >
 
-  <button  mat-button (click)="home()" aria-label="back home" role="button" title="Clicca qui per tornare alla lista dei film" tabindex="0">
-    <h1 >DVD Rent </h1>  </button>
+  <button  mat-button (click)="home()" aria-label="home button" role="button">
+    <h1 aria-label="DVD-rent" title="DVD Rent">DVD Rent</h1> </button>
   <span class="spacer"></span>
 
-  <button  mat-button (click)="rentalList()" role="button" aria-label="logout button" title="Clicca qui per aprire i tuoi noleggi">
+  <button  mat-button (click)="rentalList()" role="button" aria-label="rent list button" >
       <mat-icon>
         <span aria-hidden="true">list_alt</span>
       </mat-icon >
-      <span >Noleggi </span>
+      <span >Rent </span>
   </button>
 
-  <button mat-button (click)="logout()" role="button" aria-label="your rentals button" title="Clicca qui per fare il logout">
+  <button mat-button (click)="logout()" role="button" aria-label="logout button" >
     <mat-icon>
       <span aria-hidden="true">logout</span>
     </mat-icon >

@@ -11,17 +11,15 @@ import { RentalFilmPayment } from '../Type/interface';
 })
 export class RentDetailsComponent {
 
-  film:  RentalFilmPayment;
+  rent:  RentalFilmPayment;
   storeSelected : boolean = false;
-
-  public error: string | null | undefined;
 
   constructor(
     private _router: Router,
     @Inject(DIALOG_DATA) public data: {film_rent: RentalFilmPayment},
     public dialogRef: DialogRef<any>
   ) {
-    this.film= data.film_rent
+    this.rent= data.film_rent
   }
 
 
@@ -33,8 +31,8 @@ export class RentDetailsComponent {
     this.storeSelected = selected
   }
 
-  rent_page(film : any) : void{
-    this._router.navigate(['rent', JSON.stringify(film)])
+  rent_page(rent : RentalFilmPayment) : void{
+    this._router.navigate(['rent', JSON.stringify(rent)])
     this.closeDialog()
 
   }

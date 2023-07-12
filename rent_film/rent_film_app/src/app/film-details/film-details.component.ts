@@ -15,12 +15,8 @@ export class FilmDetailsComponent implements OnInit {
 
   film:  FilmDetails;
   stores!: StoreOccorrency[];
-  storeSelected : boolean = false;
   actors!: Actor[]
-  isFilmPresent!: boolean ;
-  isStoreAvailable: boolean =false;
-  count_numfilm: number=0;
-  filmTitle!: string;
+  storeAv: boolean = false;
 
   constructor(
     private _router: Router,
@@ -30,12 +26,9 @@ export class FilmDetailsComponent implements OnInit {
   ) {
     this.film= data.film_and_category
     this.stores= data.stores
-    this.filmTitle = data.film_and_category.film.title;
   }
 
   ngOnInit(): void {
-    this.count_numfilm=0;
-    this.isStoreAvailable=false;
     this.getActors(this.film.film.film_id)
   }
 
@@ -47,38 +40,31 @@ export class FilmDetailsComponent implements OnInit {
 
   closeDialog(): void {
     this.dialogRef.close();
-    // Naviga all'URL della dashboard
-    this._router.navigate(['dashboard']);
-  }
-
-  click(selected: boolean) : void {
-    this.storeSelected = selected
   }
 
   rent_page(film : FilmDetails, stores: StoreOccorrency[]) : void{
     this.closeDialog()
     this._router.navigate(['rent', JSON.stringify(film), JSON.stringify(stores)])
+  }
 
+  storeAvailable(stores: StoreOccorrency[]): boolean{
+    if(stores[0].num_film == 0 && stores[1].num_film == 0){
+      return this.storeAv=false
+    }
+    return this.storeAv=true
 
   }
 
+}
+
+
+
+
+/*
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       const selectedOption = document.activeElement as HTMLElement;
       this.click(selectedOption.getAttribute('aria-selected') === 'true');
     }
   }
-  storeAvailable(store: StoreOccorrency): boolean{
-    if(store.num_film == 0){
-      this.isFilmPresent = false;
-    }else{
-      this.count_numfilm+=1;
-      this.isFilmPresent= true;
-    }
-    if((this.count_numfilm >= 1) ){
-      this.isStoreAvailable=true;
-    }
-    return this.isFilmPresent
-  }
-
-}
+  */

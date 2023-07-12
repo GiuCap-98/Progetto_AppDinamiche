@@ -64,6 +64,13 @@ const typeDefs = gql`
     phone: Int
     last_update: String
   }
+
+  type City {
+    city_id: ID!
+    city: String
+    country_id: ID
+    last_update: String
+  }
     
   type Store{
     store_id: ID!
@@ -88,6 +95,7 @@ const typeDefs = gql`
   type Rental_FilmPaymant {
     film: Film
     address: Address
+    city: City
     payment: Payment
     rental:Rental
   }
@@ -190,18 +198,10 @@ const resolvers = {
       }
     },
 
-    
-          
-
     films: async (_, { searchCat, searchTerm, page, pageSize }, {customer_id}) => {
-      
+
       if(!customer_id){
-        throw new GraphQLError('Token not found', {
-          extensions: {
-              code: 'UNAUTHENTICATED',
-              http: { status: 401 },
-          },
-        })
+        return
       }
 
       try {
@@ -328,28 +328,22 @@ const resolvers = {
     },
     
     rentalsByCustomer: async (_, { customerId }, {customer_id}) => {
-      
       if(!customer_id){
-        throw new GraphQLError('Token not found', {
-          extensions: {
-              code: 'UNAUTHENTICATED',
-              http: { status: 401 },
-          },
-        })
+        return
       }
-
       try{
         const query = `
-        SELECT f.title, p.amount, 
-                to_char(r.return_date, 'DD/MM/YYYY') as return_date,
-                to_char(r.rental_date, 'DD/MM/YYYY') as rental_date,
-                r.rental_id, addr.address
+        SELECT f.title, p.amount,to_char( p.payment_date, 'DD/MM/YYYY') as payment_date,
+            to_char(r.return_date, 'DD/MM/YYYY') as return_date,
+            to_char(r.rental_date, 'DD/MM/YYYY') as rental_date,
+            r.rental_id, addr.address, cit.city
         FROM film f
         JOIN inventory i ON f.film_id = i.film_id
         JOIN rental r ON i.inventory_id = r.inventory_id
         LEFT JOIN payment p ON r.rental_id = p.rental_id
         LEFT JOIN customer cust ON cust.customer_id = p.customer_id
         LEFT JOIN address addr ON addr.address_id = cust.address_ID
+        LEFT JOIN city cit ON cit.city_id= addr.city_id
         WHERE r.customer_id = $1 AND p.amount is not NULL
         ORDER BY r.rental_date DESC;
         `;
@@ -358,7 +352,8 @@ const resolvers = {
         const rentals = result.rows.map(row => ({
           film: { title: row.title },
           address: { address: row.address },
-          payment: { amount: row.amount },
+          city: {city: row.city},
+          payment: { amount: row.amount, payment_date: row.payment_date },
           rental: {
             rental_date: row.rental_date,
             return_date: row.return_date,

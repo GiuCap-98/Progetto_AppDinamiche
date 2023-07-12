@@ -33,6 +33,15 @@ export class AuthService {
     this._router.navigate(['']);
   }
 
+  getIdToken(): number {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      return decodedToken.customer_id
+    }
+    return 0;
+  }
+
   isTokenExpired(): boolean {
     const token = this.getToken();
     if (token) {
