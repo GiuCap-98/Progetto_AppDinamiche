@@ -38,6 +38,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color:black;
 }
 
+.component-style mat-form-field {
+  color: black;
+}
 
 
 
